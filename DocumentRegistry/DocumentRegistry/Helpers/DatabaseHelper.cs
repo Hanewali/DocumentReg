@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using Dapper;
@@ -16,30 +15,30 @@ namespace DocumentRegistry.Helpers
     {
         #region ExecProcedure
 
-        public static Task<IEnumerable<T>> ExecProcedure<T>(string procedureName)
+        public static IEnumerable<T> ExecProcedure<T>(string procedureName)
         {
             return ExecProcedure<T>(procedureName, null);
         }
 
-        public static Task<IEnumerable<T>> ExecProcedure<T>(string procedureName, DynamicParameters parameters)
+        public static IEnumerable<T> ExecProcedure<T>(string procedureName, DynamicParameters parameters)
         {
             using var transaction = GetTransactionScope();
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var results = sqlConnection.QueryAsync<T>(procedureName, parameters, commandType: CommandType.StoredProcedure);
+            var results = sqlConnection.Query<T>(procedureName, parameters, commandType: CommandType.StoredProcedure);
             transaction.Complete();
 
             return results;
         }
 
-        public static Task<IEnumerable<T>> ExecProcedure<T>(DatabaseContext context)
+        public static IEnumerable<T> ExecProcedure<T>(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var results =  sqlConnection.QueryAsync<T>(context.SqlCommand, context.Parameters, commandType: CommandType.StoredProcedure);
+            var results =  sqlConnection.Query<T>(context.SqlCommand, context.Parameters, commandType: CommandType.StoredProcedure);
             transaction.Complete();
 
             return results;
@@ -49,30 +48,30 @@ namespace DocumentRegistry.Helpers
 
         #region QueryFirst
 
-        public static Task<T> QueryFirst<T>(string sqlSyntax)
+        public static T QueryFirst<T>(string sqlSyntax)
         {
             return QueryFirst<T>(sqlSyntax, null);
         }
 
-        public static Task<T> QueryFirst<T>(string sqlSyntax, DynamicParameters parameters)
+        public static T QueryFirst<T>(string sqlSyntax, DynamicParameters parameters)
         {
             using var transaction = GetTransactionScope(); 
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var result = sqlConnection.QueryFirstAsync<T>(sqlSyntax, parameters, commandType: CommandType.Text);
+            var result = sqlConnection.QueryFirst<T>(sqlSyntax, parameters, commandType: CommandType.Text);
             transaction.Complete();
 
             return result;
         }
 
-        public static Task<T> QueryFirst<T>(DatabaseContext context)
+        public static T QueryFirst<T>(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var result = sqlConnection.QueryFirstAsync<T>(context.SqlCommand, context.Parameters, commandType: CommandType.Text);
+            var result = sqlConnection.QueryFirst<T>(context.SqlCommand, context.Parameters, commandType: CommandType.Text);
             transaction.Complete();
 
             return result;
@@ -97,7 +96,7 @@ namespace DocumentRegistry.Helpers
             using var transaction = GetTransactionScope();
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.Open();
+            sqlConnection.OpenAsync();
             var result = sqlConnection.ExecuteAsync(sqlSyntax, parameters, commandType: commandType);
             transaction.Complete();
 
@@ -109,7 +108,7 @@ namespace DocumentRegistry.Helpers
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.Open();
+            sqlConnection.OpenAsync();
             var result = sqlConnection.ExecuteAsync(context.SqlCommand, context.Parameters, commandType: context.CommandType);
             transaction.Complete();
 
@@ -135,7 +134,7 @@ namespace DocumentRegistry.Helpers
             using var transaction = GetTransactionScope(); 
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.Open();
+            sqlConnection.OpenAsync();
             var result = sqlConnection.ExecuteScalarAsync<T>(sqlSyntax, parameters, commandType: commandType);
             transaction.Complete();
 
@@ -147,7 +146,7 @@ namespace DocumentRegistry.Helpers
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.Open();
+            sqlConnection.OpenAsync();
             var result = sqlConnection.ExecuteScalarAsync<T>(context.SqlCommand, context.Parameters, commandType: context.CommandType);
             transaction.Complete();
 
@@ -163,7 +162,7 @@ namespace DocumentRegistry.Helpers
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.Open();
+            sqlConnection.OpenAsync();
             var results = sqlConnection.ExecuteAsync(context.SqlCommand, context.Parameters);
             transaction.Complete();
 
@@ -179,7 +178,7 @@ namespace DocumentRegistry.Helpers
             using var transaction = GetTransactionScope();
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.Open();
+            sqlConnection.OpenAsync();
             var result = sqlConnection.InsertAsync(objectToInsert);
             transaction.Complete();
 
