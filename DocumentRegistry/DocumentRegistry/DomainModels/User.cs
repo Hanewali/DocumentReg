@@ -4,14 +4,8 @@ using Dapper.Contrib.Extensions;
 namespace DocumentRegistry.DomainModels
 {
     [Table("User")]
-    public class User : IModel
+    public class User : ModelBase
     {
-        [Key]
-        public int Id { get; set; }
-        public DateTime CreateDate { get; set; }
-        public User CreateUser { get; set; }
-        public DateTime ModifyDate { get; set; }
-        public User ModifyUser { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Login { get; set; }
