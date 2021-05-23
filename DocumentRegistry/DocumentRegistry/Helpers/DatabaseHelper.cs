@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Transactions;
 using Dapper;
 using Dapper.Contrib.Extensions;
@@ -11,138 +12,105 @@ using IsolationLevel = System.Transactions.IsolationLevel;
 
 namespace DocumentRegistry.Helpers
 {
-    public class DatabaseHelper : IDatabaseHelper
+    public class DatabaseHelper
     {
         #region ExecProcedure
 
-        public IEnumerable<T> ExecProcedure<T>(string procedureName)
+        public static Task<IEnumerable<T>> ExecProcedure<T>(string procedureName)
         {
             return ExecProcedure<T>(procedureName, null);
         }
 
-        public IEnumerable<T> ExecProcedure<T>(string procedureName, DynamicParameters parameters)
+        public static Task<IEnumerable<T>> ExecProcedure<T>(string procedureName, DynamicParameters parameters)
         {
             using var transaction = GetTransactionScope();
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var results = sqlConnection.Query<T>(procedureName, parameters, commandType: CommandType.StoredProcedure);
+            var results = sqlConnection.QueryAsync<T>(procedureName, parameters, commandType: CommandType.StoredProcedure);
             transaction.Complete();
 
-            return results.ToList();
+            return results;
         }
 
-        public IEnumerable<T> ExecProcedure<T>(DatabaseContext context)
+        public static Task<IEnumerable<T>> ExecProcedure<T>(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var results = sqlConnection.Query<T>(context.SqlCommand, context.Parameters, commandType: CommandType.StoredProcedure);
+            var results =  sqlConnection.QueryAsync<T>(context.SqlCommand, context.Parameters, commandType: CommandType.StoredProcedure);
             transaction.Complete();
 
-            return results.ToList();
-        }
-
-        #endregion
-
-        #region Query
-
-        public IEnumerable<T> Query<T>(string sqlSyntax)
-        {
-            return Query<T>(sqlSyntax, null);
-        }
-
-        public IEnumerable<T> Query<T>(string sqlSyntax, DynamicParameters parameters)
-        {
-            using var transaction = GetTransactionScope();
-            using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
-
-            sqlConnection.Open();
-            var results = sqlConnection.Query<T>(sqlSyntax, parameters, commandType: CommandType.Text);
-            transaction.Complete();
-
-            return results.ToList();
-        }
-
-        public IEnumerable<T> Query<T>(DatabaseContext context)
-        {
-            using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
-            using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
-
-            sqlConnection.Open();
-            var results = sqlConnection.Query<T>(context.SqlCommand, context.Parameters, commandType: CommandType.Text);
-            transaction.Complete();
-
-            return results.ToList();
+            return results;
         }
 
         #endregion
 
         #region QueryFirst
 
-        public T QueryFirst<T>(string sqlSyntax)
+        public static Task<T> QueryFirst<T>(string sqlSyntax)
         {
             return QueryFirst<T>(sqlSyntax, null);
         }
 
-        public T QueryFirst<T>(string sqlSyntax, DynamicParameters parameters)
+        public static Task<T> QueryFirst<T>(string sqlSyntax, DynamicParameters parameters)
         {
-            using var transaction = GetTransactionScope();
+            using var transaction = GetTransactionScope(); 
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var result = sqlConnection.QueryFirst<T>(sqlSyntax, parameters, commandType: CommandType.Text);
+            var result = sqlConnection.QueryFirstAsync<T>(sqlSyntax, parameters, commandType: CommandType.Text);
             transaction.Complete();
 
             return result;
         }
 
-        public T QueryFirst<T>(DatabaseContext context)
+        public static Task<T> QueryFirst<T>(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var result = sqlConnection.QueryFirst<T>(context.SqlCommand, context.Parameters, commandType: CommandType.Text);
+            var result = sqlConnection.QueryFirstAsync<T>(context.SqlCommand, context.Parameters, commandType: CommandType.Text);
             transaction.Complete();
 
             return result;
         }
 
         #endregion
-
+        
         #region ExecuteNoResult
 
-        public int ExecuteNoResult(string sqlSyntax)
+        public static Task<int> ExecuteNoResult(string sqlSyntax)
         {
             return ExecuteNoResult(sqlSyntax, null);
         }
 
-        public int ExecuteNoResult(string sqlSyntax, DynamicParameters parameters)
+        public static Task<int> ExecuteNoResult(string sqlSyntax, DynamicParameters parameters)
         {
             return ExecuteNoResult(sqlSyntax, parameters, CommandType.Text);
         }
 
-        public int ExecuteNoResult(string sqlSyntax, DynamicParameters parameters, CommandType commandType)
+        public static Task<int> ExecuteNoResult(string sqlSyntax, DynamicParameters parameters, CommandType commandType)
         {
             using var transaction = GetTransactionScope();
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var result = sqlConnection.Execute(sqlSyntax, parameters, commandType: commandType);
+            var result = sqlConnection.ExecuteAsync(sqlSyntax, parameters, commandType: commandType);
             transaction.Complete();
 
             return result;
         }
 
-        public int ExecuteNoResult(DatabaseContext context)
+        public static Task<int> ExecuteNoResult(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var result = sqlConnection.Execute(context.SqlCommand, context.Parameters, commandType: context.CommandType);
+            var result = sqlConnection.ExecuteAsync(context.SqlCommand, context.Parameters, commandType: context.CommandType);
             transaction.Complete();
 
             return result;
@@ -152,35 +120,35 @@ namespace DocumentRegistry.Helpers
 
         #region GetValue
 
-        public T GetValue<T>(string sqlSyntax)
+        public static Task<T> GetValue<T>(string sqlSyntax)
         {
             return GetValue<T>(sqlSyntax, null);
         }
 
-        public T GetValue<T>(string sqlSyntax, DynamicParameters parameters)
+        public static Task<T> GetValue<T>(string sqlSyntax, DynamicParameters parameters)
         {
             return GetValue<T>(sqlSyntax, parameters, CommandType.Text);
         }
 
-        public T GetValue<T>(string sqlSyntax, DynamicParameters parameters, CommandType commandType)
+        public static Task<T> GetValue<T>(string sqlSyntax, DynamicParameters parameters, CommandType commandType)
         {
-            using var transaction = GetTransactionScope();
+            using var transaction = GetTransactionScope(); 
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var result = sqlConnection.ExecuteScalar<T>(sqlSyntax, parameters, commandType: commandType);
+            var result = sqlConnection.ExecuteScalarAsync<T>(sqlSyntax, parameters, commandType: commandType);
             transaction.Complete();
 
             return result;
         }
 
-        public T GetValue<T>(DatabaseContext context)
+        public static Task<T> GetValue<T>(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var result = sqlConnection.ExecuteScalar<T>(context.SqlCommand, context.Parameters, commandType: context.CommandType);
+            var result = sqlConnection.ExecuteScalarAsync<T>(context.SqlCommand, context.Parameters, commandType: context.CommandType);
             transaction.Complete();
 
             return result;
@@ -190,13 +158,13 @@ namespace DocumentRegistry.Helpers
 
         #region Execute
 
-        public int Execute(DatabaseContext context)
+        public static Task<int> Execute(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var results = sqlConnection.Execute(context.SqlCommand, context.Parameters);
+            var results = sqlConnection.ExecuteAsync(context.SqlCommand, context.Parameters);
             transaction.Complete();
 
             return results;
@@ -206,13 +174,13 @@ namespace DocumentRegistry.Helpers
 
         #region Insert 
 
-        public long Insert<T>(T objectToInsert) where T : class
+        public static Task<int> Insert<T>(T objectToInsert) where T : class
         {
             using var transaction = GetTransactionScope();
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
             sqlConnection.Open();
-            var result = sqlConnection.Insert(objectToInsert);
+            var result = sqlConnection.InsertAsync(objectToInsert);
             transaction.Complete();
 
             return result;
