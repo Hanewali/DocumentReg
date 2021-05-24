@@ -4,7 +4,7 @@ using Dapper;
 using IsolationLevel = System.Transactions.IsolationLevel;
 
 
-namespace DocumentRegistry.Infrastructure
+namespace DocumentRegistry.Api.Infrastructure
 {
     public class DatabaseContext
     {

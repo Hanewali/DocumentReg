@@ -1,7 +1,7 @@
 ﻿using System;
 using Dapper.Contrib.Extensions;
 
-namespace DocumentRegistry.DomainModels
+namespace DocumentRegistry.Api.DomainModels
 {
     [Table("User")]
     public class User : ModelBase

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DocumentRegistry.Exceptions
+namespace DocumentRegistry.Api.Exceptions
 {
     public class NotAuthorizedException : Exception
     {

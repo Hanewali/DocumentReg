@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Dapper;
 using Dapper.Contrib.Extensions;
-using DocumentRegistry.Infrastructure;
+using DocumentRegistry.Api.Infrastructure;
 using IsolationLevel = System.Transactions.IsolationLevel;
 
-namespace DocumentRegistry.Helpers
+namespace DocumentRegistry.Api.Helpers
 {
     public class DatabaseHelper
     {

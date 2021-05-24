@@ -1,4 +1,4 @@
-﻿namespace DocumentRegistry.Models
+﻿namespace DocumentRegistry.Api.Models
 {
     public class GetCompaniesRequest : RequestModel
     {

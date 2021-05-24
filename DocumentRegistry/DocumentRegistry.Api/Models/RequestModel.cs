@@ -1,8 +1,8 @@
 ﻿using System;
-using DocumentRegistry.Exceptions;
-using DocumentRegistry.Infrastructure;
+using DocumentRegistry.Api.Exceptions;
+using DocumentRegistry.Api.Infrastructure;
 
-namespace DocumentRegistry.Models
+namespace DocumentRegistry.Api.Models
 {
     public abstract class RequestModel
     {

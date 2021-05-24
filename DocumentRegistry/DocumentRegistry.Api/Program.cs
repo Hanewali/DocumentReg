@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace DocumentRegistry
+namespace DocumentRegistry.Api
 {
     public class Program
     {

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using DocumentRegistry.DomainModels;
-using DocumentRegistry.Helpers;
-using DocumentRegistry.Models;
+using DocumentRegistry.Api.DomainModels;
+using DocumentRegistry.Api.Helpers;
+using DocumentRegistry.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DocumentRegistry.Controllers
+namespace DocumentRegistry.Api.Controllers
 {
     [ApiController, Route("[controller]")]   
     public class CompanyController : Controller

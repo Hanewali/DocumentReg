@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentRegistry", "DocumentRegistry\DocumentRegistry.csproj", "{96D7799C-F185-4D6D-A41F-D83AFA4B1D7A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentRegistry.Api", "DocumentRegistry.Api\DocumentRegistry.Api.csproj", "{96D7799C-F185-4D6D-A41F-D83AFA4B1D7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentRegistry.Web", "DocumentRegistry.Web\DocumentRegistry.Web.csproj", "{75C7607C-1797-48E0-9176-0F6D343C5011}"
 EndProject

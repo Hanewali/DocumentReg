@@ -2,7 +2,7 @@
 using System.Transactions;
 using Microsoft.Extensions.Configuration;
 
-namespace DocumentRegistry.Infrastructure
+namespace DocumentRegistry.Api.Infrastructure
 {
     public class Configuration
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using Dapper.Contrib.Extensions;
-using DocumentRegistry.Helpers;
+using DocumentRegistry.Api.Helpers;
 
-namespace DocumentRegistry.DomainModels
+namespace DocumentRegistry.Api.DomainModels
 {
     
     public class ModelBase

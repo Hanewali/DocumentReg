@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 
-namespace DocumentRegistry.DomainModels
+namespace DocumentRegistry.Api.DomainModels
 {
     [Table("Company")]
     public class Company : ModelBase
