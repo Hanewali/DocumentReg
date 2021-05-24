@@ -23,7 +23,7 @@ namespace DocumentRegistry.Infrastructure
         public static void SetConfiguration()
         {
             _configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true) //todo:Can I get right appsettings file based on environment?
                 .Build();
         }
     }
