@@ -157,7 +157,7 @@ namespace DocumentRegistry.Api.Helpers
 
         #region GetAll
 
-        public static IEnumerable<T> GetAll<T>(DatabaseContext context) where T : class
+        public static IEnumerable<T> GetAll<T>() where T : class
         {
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
