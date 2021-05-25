@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore DocumentRegistry/DocumentRegistry.sln
     - name: Build
       run: dotnet build DocumentRegistry/DocumentRegistry.sln --no-restore
     - name: Test
