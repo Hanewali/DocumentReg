@@ -72,4 +72,7 @@
   <ItemGroup>
     <None Include="DbCompare.scmp" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="dbo\Stored Procedures\GetCompanies.sql" />
+  </ItemGroup>
 </Project>
