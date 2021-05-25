@@ -1,0 +1,53 @@
+name: .NET
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+      #with:
+        # Folder location of where vswhere.exe is located if a self-hosted agent
+        #vswhere-path: # optional
+        # Version of Visual Studio to search; defaults to latest if not specified
+        #vs-version: # optional
+    - name: Restore dependencies
+      run: dotnet restore DocumentRegistry/DocumentRegistry.sln
+    #- name: Build solution
+    #  run: dotnet build DocumentRegistry/DocumentRegistry.sln --no-restore -r linux-x64
+    - name: Build API
+      run: dotnet build DocumentRegistry/DocumentRegistry.Api/DocumentRegistry.Api.csproj --no-restore -r linux-x64
+    - name: Build WebAPP
+      run: dotnet build DocumentRegistry/DocumentRegistry.Web/DocumentRegistry.Web.csproj --no-restore -r linux-x64
+    - name: Test
+      run: dotnet test DocumentRegistry/DocumentRegistry.sln --no-build --verbosity normal
+    - name: Dotnet publish
+      run: dotnet publish src -c Release -o deploy -r linux-x64 --self-contained
+    - name: Copy via ssh
+      uses: garygrossgarten/github-action-scp@v0.5.3
+      with:
+        local: /home/runner/work/DocumentRegistry/DocumentRegistry/src/deploy/
+        remote: ${{ secrets.REMOTE_TARGET }}
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        privateKey: ${{ secrets.REMOTE_SSH_KEY }}
+#     - name: Run SSH command
+#       uses: garygrossgarten/github-action-ssh@v0.3.0
+#       with:
+#         command: sudo service deferat start
+#         host: ${{ secrets.REMOTE_HOST }}
+#         username: ${{ secrets.REMOTE_USER }}
+#         privateKey: ${{ secrets.REMOTE_SSH_KEY }}
+
+
