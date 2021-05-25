@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace DocumentRegistry.Api.Controllers
 {
     [ApiController, Route("[controller]")]   
-    public class CompanyController : Extensions.Controller
+    public class CompanyController : BaseController
     {
         private readonly ILogger<CompanyController> _logger;
 
