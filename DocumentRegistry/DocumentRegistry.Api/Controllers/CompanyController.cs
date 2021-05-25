@@ -7,6 +7,7 @@ using DocumentRegistry.Api.DomainModels;
 using DocumentRegistry.Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Company = DocumentRegistry.Api.ApiModels.Company;
 
 namespace DocumentRegistry.Api.Controllers
 {
@@ -27,8 +28,8 @@ namespace DocumentRegistry.Api.Controllers
 
             try
             {
-                var queryResult = DatabaseHelper.ExecProcedure<Company>("GetCompanies");
-                result.AddRange(queryResult.Select(ApiModels.Company.BuildFromDomainModel));
+                var queryResult = DatabaseHelper.GetAll<DomainModels.Company>(); //DatabaseHelper.ExecProcedure<Company>("GetCompanies");
+                result.AddRange(queryResult.Take(10).Select(Company.BuildFromDomainModel));
             }
             catch (Exception ex)
             {
