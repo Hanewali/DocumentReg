@@ -34,8 +34,17 @@ jobs:
     - name: Copy via ssh
       uses: garygrossgarten/github-action-scp@v0.5.3
       with:
-        local: /home/runner/work/DocumentRegistry/DocumentRegistry/src/deploy/
-        remote: ${{ secrets.REMOTE_TARGET }}
+        local: /home/runner/work/DocumentRegistry/DocumentRegistry/src/deploy/Web/
+        remote: ${{ secrets.REMOTE_TARGET_API }}
+        host: ${{ secrets.REMOTE_HOST }}
+        port: ${{ secrets.REMOTE_PORT }}
+        username: ${{ secrets.REMOTE_USER }}
+        privateKey: ${{ secrets.REMOTE_SSH_KEY }}
+    - name: Copy via ssh
+      uses: garygrossgarten/github-action-scp@v0.5.3
+      with:
+        local: /home/runner/work/DocumentRegistry/DocumentRegistry/src/deploy/Api/
+        remote: ${{ secrets.REMOTE_TARGET_WEB }}
         host: ${{ secrets.REMOTE_HOST }}
         port: ${{ secrets.REMOTE_PORT }}
         username: ${{ secrets.REMOTE_USER }}
