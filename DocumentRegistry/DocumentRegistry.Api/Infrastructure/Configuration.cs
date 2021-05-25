@@ -15,6 +15,11 @@ namespace DocumentRegistry.Api.Infrastructure
             public static TimeSpan DefaultTimeout = TransactionManager.DefaultTimeout;
         }
 
+        public static class Api
+        {
+            public static string AuthorizationToken = GetConfigurationField("Api:AuthorizationToken");
+        }
+
         public static string GetConfigurationField(string fieldName)
         {
             return _configuration[fieldName];
