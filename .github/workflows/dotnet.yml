@@ -28,7 +28,9 @@ jobs:
     - name: Test WebAPP
       run: dotnet test DocumentRegistry/DocumentRegistry.Web/DocumentRegistry.Web.csproj --no-build --verbosity normal
     - name: Dotnet publish
-      run: dotnet publish src -c Release -o deploy -r linux-x64 --self-contained
+      run: dotnet publish DocumentRegistry/DocumentRegistry.Api/DocumentRegistry.Api.csproj -c Release -o deploy/Api -r linux-x64 --self-contained
+    - name: Dotnet publish
+      run: dotnet publish DocumentRegistry/DocumentRegistry.Web/DocumentRegistry.Web.csproj -c Release -o deploy/Web -r linux-x64 --self-contained
     - name: Copy via ssh
       uses: garygrossgarten/github-action-scp@v0.5.3
       with:
