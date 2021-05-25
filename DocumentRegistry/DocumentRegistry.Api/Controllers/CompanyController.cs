@@ -1,21 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using DocumentRegistry.Api.DomainModels;
+﻿using DocumentRegistry.Api.DomainModels;
 using DocumentRegistry.Api.Helpers;
-using DocumentRegistry.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentRegistry.Api.Controllers
 {
     [ApiController, Route("[controller]")]   
-    public class CompanyController : Controller
+    public class CompanyController : Extensions.Controller
     {
         [HttpGet]
-        public IEnumerable<Company> GetList(GetCompaniesRequest request)
+        public IActionResult GetList()
         {
-            
-            
-            return DatabaseHelper.ExecProcedure<Company>("GetCompanies");
+            var result = DatabaseHelper.ExecProcedure<Company>("GetCompanies");
+
+            return Ok(result);
         }
     }
 }
