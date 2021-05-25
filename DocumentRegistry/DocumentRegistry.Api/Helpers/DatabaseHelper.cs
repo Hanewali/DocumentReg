@@ -155,6 +155,20 @@ namespace DocumentRegistry.Api.Helpers
 
         #endregion
 
+        #region GetAll
+
+        public static IEnumerable<T> GetAll<T>(DatabaseContext context) where T : class
+        {
+            using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
+
+            sqlConnection.Open();
+            var result = sqlConnection.GetAll<T>();
+
+            return result;
+        }
+
+        #endregion
+
         #region Execute
 
         public static int Execute(DatabaseContext context)
