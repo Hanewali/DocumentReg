@@ -81,35 +81,35 @@ namespace DocumentRegistry.Api.Helpers
         
         #region ExecuteNoResult
 
-        public static Task<int> ExecuteNoResult(string sqlSyntax)
+        public static int ExecuteNoResult(string sqlSyntax)
         {
             return ExecuteNoResult(sqlSyntax, null);
         }
 
-        public static Task<int> ExecuteNoResult(string sqlSyntax, DynamicParameters parameters)
+        public static int ExecuteNoResult(string sqlSyntax, DynamicParameters parameters)
         {
             return ExecuteNoResult(sqlSyntax, parameters, CommandType.Text);
         }
 
-        public static Task<int> ExecuteNoResult(string sqlSyntax, DynamicParameters parameters, CommandType commandType)
+        public static int ExecuteNoResult(string sqlSyntax, DynamicParameters parameters, CommandType commandType)
         {
             using var transaction = GetTransactionScope();
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.OpenAsync();
-            var result = sqlConnection.ExecuteAsync(sqlSyntax, parameters, commandType: commandType);
+            sqlConnection.Open();
+            var result = sqlConnection.Execute(sqlSyntax, parameters, commandType: commandType);
             transaction.Complete();
 
             return result;
         }
 
-        public static Task<int> ExecuteNoResult(DatabaseContext context)
+        public static int ExecuteNoResult(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.OpenAsync();
-            var result = sqlConnection.ExecuteAsync(context.SqlCommand, context.Parameters, commandType: context.CommandType);
+            sqlConnection.Open();
+            var result = sqlConnection.Execute(context.SqlCommand, context.Parameters, commandType: context.CommandType);
             transaction.Complete();
 
             return result;
@@ -119,35 +119,35 @@ namespace DocumentRegistry.Api.Helpers
 
         #region GetValue
 
-        public static Task<T> GetValue<T>(string sqlSyntax)
+        public static T GetValue<T>(string sqlSyntax)
         {
             return GetValue<T>(sqlSyntax, null);
         }
 
-        public static Task<T> GetValue<T>(string sqlSyntax, DynamicParameters parameters)
+        public static T GetValue<T>(string sqlSyntax, DynamicParameters parameters)
         {
             return GetValue<T>(sqlSyntax, parameters, CommandType.Text);
         }
 
-        public static Task<T> GetValue<T>(string sqlSyntax, DynamicParameters parameters, CommandType commandType)
+        public static T GetValue<T>(string sqlSyntax, DynamicParameters parameters, CommandType commandType)
         {
             using var transaction = GetTransactionScope(); 
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.OpenAsync();
-            var result = sqlConnection.ExecuteScalarAsync<T>(sqlSyntax, parameters, commandType: commandType);
+            sqlConnection.Open();
+            var result = sqlConnection.ExecuteScalar<T>(sqlSyntax, parameters, commandType: commandType);
             transaction.Complete();
 
             return result;
         }
 
-        public static Task<T> GetValue<T>(DatabaseContext context)
+        public static T GetValue<T>(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.OpenAsync();
-            var result = sqlConnection.ExecuteScalarAsync<T>(context.SqlCommand, context.Parameters, commandType: context.CommandType);
+            sqlConnection.Open();
+            var result = sqlConnection.ExecuteScalar<T>(context.SqlCommand, context.Parameters, commandType: context.CommandType);
             transaction.Complete();
 
             return result;
@@ -157,13 +157,13 @@ namespace DocumentRegistry.Api.Helpers
 
         #region Execute
 
-        public static Task<int> Execute(DatabaseContext context)
+        public static int Execute(DatabaseContext context)
         {
             using var transaction = GetTransactionScope(context.IsolationLevel, context.Timeout);
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.OpenAsync();
-            var results = sqlConnection.ExecuteAsync(context.SqlCommand, context.Parameters);
+            sqlConnection.Open();
+            var results = sqlConnection.Execute(context.SqlCommand, context.Parameters);
             transaction.Complete();
 
             return results;
@@ -173,13 +173,13 @@ namespace DocumentRegistry.Api.Helpers
 
         #region Insert 
 
-        public static Task<int> Insert<T>(T objectToInsert) where T : class
+        public static long Insert<T>(T objectToInsert) where T : class
         {
             using var transaction = GetTransactionScope();
             using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
 
-            sqlConnection.OpenAsync();
-            var result = sqlConnection.InsertAsync(objectToInsert);
+            sqlConnection.Open();
+            var result = sqlConnection.Insert(objectToInsert);
             transaction.Complete();
 
             return result;
