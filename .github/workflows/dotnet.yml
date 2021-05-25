@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -17,14 +17,25 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1
+      #with:
+        # Folder location of where vswhere.exe is located if a self-hosted agent
+        #vswhere-path: # optional
+        # Version of Visual Studio to search; defaults to latest if not specified
+        #vs-version: # optional
     - name: Restore dependencies
       run: dotnet restore DocumentRegistry/DocumentRegistry.sln
-    - name: Build
-      run: dotnet build DocumentRegistry/DocumentRegistry.sln --no-restore
+    - name: Build solution
+      run: dotnet build DocumentRegistry/DocumentRegistry.sln --no-restore -r linux-x64
+    #- name: Build API
+    #  run: dotnet build DocumentRegistry/DocumentRegistry.Api/DocumentRegistry.Api.csproj --no-restore
+    #- name: Build WebAPP
+    #  run: dotnet build DocumentRegistry/DocumentRegistry.Web/DocumentRegistry.Web.csproj --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test DocumentRegistry/DocumentRegistry.sln --no-build --verbosity normal
     - name: Dotnet publish
-      run: dotnet publish src -c Release -o deploy
+      run: dotnet publish src -c Release -o deploy -r linux-x64
     - name: Copy via ssh
       uses: garygrossgarten/github-action-scp@v0.5.3
       with:
