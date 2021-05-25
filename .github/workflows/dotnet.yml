@@ -20,7 +20,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build DocumentRegistry/DocumentRegistry.sln --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Dotnet publish
@@ -28,7 +28,7 @@ jobs:
     - name: Copy via ssh
       uses: garygrossgarten/github-action-scp@v0.5.3
       with:
-        local: /home/runner/work/deferat/deferat/src/deploy/
+        local: /home/runner/work/DocumentRegistry/DocumentRegistry/src/deploy/
         remote: ${{ secrets.REMOTE_TARGET }}
         host: ${{ secrets.REMOTE_HOST }}
         username: ${{ secrets.REMOTE_USER }}
