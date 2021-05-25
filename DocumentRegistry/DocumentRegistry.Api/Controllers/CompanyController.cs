@@ -1,4 +1,7 @@
-﻿using DocumentRegistry.Api.DomainModels;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using DocumentRegistry.Api.DomainModels;
 using DocumentRegistry.Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +13,12 @@ namespace DocumentRegistry.Api.Controllers
         [HttpGet]
         public IActionResult GetList()
         {
-            var result = DatabaseHelper.ExecProcedure<Company>("GetCompanies");
-
-            return Ok(result);
+            var result = new List<ApiModels.Company>();
+            
+            var queryResult = DatabaseHelper.ExecProcedure<Company>("GetCompanies");
+            result.AddRange(queryResult.Select(ApiModels.Company.BuildFromDomainModel));
+      
+            return Ok(JsonSerializer.Serialize(result));
         }
     }
 }
