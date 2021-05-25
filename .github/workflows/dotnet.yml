@@ -52,7 +52,7 @@ jobs:
     - name: Run SSH command
       uses: garygrossgarten/github-action-ssh@v0.3.0
       with:
-        command: chmod +x /home/hane/apps/DocumentRegistry/Api/DocumentRegistry.Api && chmod +x /home/hane/apps/DocumentRegistry/Api/DocumentRegistry.Api && sudo service DocumentRegistry.Api start && sudo service DocumentRegistry.Web start && sudo service DocumentRegistry.Api restart && sudo service DocumentRegistry.Web restart
+        command: chmod +x /home/hane/apps/DocumentRegistry/Api/DocumentRegistry.Api && chmod +x /home/hane/apps/DocumentRegistry/Api/DocumentRegistry.Web && sudo service DocumentRegistry.Api start && sudo service DocumentRegistry.Web start
         host: ${{ secrets.REMOTE_HOST }}
         port: ${{ secrets.REMOTE_PORT }}
         username: ${{ secrets.REMOTE_USER }}
