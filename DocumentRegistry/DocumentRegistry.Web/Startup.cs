@@ -1,3 +1,4 @@
+using System.IO;
 using DocumentRegistry.Web.Infrastructure;
 using DocumentRegistry.Web.Services.CompanyService;
 using DocumentRegistry.Web.Services.HomeService;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace DocumentRegistry.Web
@@ -41,7 +43,12 @@ namespace DocumentRegistry.Web
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, "newwwwroot")),
+                RequestPath = ""
+            });
 
             app.UseRouting();
 
@@ -49,9 +56,7 @@ namespace DocumentRegistry.Web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }
