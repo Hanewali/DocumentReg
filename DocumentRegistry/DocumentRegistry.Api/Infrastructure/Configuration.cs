@@ -25,10 +25,12 @@ namespace DocumentRegistry.Api.Infrastructure
             return _configuration[fieldName];
         }
 
-        public static void SetConfiguration()
+        public static void SetConfiguration(bool IsDevelopment)
         {
+            var appsettingsFile = IsDevelopment ? "appsettings.Development.json" : "appsettings.json";
+            
             _configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true) //todo:Can I get right appsettings file based on environment?
+                .AddJsonFile(appsettingsFile, optional: false, reloadOnChange: true) 
                 .Build();
         }
     }
