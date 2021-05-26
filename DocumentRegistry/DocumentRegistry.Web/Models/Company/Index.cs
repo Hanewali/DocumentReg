@@ -9,6 +9,11 @@ namespace DocumentRegistry.Web.Models.Company
             Companies = companies;
         }
 
+        public Index()
+        {
+            Companies = new List<Company>();
+        }
+
         public IEnumerable<Company> Companies { get; set; }
     }
 }
