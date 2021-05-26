@@ -1,0 +1,30 @@
+﻿@model DocumentRegistry.Web.Models.Home.Login
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Rejestr Dokumentów</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Login">Rejestr dokumentów</a>
+        </div>
+    </nav>
+</header>
+<div>
+    <h2>Logowanie</h2>
+    @Html.TextBoxFor(m => m.Username)
+    @Html.TextBoxFor(m => m.Password)
+    @Html.ActionLink("Zaloguj", "LoginPost", "Home")
+</div>
+</body>
+</html>
