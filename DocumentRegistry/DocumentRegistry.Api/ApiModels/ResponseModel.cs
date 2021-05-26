@@ -4,9 +4,9 @@ namespace DocumentRegistry.Web.Models
 {
     public class ResponseModel
     {
-        public static T FromJson<T>(string json)
+        public string ToJson()
         {
-            return JsonSerializer.Deserialize<T>(json);
+            return JsonSerializer.Serialize(this);
         }
     }
 }
