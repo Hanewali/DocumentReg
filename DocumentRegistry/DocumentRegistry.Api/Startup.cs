@@ -1,3 +1,4 @@
+using System;
 using DocumentRegistry.Api.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,11 +10,6 @@ namespace DocumentRegistry.Api
 {
     public class Startup
     {
-        public Startup()
-        {
-            Configuration.SetConfiguration();
-        }
-
         public Configuration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -35,6 +31,8 @@ namespace DocumentRegistry.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DocumentRegistry.Api v1"));
             }
+
+            Configuration.SetConfiguration(env.IsDevelopment());
 
             app.UseHttpsRedirection();
 
