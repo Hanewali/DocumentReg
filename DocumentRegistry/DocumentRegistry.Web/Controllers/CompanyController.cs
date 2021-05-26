@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using System;
 using DocumentRegistry.Web.Services.CompanyService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,7 +20,19 @@ namespace DocumentRegistry.Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var model = _companyService.PrepareIndexModel();
+            var model = new Models.Company.Index();
+            try
+            {
+                 model = _companyService.PrepareIndexModel();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,"Error during API request");
+                Response.StatusCode = 500;
+                
+                return View();
+            }
+            
             return View(model);
         }
     }
