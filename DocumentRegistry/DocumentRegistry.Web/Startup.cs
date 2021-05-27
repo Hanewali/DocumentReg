@@ -43,12 +43,7 @@ namespace DocumentRegistry.Web
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "newwwwroot")),
-                RequestPath = ""
-            });
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -57,6 +52,9 @@ namespace DocumentRegistry.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
