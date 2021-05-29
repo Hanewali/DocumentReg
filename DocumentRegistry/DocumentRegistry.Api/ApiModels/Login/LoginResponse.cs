@@ -1,10 +1,8 @@
-﻿
-using DocumentRegistry.Api.DomainModels;
-using DocumentRegistry.Web.Models;
+﻿using DocumentRegistry.Api.DomainModels;
 
 namespace DocumentRegistry.Api.ApiModels.Login
 {
-    public class LoginResponse : ResponseModel
+    public class LoginResponse
     {
         public bool Verified { get; set; }
         public int UserId { get; set; }
