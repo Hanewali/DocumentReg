@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentRegistry.Api.Controllers
 {
-    [ApiController, Route("[controller]")]
+    [ApiController, Route("[controller]/[action]")]
     public class LoginController : BaseController
     {
         [HttpPost]
