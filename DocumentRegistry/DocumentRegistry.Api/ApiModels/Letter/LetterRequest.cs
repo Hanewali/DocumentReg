@@ -1,6 +1,6 @@
 ﻿namespace DocumentRegistry.Api.ApiModels.Letter
 {
-    public class RequestModel
+    public class LetterRequest
     {
         public int UserId { get; set; }
         public int? BeginFrom { get; set; }

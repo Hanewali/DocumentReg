@@ -1,6 +1,6 @@
 ﻿namespace DocumentRegistry.Api.ApiModels.PostCompany
 {
-    public class RequestModel
+    public class PostCompanyRequest
     {
         public int UserId { get; set; }
         public int? BeginFrom { get; set; }

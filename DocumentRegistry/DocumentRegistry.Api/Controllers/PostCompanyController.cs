@@ -45,7 +45,7 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(RequestModel model)
+        public IActionResult Search(PostCompanyRequest model)
         {
             var result = new List<PostCompany>();
 
@@ -84,7 +84,7 @@ namespace DocumentRegistry.Api.Controllers
         }
         
         [HttpPost]
-        public IActionResult Create(RequestModel model)
+        public IActionResult Create(PostCompanyRequest model)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(RequestModel model)
+        public IActionResult Edit(PostCompanyRequest model)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(RequestModel model)
+        public IActionResult Delete(PostCompanyRequest model)
         {
             try
             {

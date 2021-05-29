@@ -1,10 +1,10 @@
-﻿namespace DocumentRegistry.Api.ApiModels.Company
+﻿namespace DocumentRegistry.Api.ApiModels.Employee
 {
-    public class RequestModel
+    public class EmployeeRequest
     {
         public int UserId { get; set; }
         public int? BeginFrom { get; set; }
         public int? Rows { get; set; }
-        public Company Company { get; set; }
+        public Employee Employee { get; set; }
     }
 }

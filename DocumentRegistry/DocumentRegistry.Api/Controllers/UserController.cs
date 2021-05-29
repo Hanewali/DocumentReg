@@ -46,7 +46,7 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(RequestModel model)
+        public IActionResult Search(UserRequest model)
         {
             var result = new List<User>();
 
@@ -85,7 +85,7 @@ namespace DocumentRegistry.Api.Controllers
         }
         
         [HttpPost]
-        public IActionResult Create(RequestModel model)
+        public IActionResult Create(UserRequest model)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(RequestModel model)
+        public IActionResult Edit(UserRequest model)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(RequestModel model)
+        public IActionResult Delete(UserRequest model)
         {
             try
             {

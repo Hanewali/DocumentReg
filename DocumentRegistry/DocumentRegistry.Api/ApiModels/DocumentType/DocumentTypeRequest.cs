@@ -1,6 +1,6 @@
 ﻿namespace DocumentRegistry.Api.ApiModels.DocumentType
 {
-    public class RequestModel
+    public class DocumentTypeRequest
     {
         public int UserId { get; set; }
         public int? BeginFrom { get; set; }

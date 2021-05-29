@@ -45,7 +45,7 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(RequestModel model)
+        public IActionResult Search(DocumentTypeRequest model)
         {
             var result = new List<DocumentType>();
 
@@ -84,7 +84,7 @@ namespace DocumentRegistry.Api.Controllers
         }
         
         [HttpPost]
-        public IActionResult Create(RequestModel model)
+        public IActionResult Create(DocumentTypeRequest model)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(RequestModel model)
+        public IActionResult Edit(DocumentTypeRequest model)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(RequestModel model)
+        public IActionResult Delete(DocumentTypeRequest model)
         {
             try
             {
