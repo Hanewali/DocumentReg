@@ -6,10 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="ApiModels\Company" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Remove="ApiModels\Company\CompaniesList.cs" />
     </ItemGroup>
 
