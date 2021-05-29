@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using DocumentRegistry.Web.Models.Company;
 using System.Text.Json;
-using DocumentRegistry.Web.ApiModels.Company;
+using DocumentRegistry.Web.ApiModels;
 
 namespace DocumentRegistry.Web.Services.CompanyService
 {
@@ -77,7 +77,7 @@ namespace DocumentRegistry.Web.Services.CompanyService
         {
             return new CompanyRequest
             {
-                UserID = userId,
+                UserId = userId,
                 Company = new Company {Id = companyId}
             };
         }
@@ -86,7 +86,7 @@ namespace DocumentRegistry.Web.Services.CompanyService
         {
             return new CompanyRequest
             {
-                UserID = userId,
+                UserId = userId,
                 Company = company
             };
         }
@@ -95,7 +95,7 @@ namespace DocumentRegistry.Web.Services.CompanyService
         {
             return new CompanyRequest
             {
-                UserID = userId,
+                UserId = userId,
                 BeginFrom = beginFrom,
                 Rows = rows,
                 Company = company
