@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DocumentRegistry.Web.Models;
 using DocumentRegistry.Web.Services.HomeService;
+using Microsoft.AspNetCore.Http;
 
 namespace DocumentRegistry.Web.Controllers
 {
@@ -23,12 +24,16 @@ namespace DocumentRegistry.Web.Controllers
 
         public IActionResult Index()
         {
-            //if logged in
-            //redirect to Letters List
-            //if not logged in
-            return RedirectToAction("Login");
+            return HttpContext.Session.Get("UserId") != null ? RedirectToAction("Index", "Letter") : RedirectToAction("Login");
         }
 
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("UserId");
+            return RedirectToAction("Login", "Home");
+        }
+        
         [HttpGet]
         public IActionResult Login()
         {
@@ -36,22 +41,14 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(Models.Home.Login request)
+        public IActionResult LoginPost(Models.Home.Login request)
         {
             var loginResponse = _loginService.Verify(request);
 
             if (loginResponse.Verified)
-            {
-                _loginService.Login(loginResponse);
-            }
+                _loginService.Login(HttpContext.Session, loginResponse);
 
             return RedirectToAction("Index", "Letter");
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
     }
 }
