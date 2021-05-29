@@ -6,12 +6,16 @@ namespace DocumentRegistry.Web.Services
 {
     public static class ApiHelper
     {
-        public static HttpClient PrepareClient()
+        public static HttpClient PrepareClient(string targetArea)
         {
-            return new()
+            var client = new HttpClient
             {
-                BaseAddress = new Uri(Configuration.Api.Url)
+                BaseAddress = new Uri(Configuration.Api.Url + targetArea)
             };
+            
+            client.DefaultRequestHeaders.Add("AuthorizationToken", Configuration.Api.AuthorizationToken);
+
+            return client;
         }
     }
 }
