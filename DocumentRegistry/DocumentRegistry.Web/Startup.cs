@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using DocumentRegistry.Web.Infrastructure;
 using DocumentRegistry.Web.Services.CompanyService;
@@ -23,7 +24,14 @@ namespace DocumentRegistry.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            
+            services.AddControllersWithViews().AddSessionStateTempDataProvider();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<ILoginService, LoginService>();
         }
@@ -47,6 +55,8 @@ namespace DocumentRegistry.Web
 
             app.UseRouting();
 
+            app.UseSession();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
