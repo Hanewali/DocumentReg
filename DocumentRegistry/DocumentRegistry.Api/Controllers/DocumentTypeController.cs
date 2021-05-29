@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using Dapper;
-using DocumentRegistry.Api.ApiModels.Company;
+using DocumentRegistry.Api.ApiModels.DocumentType;
 using DocumentRegistry.Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,11 +13,11 @@ namespace DocumentRegistry.Api.Controllers
 {
     [ApiController] 
     [Route("[controller]/[action]")]  
-    public class CompanyController : BaseController
+    public class DocumentTypeController : Controller
     {
-        private readonly ILogger<CompanyController> _logger;
+        private readonly ILogger<DocumentTypeController> _logger;
 
-        public CompanyController(ILogger<CompanyController> logger)
+        public DocumentTypeController(ILogger<DocumentTypeController> logger)
         {
             _logger = logger;
         }
@@ -25,15 +25,15 @@ namespace DocumentRegistry.Api.Controllers
         [HttpGet]
         public IActionResult GetList([FromQuery] int? beginFrom, [FromQuery] int? rows)
         {
-            var result = new List<Company>();
+            var result = new List<DocumentType>();
 
             try
             {
-                var queryResult = DatabaseHelper.GetAll<DomainModels.Company>();
+                var queryResult = DatabaseHelper.GetAll<DomainModels.DocumentType>();
                 result.AddRange(queryResult
                     .Skip(beginFrom ?? 0)
                     .Take(rows ?? 10)
-                    .Select(Company.BuildFromDomainModel));
+                    .Select(DocumentType.BuildFromDomainModel));
             }
             catch (Exception ex)
             {
@@ -47,15 +47,15 @@ namespace DocumentRegistry.Api.Controllers
         [HttpPost]
         public IActionResult Search(RequestModel model)
         {
-            var result = new List<Company>();
+            var result = new List<DocumentType>();
 
             try
             {
-                var queryResult = DatabaseHelper.ExecProcedure<DomainModels.Company>("CompanySearch", model.Company.ToDynamicParameters());
+                var queryResult = DatabaseHelper.ExecProcedure<DomainModels.DocumentType>("CompanySearch", model.DocumentType.ToDynamicParameters());
                 result.AddRange(queryResult
                     .Skip(model.BeginFrom ?? 0)
                     .Take(model.Rows ?? 10)
-                    .Select(Company.BuildFromDomainModel));
+                    .Select(DocumentType.BuildFromDomainModel));
             }
             catch (Exception ex)
             {
@@ -69,10 +69,10 @@ namespace DocumentRegistry.Api.Controllers
         [HttpGet]
         public IActionResult GetDetails([FromQuery] int Id)
         {
-            var result = new Company();
+            var result = new DocumentType();
             try
             {
-                result = DatabaseHelper.Get<Company>(Id);
+                result = DatabaseHelper.Get<DocumentType>(Id);
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                DatabaseHelper.Insert(model.Company.ToDomainModel(model.UserId));
+                DatabaseHelper.Insert(model.DocumentType.ToDomainModel(model.UserId));
             }
             catch (Exception ex)
             {
@@ -104,13 +104,13 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                var existingCompany = new DomainModels.Company();
-                if (model.Company.Id != null)
+                var existingDocumentType = new DomainModels.DocumentType();
+                if (model.DocumentType.Id != null)
                 {
-                    existingCompany = DatabaseHelper.Get<DomainModels.Company>(model.Company.Id.Value);
+                    existingDocumentType = DatabaseHelper.Get<DomainModels.DocumentType>(model.DocumentType.Id.Value);
                 }
                 
-                var result = DatabaseHelper.Update(model.Company.ToDomainModel(model.UserId, existingCompany));
+                var result = DatabaseHelper.Update(model.DocumentType.ToDomainModel(model.UserId, existingDocumentType));
                 if (!result)
                     throw new Exception("Record wasn't updated");
             }
@@ -130,7 +130,7 @@ namespace DocumentRegistry.Api.Controllers
             {
                 var parameters = new DynamicParameters();
                 
-                parameters.Add("Id", model.Company.Id);
+                parameters.Add("Id", model.DocumentType.Id);
                 parameters.Add("UserId", model.UserId);
 
                 DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);

@@ -4,20 +4,20 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using Dapper;
-using DocumentRegistry.Api.ApiModels.Company;
+using DocumentRegistry.Api.ApiModels.Letter;
 using DocumentRegistry.Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace DocumentRegistry.Api.Controllers
 {
-    [ApiController] 
+    [ApiController]
     [Route("[controller]/[action]")]  
-    public class CompanyController : BaseController
+    public class LetterController : Controller
     {
-        private readonly ILogger<CompanyController> _logger;
+        private readonly ILogger<LetterController> _logger;
 
-        public CompanyController(ILogger<CompanyController> logger)
+        public LetterController(ILogger<LetterController> logger)
         {
             _logger = logger;
         }
@@ -25,15 +25,15 @@ namespace DocumentRegistry.Api.Controllers
         [HttpGet]
         public IActionResult GetList([FromQuery] int? beginFrom, [FromQuery] int? rows)
         {
-            var result = new List<Company>();
+            var result = new List<Letter>();
 
             try
             {
-                var queryResult = DatabaseHelper.GetAll<DomainModels.Company>();
+                var queryResult = DatabaseHelper.GetAll<DomainModels.Letter>();
                 result.AddRange(queryResult
                     .Skip(beginFrom ?? 0)
                     .Take(rows ?? 10)
-                    .Select(Company.BuildFromDomainModel));
+                    .Select(Letter.BuildFromDomainModel));
             }
             catch (Exception ex)
             {
@@ -47,15 +47,15 @@ namespace DocumentRegistry.Api.Controllers
         [HttpPost]
         public IActionResult Search(RequestModel model)
         {
-            var result = new List<Company>();
+            var result = new List<Letter>();
 
             try
             {
-                var queryResult = DatabaseHelper.ExecProcedure<DomainModels.Company>("CompanySearch", model.Company.ToDynamicParameters());
+                var queryResult = DatabaseHelper.ExecProcedure<DomainModels.Letter>("CompanySearch", model.Letter.ToDynamicParameters());
                 result.AddRange(queryResult
                     .Skip(model.BeginFrom ?? 0)
                     .Take(model.Rows ?? 10)
-                    .Select(Company.BuildFromDomainModel));
+                    .Select(Letter.BuildFromDomainModel));
             }
             catch (Exception ex)
             {
@@ -69,10 +69,10 @@ namespace DocumentRegistry.Api.Controllers
         [HttpGet]
         public IActionResult GetDetails([FromQuery] int Id)
         {
-            var result = new Company();
+            var result = new Letter();
             try
             {
-                result = DatabaseHelper.Get<Company>(Id);
+                result = DatabaseHelper.Get<Letter>(Id);
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                DatabaseHelper.Insert(model.Company.ToDomainModel(model.UserId));
+                DatabaseHelper.Insert(model.Letter.ToDomainModel(model.UserId));
             }
             catch (Exception ex)
             {
@@ -104,13 +104,13 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                var existingCompany = new DomainModels.Company();
-                if (model.Company.Id != null)
+                var existingLetter = new DomainModels.Letter();
+                if (model.Letter.Id != null)
                 {
-                    existingCompany = DatabaseHelper.Get<DomainModels.Company>(model.Company.Id.Value);
+                    existingLetter = DatabaseHelper.Get<DomainModels.Letter>(model.Letter.Id.Value);
                 }
                 
-                var result = DatabaseHelper.Update(model.Company.ToDomainModel(model.UserId, existingCompany));
+                var result = DatabaseHelper.Update(model.Letter.ToDomainModel(model.UserId, existingLetter));
                 if (!result)
                     throw new Exception("Record wasn't updated");
             }
@@ -130,7 +130,7 @@ namespace DocumentRegistry.Api.Controllers
             {
                 var parameters = new DynamicParameters();
                 
-                parameters.Add("Id", model.Company.Id);
+                parameters.Add("Id", model.Letter.Id);
                 parameters.Add("UserId", model.UserId);
 
                 DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
