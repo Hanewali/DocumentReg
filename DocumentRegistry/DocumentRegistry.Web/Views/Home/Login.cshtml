@@ -1,4 +1,6 @@
 ﻿@using System.IO
+@using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Hosting
 @model DocumentRegistry.Web.Models.Home.Login
 
 @{
@@ -22,11 +24,16 @@
     </nav>
 </header>
 <div>
+    
     @Directory.GetParent("~")
-    <h2>Logowanie</h2>
-    @Html.TextBoxFor(m => m.Username)
-    @Html.TextBoxFor(m => m.Password)
-    @Html.ActionLink("Zaloguj", "LoginPost", "Home")
+    @using (Html.BeginForm("LoginPost", "Home"))
+    {
+        @Html.AntiForgeryToken()
+        <h2>Logowanie</h2>
+        @Html.TextBoxFor(m => m.Username)
+        @Html.PasswordFor(m => m.Password)
+        <input type="submit" value="Zaloguj" class="btn btn-primary"/>
+    }
 </div>
 </body>
 </html>
