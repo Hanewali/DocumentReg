@@ -4,6 +4,7 @@ namespace DocumentRegistry.Web.Models.Company
 {
     public class Company
     {
+        public int Id { get; set; }
         [DisplayName("Nazwa")]
         public string Name { get; set; }
         [DisplayName("Ulica")]
