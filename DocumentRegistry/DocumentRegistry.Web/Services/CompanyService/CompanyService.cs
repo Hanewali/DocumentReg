@@ -1,28 +1,105 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using DocumentRegistry.Web.Infrastructure;
 using DocumentRegistry.Web.Models.Company;
-using Index = DocumentRegistry.Web.Models.Company.Index;
 using System.Text.Json;
-
+using DocumentRegistry.Web.ApiModels.Company;
 
 namespace DocumentRegistry.Web.Services.CompanyService
 {
     public class CompanyService : ICompanyService
     {
-        public Index PrepareIndexModel()
+        private HttpClient _apiClient;
+
+        public CompanyService()
         {
-            var client = new HttpClient
+            _apiClient = ApiHelper.PrepareClient("Company/");
+        }
+        
+        public IEnumerable<Company> Search(int beginFrom, int rows, int userId)
+        {
+            var response = _apiClient.GetAsync("Search").Result.Content.ReadAsStringAsync().Result;
+            return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
+        }
+
+        public IEnumerable<Company> Search(Company company, int beginFrom, int rows, int userId)
+        {
+            var request = PrepareRequestModel(company, beginFrom, rows, userId);
+            
+            var jsonRequest = JsonSerializer.Serialize(request);
+            
+            var response = _apiClient.PostAsync("Search", new StringContent(jsonRequest)).Result.Content.ReadAsStringAsync().Result;
+            
+            return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
+        }
+
+        public Company GetDetails(int companyId, int userId)
+        {
+            var response = _apiClient.GetAsync("GetDetails").Result.Content.ReadAsStringAsync().Result;
+
+            return JsonSerializer.Deserialize<Company>(response);
+        }
+
+        public void Create(Company company, int userId)
+        {
+            var request = PrepareRequestModel(company, userId);
+
+            var jsonRequest = JsonSerializer.Serialize(request);
+
+            var result = _apiClient.PostAsync("Create", new StringContent(jsonRequest)).Result;
+
+            if (!result.IsSuccessStatusCode) throw new Exception("Error during creating an object");
+        }
+
+        public void Edit(Company company, int userId)
+        {
+            var request = PrepareRequestModel(company, userId);
+
+            var jsonRequest = JsonSerializer.Serialize(request);
+
+            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest)).Result;
+
+            if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
+        }
+
+        public void Delete(int companyId, int userId)
+        {
+            var request = PrepareRequestModel(companyId, userId);
+
+            var jsonRequest = JsonSerializer.Serialize(request);
+
+            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest)).Result;
+
+            if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
+        }
+
+        private CompanyRequest PrepareRequestModel(int companyId, int userId)
+        {
+            return new CompanyRequest
             {
-                BaseAddress = new Uri(Configuration.Api.Url)
+                UserID = userId,
+                Company = new Company {Id = companyId}
             };
-
-            client.DefaultRequestHeaders.Add("AuthorizationToken", Configuration.Api.AuthorizationToken);
-            var response = client.GetAsync("Company").Result.Content.ReadAsStringAsync().Result;
-
-            var result = JsonSerializer.Deserialize<IEnumerable<Company>>(response);
-            return new Index(result);
+        }
+        
+        private CompanyRequest PrepareRequestModel(Company company, int userId)
+        {
+            return new CompanyRequest
+            {
+                UserID = userId,
+                Company = company
+            };
+        }
+        
+        private CompanyRequest PrepareRequestModel(Company company, int beginFrom, int rows, int userId)
+        {
+            return new CompanyRequest
+            {
+                UserID = userId,
+                BeginFrom = beginFrom,
+                Rows = rows,
+                Company = company
+            };
         }
     }
 }
