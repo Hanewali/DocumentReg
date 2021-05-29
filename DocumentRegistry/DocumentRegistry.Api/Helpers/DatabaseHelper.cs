@@ -117,6 +117,16 @@ namespace DocumentRegistry.Api.Helpers
 
         #endregion
 
+        public static T Get<T>(int objectId) where T : class
+        {
+            using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
+
+            sqlConnection.Open();
+            var result = sqlConnection.Get<T>(objectId);
+
+            return result;
+        }
+        
         #region GetValue
 
         public static T GetValue<T>(string sqlSyntax)
@@ -201,6 +211,22 @@ namespace DocumentRegistry.Api.Helpers
 
         #endregion
 
+        #region Update
+
+        public static bool Update<T>(T objectToUpdate) where T : class
+        {
+            using var transaction = GetTransactionScope();
+            using var sqlConnection = new SqlConnection(Configuration.Database.ConnectionString);
+            
+            sqlConnection.Open();
+            var result = sqlConnection.Update(objectToUpdate);
+            transaction.Complete();
+
+            return result;  
+        }
+
+        #endregion
+        
         #region PrivateMethods
         private static TransactionScope GetTransactionScope(IsolationLevel isolationLevel, TimeSpan timeout)
         {
