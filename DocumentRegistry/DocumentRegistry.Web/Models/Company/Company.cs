@@ -2,7 +2,7 @@
 
 namespace DocumentRegistry.Web.Models.Company
 {
-    public class Company
+    public class Company : IModel
     {
         public int Id { get; set; }
         [DisplayName("Nazwa")]
