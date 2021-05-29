@@ -70,10 +70,10 @@ namespace DocumentRegistry.Api.Controllers
         [HttpGet]
         public IActionResult GetDetails([FromQuery] int Id)
         {
-            var result = new User();
+            var result = new DomainModels.User();
             try
             {
-                result = DatabaseHelper.Get<User>(Id);
+                result = DatabaseHelper.Get<DomainModels.User>(Id);
             }
             catch (Exception ex)
             {

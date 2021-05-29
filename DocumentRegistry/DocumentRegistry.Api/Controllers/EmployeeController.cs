@@ -69,10 +69,10 @@ namespace DocumentRegistry.Api.Controllers
         [HttpGet]
         public IActionResult GetDetails([FromQuery] int Id)
         {
-            var result = new Employee();
+            var result = new DomainModels.Employee();
             try
             {
-                result = DatabaseHelper.Get<Employee>(Id);
+                result = DatabaseHelper.Get<DomainModels.Employee>(Id);
             }
             catch (Exception ex)
             {
