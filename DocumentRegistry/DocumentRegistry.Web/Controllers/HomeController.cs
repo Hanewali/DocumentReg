@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentRegistry.Web.Controllers
 {
-    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         [HttpGet]
