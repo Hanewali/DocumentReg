@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace DocumentRegistry.Web.Controllers
 {
+    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

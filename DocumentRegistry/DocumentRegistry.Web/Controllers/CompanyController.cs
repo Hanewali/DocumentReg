@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DocumentRegistry.Web.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class CompanyController : BaseController
     {
         private readonly ILogger<CompanyController> _logger;
