@@ -13,11 +13,11 @@ namespace DocumentRegistry.Web.Controllers
     public class EmployeeController : BaseController
     {
         private readonly ILogger<EmployeeController> _logger;
-        private static IEmployeeService _companyService;
+        private static IEmployeeService _employeeService;
 
-        public EmployeeController(IEmployeeService companyService, ILogger<EmployeeController> logger)
+        public EmployeeController(IEmployeeService employeeService, ILogger<EmployeeController> logger)
         {
-            _companyService = companyService;
+            _employeeService = employeeService;
             _logger = logger;
         }
 
@@ -37,11 +37,11 @@ namespace DocumentRegistry.Web.Controllers
             
             try
             {
-                searchResult.AddRange(_companyService.Search(model.Employee, model.BeginFrom, model.Rows, GetUserIdFromSession()));
+                searchResult.AddRange(_employeeService.Search(model.Employee, model.BeginFrom, model.Rows, GetUserIdFromSession()));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during employee search");
                 return Problem();
             }
 
@@ -49,17 +49,17 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int companyId)
+        public IActionResult Details(int employeeId)
         {
             var result = new Employee();
 
             try
             {
-                result = _companyService.GetDetails(companyId, GetUserIdFromSession());
+                result = _employeeService.GetDetails(employeeId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during employee search");
                 return Problem();
             }
 
@@ -75,15 +75,15 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpPost]
-        public IActionResult Create(Employee company)
+        public IActionResult Create(Employee employee)
         {
             try
             {
-                _companyService.Create(company, GetUserIdFromSession());
+                _employeeService.Create(employee, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during employee search");
                 return Problem();
             }
 
@@ -99,19 +99,19 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpPost]
-        public IActionResult Edit(Employee company)
+        public IActionResult Edit(Employee employee)
         {
             try
             {
-                _companyService.Edit(company, GetUserIdFromSession());
+                _employeeService.Edit(employee, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during employee search");
                 return Problem();
             }
 
-            return RedirectToAction("Details", "Employee", company.Id);
+            return RedirectToAction("Details", "Employee", employee.Id);
         }
         
         [HttpGet]
@@ -123,15 +123,15 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(int companyId)
+        public IActionResult Delete(int employeeId)
         {
             try
             {
-                _companyService.Delete(companyId, GetUserIdFromSession());
+                _employeeService.Delete(employeeId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during employee search");
                 return Problem();
             }
 
