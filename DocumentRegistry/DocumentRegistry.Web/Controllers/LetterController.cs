@@ -13,14 +13,22 @@ namespace DocumentRegistry.Web.Controllers
     public class LetterController : BaseController
     {
         private readonly ILogger<LetterController> _logger;
-        private static ILetterService _companyService;
+        private static ILetterService _letterService;
 
-        public LetterController(ILetterService companyService, ILogger<LetterController> logger)
+        public LetterController(ILetterService letterService, ILogger<LetterController> logger)
         {
-            _companyService = companyService;
+            _letterService = letterService;
             _logger = logger;
         }
 
+        [HttpGet]
+        public IActionResult Search()
+        {
+            var model = new Search();
+
+            return View(model);
+        }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Search(LetterRequest model)
@@ -29,11 +37,11 @@ namespace DocumentRegistry.Web.Controllers
             
             try
             {
-                searchResult.AddRange(_companyService.Search(model.Letter, model.BeginFrom, model.Rows, GetUserIdFromSession()));
+                searchResult.AddRange(_letterService.Search(model.Letter, model.BeginFrom, model.Rows, GetUserIdFromSession()));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during letter search");
                 return Problem();
             }
 
@@ -41,17 +49,17 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int companyId)
+        public IActionResult Details(int letterId)
         {
             var result = new Letter();
 
             try
             {
-                result = _companyService.GetDetails(companyId, GetUserIdFromSession());
+                result = _letterService.GetDetails(letterId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during letter search");
                 return Problem();
             }
 
@@ -67,15 +75,15 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpPost]
-        public IActionResult Create(Letter company)
+        public IActionResult Create(Letter letter)
         {
             try
             {
-                _companyService.Create(company, GetUserIdFromSession());
+                _letterService.Create(letter, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during letter search");
                 return Problem();
             }
 
@@ -91,19 +99,19 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpPost]
-        public IActionResult Edit(Letter company)
+        public IActionResult Edit(Letter letter)
         {
             try
             {
-                _companyService.Edit(company, GetUserIdFromSession());
+                _letterService.Edit(letter, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during letter search");
                 return Problem();
             }
 
-            return RedirectToAction("Details", "Letter", company.Id);
+            return RedirectToAction("Details", "Letter", letter.Id);
         }
         
         [HttpGet]
@@ -115,15 +123,15 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(int companyId)
+        public IActionResult Delete(int letterId)
         {
             try
             {
-                _companyService.Delete(companyId, GetUserIdFromSession());
+                _letterService.Delete(letterId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during letter search");
                 return Problem();
             }
 
