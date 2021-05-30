@@ -2,7 +2,12 @@ using System;
 using System.IO;
 using DocumentRegistry.Web.Infrastructure;
 using DocumentRegistry.Web.Services.CompanyService;
+using DocumentRegistry.Web.Services.DocumentTypeService;
+using DocumentRegistry.Web.Services.EmployeeService;
 using DocumentRegistry.Web.Services.HomeService;
+using DocumentRegistry.Web.Services.LetterService;
+using DocumentRegistry.Web.Services.PostCompanyService;
+using DocumentRegistry.Web.Services.UserService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.WebSockets;
@@ -26,7 +31,7 @@ namespace DocumentRegistry.Web
         {
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromHours(2);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -34,6 +39,11 @@ namespace DocumentRegistry.Web
             services.AddControllersWithViews().AddSessionStateTempDataProvider();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<ILetterService, LetterService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IPostCompanyService, PostCompanyService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDocumentTypeService, DocumentTypeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
