@@ -1,0 +1,38 @@
+﻿@model DocumentRegistry.Web.Models.User.Search
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+
+<table class="table">
+<tr>
+    <td>@Html.DisplayNameFor(x => x.Users.First().FirstName)</td>
+    <td>@Html.DisplayNameFor(x => x.Users.First().LastName)</td>
+    <td>@Html.DisplayNameFor(x => x.Users.First().Login)</td>
+    <td>@Html.DisplayNameFor(x => x.Users.First().Email)</td>
+    <td>@Html.DisplayNameFor(x => x.Users.First().IsAdmin)</td>
+</tr>
+
+@foreach (var user in Model.Users)
+{
+    <tr>
+        <td>@user.FirstName</td>
+        <td>@user.LastName</td>
+        <td>@user.Login</td>
+        <td>@user.Email</td>
+        <td>@(user.IsAdmin ? "Tak" : "Nie")</td>
+    </tr>
+}
+</table>
+
+
+</body>
+</html>

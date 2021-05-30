@@ -1,0 +1,70 @@
+﻿@model DocumentRegistry.Web.Models.Letter.Search
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Listy</title>
+</head>
+<body>
+<div>
+      <table class="table">
+      <tr>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().Number)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().PostCompany)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().Date)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().ReceiveDate)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().Content)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().Employee)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().Company)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().DocumentType)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().Other)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().PR)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().PO)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().CompanyName)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().CompanyStreet)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().CompanyCity)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().CompanyPostalCode)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().CompanyPostName)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().CompanyPostStreet)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().CompanyPostCity)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().CompanyPostPostalCode)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().EmployeeFirstName)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().EmployeeLastName)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().Kind)</td>
+      </tr>
+      
+      @foreach (var letter in Model.Letters)
+      {
+          <tr>
+              <td>@letter.Number</td>
+              <td>@letter.PostCompany</td>
+              <td>@letter.Date</td>
+              <td>@letter.ReceiveDate</td>
+              <td>@letter.Employee.FirstName + @letter.Employee.LastName</td>
+              <td>@letter.Company.Name</td>
+              <td>@letter.DocumentType.Name</td>
+              <td>@letter.Other</td>
+              <td>@letter.PR</td>
+              <td>@letter.PO</td>
+              <td>@letter.CompanyName</td>
+              <td>@letter.CompanyStreet</td>
+              <td>@letter.CompanyCity</td>
+              <td>@letter.CompanyPostalCode</td>
+              <td>@letter.CompanyPostName</td>
+              <td>@letter.CompanyPostStreet</td>
+              <td>@letter.CompanyPostCity</td>
+              <td>@letter.CompanyPostPostalCode</td>
+              <td>@letter.EmployeeFirstName</td>
+              <td>@letter.EmployeeLastName</td>
+              <td>@letter.Kind</td>
+          </tr>
+      }
+      </table>
+</div>
+</body>
+</html>

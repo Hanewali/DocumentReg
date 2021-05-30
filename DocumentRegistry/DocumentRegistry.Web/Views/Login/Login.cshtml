@@ -19,14 +19,14 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Login">Rejestr dokumentów</a>
+            <a class="navbar-brand" asp-area="" asp-controller="Login" asp-action="Login">Rejestr dokumentów</a>
         </div>
     </nav>
 </header>
 <div>
     
     @Directory.GetParent("~")
-    @using (Html.BeginForm("LoginPost", "Home"))
+    @using (Html.BeginForm("LoginPost", "Login"))
     {
         @Html.AntiForgeryToken()
         <h2>Logowanie</h2>
