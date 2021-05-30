@@ -10,7 +10,7 @@ namespace DocumentRegistry.Web.Services
         {
             var client = new HttpClient
             {
-                BaseAddress = new Uri(Configuration.Api.Url + targetArea)
+                BaseAddress = new Uri(Configuration.Api.Url + targetArea + "/")
             };
             
             client.DefaultRequestHeaders.Add("AuthorizationToken", Configuration.Api.AuthorizationToken);

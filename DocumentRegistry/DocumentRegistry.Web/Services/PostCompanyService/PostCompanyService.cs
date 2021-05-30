@@ -1,48 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using DocumentRegistry.Web.Models.Company;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
+using DocumentRegistry.Web.Models.PostCompany;
 
-namespace DocumentRegistry.Web.Services.CompanyService
+namespace DocumentRegistry.Web.Services.PostCompanyService
 {
-    public class CompanyService : ICompanyService
+    public class PostCompanyService : IPostCompanyService
     {
-        private readonly HttpClient _apiClient;
+        private HttpClient _apiClient;
 
-        public CompanyService()
+        public PostCompanyService()
         {
-            _apiClient = ApiHelper.PrepareClient("Company");
+            _apiClient = ApiHelper.PrepareClient("PostCompany");
         }
-        
-        public IEnumerable<Company> Search(int beginFrom, int rows, int userId)
+
+        public IEnumerable<PostCompany> Search(int beginFrom, int rows, int userId)
         {
             var response = _apiClient.GetAsync("Search").Result.Content.ReadAsStringAsync().Result;
-            return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
+            return JsonSerializer.Deserialize<IEnumerable<PostCompany>>(response);
         }
 
-        public IEnumerable<Company> Search(Company company, int beginFrom, int rows, int userId)
+        public IEnumerable<PostCompany> Search(PostCompany postCompany, int beginFrom, int rows, int userId)
         {
-            var request = PrepareRequestModel(company, beginFrom, rows, userId);
+            var request = PrepareRequestModel(postCompany, beginFrom, rows, userId);
             
             var jsonRequest = JsonSerializer.Serialize(request);
             
             var response = _apiClient.PostAsync("Search", new StringContent(jsonRequest)).Result.Content.ReadAsStringAsync().Result;
             
-            return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
+            return JsonSerializer.Deserialize<IEnumerable<PostCompany>>(response);
         }
 
-        public Company GetDetails(int companyId, int userId)
+        public PostCompany GetDetails(int postCompanyId, int userId)
         {
             var response = _apiClient.GetAsync("GetDetails").Result.Content.ReadAsStringAsync().Result;
 
-            return JsonSerializer.Deserialize<Company>(response);
+            return JsonSerializer.Deserialize<PostCompany>(response);
         }
 
-        public void Create(Company company, int userId)
+        public void Create(PostCompany postCompany, int userId)
         {
-            var request = PrepareRequestModel(company, userId);
+            var request = PrepareRequestModel(postCompany, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -51,9 +51,9 @@ namespace DocumentRegistry.Web.Services.CompanyService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during creating an object");
         }
 
-        public void Edit(Company company, int userId)
+        public void Edit(PostCompany postCompany, int userId)
         {
-            var request = PrepareRequestModel(company, userId);
+            var request = PrepareRequestModel(postCompany, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -62,9 +62,9 @@ namespace DocumentRegistry.Web.Services.CompanyService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
 
-        public void Delete(int companyId, int userId)
+        public void Delete(int postCompanyId, int userId)
         {
-            var request = PrepareRequestModel(companyId, userId);
+            var request = PrepareRequestModel(postCompanyId, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -72,33 +72,33 @@ namespace DocumentRegistry.Web.Services.CompanyService
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
-
-        private CompanyRequest PrepareRequestModel(int companyId, int userId)
+        
+        private PostCompanyRequest PrepareRequestModel(int postCompanyId, int userId)
         {
             return new()
             {
                 UserId = userId,
-                Company = new Company {Id = companyId}
+                PostCompany = new PostCompany {Id = postCompanyId}
             };
         }
         
-        private CompanyRequest PrepareRequestModel(Company company, int userId)
+        private PostCompanyRequest PrepareRequestModel(PostCompany postCompany, int userId)
         {
             return new()
             {
                 UserId = userId,
-                Company = company
+                PostCompany = postCompany
             };
         }
         
-        private CompanyRequest PrepareRequestModel(Company company, int beginFrom, int rows, int userId)
+        private PostCompanyRequest PrepareRequestModel(PostCompany postCompany, int beginFrom, int rows, int userId)
         {
             return new()
             {
                 UserId = userId,
                 BeginFrom = beginFrom,
                 Rows = rows,
-                Company = company
+                PostCompany = postCompany
             };
         }
     }

@@ -19,14 +19,14 @@ namespace DocumentRegistry.Web.Services.HomeService
         
         public LoginService(ISessionStore session)
         {
-            _client = ApiHelper.PrepareClient("");
+            _client = ApiHelper.PrepareClient("Login");
             _session = session;
         }
 
         public LoginResponse Verify(Login request)
         {
             var response = _client
-                .PostAsync("Login", new StringContent(JsonSerializer.Serialize(request)))
+                .PostAsync("VerifyLogin", new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json"))
                 .Result.Content.ReadAsStringAsync().Result;
             
              return JsonSerializer.Deserialize<LoginResponse>(response);
@@ -34,10 +34,9 @@ namespace DocumentRegistry.Web.Services.HomeService
 
         public void Login(ISession session, LoginResponse response)
         {
-            if (session.IsAvailable)
-                session.SetInt32("UserId", response.UserId);
+            if (!session.IsAvailable) throw new Exception("Session is not available!");
             
-            throw new Exception("Session is not available!");
+            session.SetInt32("UserId", response.UserId);
         }
     }
 }

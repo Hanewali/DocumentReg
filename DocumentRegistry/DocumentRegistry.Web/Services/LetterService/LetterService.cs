@@ -1,48 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using DocumentRegistry.Web.Models.Company;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
+using DocumentRegistry.Web.Models.Letter;
 
-namespace DocumentRegistry.Web.Services.CompanyService
+namespace DocumentRegistry.Web.Services.LetterService
 {
-    public class CompanyService : ICompanyService
+    public class LetterService : ILetterService
     {
         private readonly HttpClient _apiClient;
 
-        public CompanyService()
+        public LetterService()
         {
-            _apiClient = ApiHelper.PrepareClient("Company");
-        }
-        
-        public IEnumerable<Company> Search(int beginFrom, int rows, int userId)
-        {
-            var response = _apiClient.GetAsync("Search").Result.Content.ReadAsStringAsync().Result;
-            return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
+            _apiClient = ApiHelper.PrepareClient("Letter");
         }
 
-        public IEnumerable<Company> Search(Company company, int beginFrom, int rows, int userId)
+        public IEnumerable<Letter> Search(int beginFrom, int rows, int userId)
         {
-            var request = PrepareRequestModel(company, beginFrom, rows, userId);
+            var response = _apiClient.GetAsync("Search").Result.Content.ReadAsStringAsync().Result;
+            return JsonSerializer.Deserialize<IEnumerable<Letter>>(response);
+        }
+
+        public IEnumerable<Letter> Search(Letter letter, int beginFrom, int rows, int userId)
+        {
+            var request = PrepareRequestModel(letter, beginFrom, rows, userId);
             
             var jsonRequest = JsonSerializer.Serialize(request);
             
             var response = _apiClient.PostAsync("Search", new StringContent(jsonRequest)).Result.Content.ReadAsStringAsync().Result;
             
-            return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
+            return JsonSerializer.Deserialize<IEnumerable<Letter>>(response);
         }
 
-        public Company GetDetails(int companyId, int userId)
+        public Letter GetDetails(int letterId, int userId)
         {
             var response = _apiClient.GetAsync("GetDetails").Result.Content.ReadAsStringAsync().Result;
 
-            return JsonSerializer.Deserialize<Company>(response);
+            return JsonSerializer.Deserialize<Letter>(response);
         }
 
-        public void Create(Company company, int userId)
+        public void Create(Letter letter, int userId)
         {
-            var request = PrepareRequestModel(company, userId);
+            var request = PrepareRequestModel(letter, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -51,9 +51,9 @@ namespace DocumentRegistry.Web.Services.CompanyService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during creating an object");
         }
 
-        public void Edit(Company company, int userId)
+        public void Edit(Letter letter, int userId)
         {
-            var request = PrepareRequestModel(company, userId);
+            var request = PrepareRequestModel(letter, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -62,9 +62,9 @@ namespace DocumentRegistry.Web.Services.CompanyService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
 
-        public void Delete(int companyId, int userId)
+        public void Delete(int letterId, int userId)
         {
-            var request = PrepareRequestModel(companyId, userId);
+            var request = PrepareRequestModel(letterId, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -72,33 +72,33 @@ namespace DocumentRegistry.Web.Services.CompanyService
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
-
-        private CompanyRequest PrepareRequestModel(int companyId, int userId)
+        
+        private LetterRequest PrepareRequestModel(int letterId, int userId)
         {
             return new()
             {
                 UserId = userId,
-                Company = new Company {Id = companyId}
+                Letter = new Letter {Id = letterId}
             };
         }
         
-        private CompanyRequest PrepareRequestModel(Company company, int userId)
+        private LetterRequest PrepareRequestModel(Letter letter, int userId)
         {
             return new()
             {
                 UserId = userId,
-                Company = company
+                Letter = letter
             };
         }
         
-        private CompanyRequest PrepareRequestModel(Company company, int beginFrom, int rows, int userId)
+        private LetterRequest PrepareRequestModel(Letter letter, int beginFrom, int rows, int userId)
         {
             return new()
             {
                 UserId = userId,
                 BeginFrom = beginFrom,
                 Rows = rows,
-                Company = company
+                Letter = letter
             };
         }
     }
