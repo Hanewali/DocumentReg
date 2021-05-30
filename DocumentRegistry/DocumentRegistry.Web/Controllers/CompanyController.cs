@@ -57,6 +57,14 @@ namespace DocumentRegistry.Web.Controllers
 
             return View(result);
         }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var model = new Company();
+
+            return View(model);
+        }
         
         [HttpPost]
         public IActionResult Create(Company company)
@@ -74,6 +82,14 @@ namespace DocumentRegistry.Web.Controllers
             return RedirectToAction("Search", "Company");
         }
 
+        [HttpGet]
+        public IActionResult Edit()
+        {
+            var model = new Company();
+
+            return View(model);
+        }
+        
         [HttpPost]
         public IActionResult Edit(Company company)
         {
@@ -88,6 +104,14 @@ namespace DocumentRegistry.Web.Controllers
             }
 
             return RedirectToAction("Details", "Company", company.Id);
+        }
+        
+        [HttpGet]
+        public IActionResult Delete()
+        {
+            var model = new Company();
+
+            return View(model);
         }
 
         [HttpPost]
