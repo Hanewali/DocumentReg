@@ -21,6 +21,14 @@ namespace DocumentRegistry.Web.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        public IActionResult Search()
+        {
+            var model = new Search();
+
+            return View(model);
+        }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Search(EmployeeRequest model)
