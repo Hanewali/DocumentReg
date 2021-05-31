@@ -5,4 +5,60 @@
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>Edycja firmy: @Model.Name</h2>
+@using (Html.BeginForm("Edit", "Company"))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Name, new {@class = "required"})
+                @Html.TextBoxFor(x => x.Name, null, new {@class = "form-control"})
+            </div>
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Branch)
+                @Html.TextBoxFor(x => x.Branch, null, new {@class = "form-control"})
+            </div>
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Street)
+                @Html.TextBoxFor(x => x.Street, null, new {@class = "form-control"})
+            </div>
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.City)
+                @Html.TextBoxFor(x => x.City, null, new {@class = "form-control"})
+            </div>
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.PostalCode)
+                @Html.TextBoxFor(x => x.PostalCode, null, new {@class = "form-control"})
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.PostName)
+                @Html.TextBoxFor(x => x.PostName, null, new {@class = "form-control"})
+            </div>
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.PostStreet)
+                @Html.TextBoxFor(x => x.PostStreet, null, new {@class = "form-control"})
+            </div>
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.PostCity)
+                @Html.TextBoxFor(x => x.PostCity, null, new {@class = "form-control"})
+            </div>
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.PostPostalCode)
+                @Html.TextBoxFor(x => x.PostPostalCode, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row mt-3 pl-3">
+        @Html.ActionLink("Wróć", "Details", "Company", new {companyId = Model.Id}, new {@class = "btn btn-secondary"})
+        <div class="col-sm-6"></div>
+        <div class="col-sm-2">
+            <input type="submit" value="Zapisz" class="btn btn-primary">
+        </div>
+    </div>
+}

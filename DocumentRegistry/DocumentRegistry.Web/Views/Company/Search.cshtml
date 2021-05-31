@@ -4,21 +4,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
+<div class="row">
+    <h2 class="col-sm-2">Firmy</h2>
+    <div class="col-sm-8"></div>
+    @Html.ActionLink("Dodaj", "Create", "Company", null, new {@class = "btn btn-outline-secondary mb-2"})
+</div>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
 
-<table class="table">
-<tr>
+<div class="row">
+    
+</div>
+
+<table class="table table-sm">
+<tr class="table-active">
     <td>@Html.DisplayNameFor(x => x.Companies.First().Name)</td>
     <td>@Html.DisplayNameFor(x => x.Companies.First().City)</td>
     <td>@Html.DisplayNameFor(x => x.Companies.First().Street)</td>
     <td>@Html.DisplayNameFor(x => x.Companies.First().Branch)</td>
     <td>@Html.DisplayNameFor(x => x.Companies.First().PostalCode)</td>
+    <td></td>
 </tr>
 
 @foreach (var company in Model.Companies)
@@ -29,10 +33,10 @@
         <td>@company.Street</td>
         <td>@company.Branch</td>
         <td>@company.PostalCode</td>
+        <td>
+            @Html.ActionLink("Szczegóły", "Details", "Company", new {companyId = company.Id}, new {@class = "btn btn-outline-primary btn-sm"})
+        </td>
     </tr>
 }
 </table>
 
-
-</body>
-</html>

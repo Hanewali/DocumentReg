@@ -5,8 +5,13 @@
     Layout = "_Layout";
 }
 
-<h2>@Model.Name</h2>
+<h2>Usuń firmę: @Model.Name</h2>
 
+
+<div class="row ml-2">
+    <strong class="mr-1">@Html.DisplayNameFor(x => x.Name):</strong>
+    @Html.DisplayFor(x => x.Name)
+</div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.Branch):</strong>
     @Html.DisplayFor(x => x.Branch)
@@ -39,9 +44,16 @@
     <strong class="mr-1">@Html.DisplayNameFor(x => x.PostPostalCode):</strong>
     @Html.DisplayFor(x => x.PostPostalCode)
 </div>
-<div class="row mt-4 ml-2">
-    @Html.ActionLink("Wróć", "Search", "Company", null, new {@class = "btn btn-secondary col-sm-1"})
-    <div class="col-sm-7"></div>
-    @Html.ActionLink("Edytuj", "Edit", "Company", new {companyId = Model.Id}, new {@class = "btn btn-warning col-sm-1"})
-    @Html.ActionLink("Usuń", "ConfirmDelete", "Company", new {companyId = Model.Id}, new {@class = "btn btn-danger col-sm-1  ml-1"})
-</div>
+
+@using (Html.BeginForm("Delete", "Company"))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="row ml-3 mt-3">
+        @Html.ActionLink("Wróć", "Details", "Company", new {companyId = Model.Id}, new {@class = "btn btn-secondary"})
+        <div class="col-sm-4"></div>
+        <input type="submit" value="Usuń" class="btn btn-danger"/>
+    </div>
+}
+
+
+
