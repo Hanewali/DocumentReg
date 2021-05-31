@@ -26,6 +26,16 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = new Search();
 
+            try
+            {
+                model.Letters = _letterService.Search(0, 10, GetUserIdFromSession());
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during company search");
+                return Problem();
+            }
+
             return View(model);
         }
         

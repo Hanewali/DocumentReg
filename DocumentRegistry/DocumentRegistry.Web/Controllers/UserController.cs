@@ -13,11 +13,11 @@ namespace DocumentRegistry.Web.Controllers
     public class UserController : BaseController
     {
         private readonly ILogger<UserController> _logger;
-        private static IUserService _companyService;
+        private static IUserService _userService;
 
-        public UserController(IUserService companyService, ILogger<UserController> logger)
+        public UserController(IUserService userService, ILogger<UserController> logger)
         {
-            _companyService = companyService;
+            _userService = userService;
             _logger = logger;
         }
 
@@ -25,6 +25,16 @@ namespace DocumentRegistry.Web.Controllers
         public IActionResult Search()
         {
             var model = new Search();
+
+            try
+            {
+                model.Users = _userService.Search(0, 10, GetUserIdFromSession());
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during company search");
+                return Problem();
+            }
 
             return View(model);
         }
@@ -37,7 +47,7 @@ namespace DocumentRegistry.Web.Controllers
             
             try
             {
-                searchResult.AddRange(_companyService.Search(model.User, model.BeginFrom, model.Rows, GetUserIdFromSession()));
+                searchResult.AddRange(_userService.Search(model.User, model.BeginFrom, model.Rows, GetUserIdFromSession()));
             }
             catch (Exception ex)
             {
@@ -55,7 +65,7 @@ namespace DocumentRegistry.Web.Controllers
 
             try
             {
-                result = _companyService.GetDetails(companyId, GetUserIdFromSession());
+                result = _userService.GetDetails(companyId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -79,7 +89,7 @@ namespace DocumentRegistry.Web.Controllers
         {
             try
             {
-                _companyService.Create(company, GetUserIdFromSession());
+                _userService.Create(company, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -103,7 +113,7 @@ namespace DocumentRegistry.Web.Controllers
         {
             try
             {
-                _companyService.Edit(company, GetUserIdFromSession());
+                _userService.Edit(company, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -127,7 +137,7 @@ namespace DocumentRegistry.Web.Controllers
         {
             try
             {
-                _companyService.Delete(companyId, GetUserIdFromSession());
+                _userService.Delete(companyId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {

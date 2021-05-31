@@ -26,6 +26,16 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = new Search();
 
+            try
+            {
+                model.Companies = _companyService.Search(0, 10, GetUserIdFromSession());
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during company search");
+                return Problem();
+            }
+            
             return View(model);
         }
         
@@ -49,7 +59,7 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int companyId)
+        public IActionResult Details([FromQuery] int companyId)
         {
             var result = new Company();
 
@@ -91,9 +101,9 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int companyId)
         {
-            var model = new Company();
+            var model = _companyService.GetDetails(companyId, GetUserIdFromSession());
 
             return View(model);
         }
@@ -111,23 +121,23 @@ namespace DocumentRegistry.Web.Controllers
                 return Problem();
             }
 
-            return RedirectToAction("Details", "Company", company.Id);
+            return RedirectToAction("Details", "Company", new {companyId = company.Id});
         }
         
         [HttpGet]
-        public IActionResult Delete()
+        public IActionResult ConfirmDelete(int companyId)
         {
-            var model = new Company();
+            var model = _companyService.GetDetails(companyId, GetUserIdFromSession());
 
             return View(model);
         }
-
+        
         [HttpPost]
-        public IActionResult Delete(int companyId)
+        public IActionResult Delete(int Id)
         {
             try
             {
-                _companyService.Delete(companyId, GetUserIdFromSession());
+                _companyService.Delete(Id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {

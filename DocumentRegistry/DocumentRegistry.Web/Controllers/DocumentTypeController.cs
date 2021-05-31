@@ -13,11 +13,11 @@ namespace DocumentRegistry.Web.Controllers
     public class DocumentTypeController : BaseController
     {
         private readonly ILogger<DocumentTypeController> _logger;
-        private static IDocumentTypeService _companyService;
+        private static IDocumentTypeService _documentTypeService;
 
-        public DocumentTypeController(IDocumentTypeService companyService, ILogger<DocumentTypeController> logger)
+        public DocumentTypeController(IDocumentTypeService documentTypeService, ILogger<DocumentTypeController> logger)
         {
-            _companyService = companyService;
+            _documentTypeService = documentTypeService;
             _logger = logger;
         }
 
@@ -25,6 +25,16 @@ namespace DocumentRegistry.Web.Controllers
         public IActionResult Search()
         {
             var model = new Search();
+
+            try
+            {
+                model.DocumentTypes = _documentTypeService.Search(0, 10, GetUserIdFromSession());
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during company search");
+                return Problem();
+            }
 
             return View(model);
         }
@@ -37,7 +47,7 @@ namespace DocumentRegistry.Web.Controllers
             
             try
             {
-                searchResult.AddRange(_companyService.Search(model.DocumentType, model.BeginFrom, model.Rows, GetUserIdFromSession()));
+                searchResult.AddRange(_documentTypeService.Search(model.DocumentType, model.BeginFrom, model.Rows, GetUserIdFromSession()));
             }
             catch (Exception ex)
             {
@@ -55,7 +65,7 @@ namespace DocumentRegistry.Web.Controllers
 
             try
             {
-                result = _companyService.GetDetails(companyId, GetUserIdFromSession());
+                result = _documentTypeService.GetDetails(companyId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -79,7 +89,7 @@ namespace DocumentRegistry.Web.Controllers
         {
             try
             {
-                _companyService.Create(company, GetUserIdFromSession());
+                _documentTypeService.Create(company, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -103,7 +113,7 @@ namespace DocumentRegistry.Web.Controllers
         {
             try
             {
-                _companyService.Edit(company, GetUserIdFromSession());
+                _documentTypeService.Edit(company, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -127,7 +137,7 @@ namespace DocumentRegistry.Web.Controllers
         {
             try
             {
-                _companyService.Delete(companyId, GetUserIdFromSession());
+                _documentTypeService.Delete(companyId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {

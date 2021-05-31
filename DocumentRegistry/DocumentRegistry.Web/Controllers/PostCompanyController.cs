@@ -13,11 +13,11 @@ namespace DocumentRegistry.Web.Controllers
     public class PostCompanyController : BaseController
     {
         private readonly ILogger<PostCompanyController> _logger;
-        private static IPostCompanyService _companyService;
+        private static IPostCompanyService _postCompanyService;
 
-        public PostCompanyController(IPostCompanyService companyService, ILogger<PostCompanyController> logger)
+        public PostCompanyController(IPostCompanyService postCompanyService, ILogger<PostCompanyController> logger)
         {
-            _companyService = companyService;
+            _postCompanyService = postCompanyService;
             _logger = logger;
         }
 
@@ -25,6 +25,16 @@ namespace DocumentRegistry.Web.Controllers
         public IActionResult Search()
         {
             var model = new Search();
+
+            try
+            {
+                model.PostCompanies = _postCompanyService.Search(0, 10, GetUserIdFromSession());
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during company search");
+                return Problem();
+            }
 
             return View(model);
         }
@@ -37,7 +47,7 @@ namespace DocumentRegistry.Web.Controllers
             
             try
             {
-                searchResult.AddRange(_companyService.Search(model.PostCompany, model.BeginFrom, model.Rows, GetUserIdFromSession()));
+                searchResult.AddRange(_postCompanyService.Search(model.PostCompany, model.BeginFrom, model.Rows, GetUserIdFromSession()));
             }
             catch (Exception ex)
             {
@@ -55,7 +65,7 @@ namespace DocumentRegistry.Web.Controllers
 
             try
             {
-                result = _companyService.GetDetails(companyId, GetUserIdFromSession());
+                result = _postCompanyService.GetDetails(companyId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -79,7 +89,7 @@ namespace DocumentRegistry.Web.Controllers
         {
             try
             {
-                _companyService.Create(company, GetUserIdFromSession());
+                _postCompanyService.Create(company, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -103,7 +113,7 @@ namespace DocumentRegistry.Web.Controllers
         {
             try
             {
-                _companyService.Edit(company, GetUserIdFromSession());
+                _postCompanyService.Edit(company, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -127,7 +137,7 @@ namespace DocumentRegistry.Web.Controllers
         {
             try
             {
-                _companyService.Delete(companyId, GetUserIdFromSession());
+                _postCompanyService.Delete(companyId, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
