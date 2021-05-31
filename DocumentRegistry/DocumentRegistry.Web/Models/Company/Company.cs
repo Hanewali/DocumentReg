@@ -15,13 +15,13 @@ namespace DocumentRegistry.Web.Models.Company
         public string Branch { get; set; }
         [DisplayName("Kod pocztowy")]
         public string PostalCode { get; set; }
-        [DisplayName("Nazwa")]
+        [DisplayName("Nazwa korespondencyjna")]
         public string PostName { get; set; }
-        [DisplayName("Ulica")]
+        [DisplayName("Ulica  korespondencyjna")]
         public string PostStreet { get; set; }
-        [DisplayName("Miasto")]        
+        [DisplayName("Miasto korespondencyjne")]        
         public string PostCity { get; set; }
-        [DisplayName("Kod pocztowy")]
+        [DisplayName("Kod pocztowy  korespondencyjny")]
         public string PostPostalCode { get; set; }
     }
 }
