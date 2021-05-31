@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
 using DocumentRegistry.Web.Models.DocumentType;
@@ -19,7 +20,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
         
         public IEnumerable<DocumentType> Search(int beginFrom, int rows, int userId)
         {
-            var response = _apiClient.GetAsync("Search").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync("GetList?beginFrom={beginFrom}&rows={rows}").Result.Content.ReadAsStringAsync().Result;
             return JsonSerializer.Deserialize<IEnumerable<DocumentType>>(response);
         }
 
@@ -29,7 +30,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
             
             var jsonRequest = JsonSerializer.Serialize(request);
             
-            var response = _apiClient.PostAsync("Search", new StringContent(jsonRequest)).Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.PostAsync("Search", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result.Content.ReadAsStringAsync().Result;
             
             return JsonSerializer.Deserialize<IEnumerable<DocumentType>>(response);
         }
@@ -47,7 +48,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
-            var result = _apiClient.PostAsync("Create", new StringContent(jsonRequest)).Result;
+            var result = _apiClient.PostAsync("Create", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during creating an object");
         }
@@ -58,7 +59,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
-            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest)).Result;
+            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
@@ -69,7 +70,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
-            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest)).Result;
+            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }

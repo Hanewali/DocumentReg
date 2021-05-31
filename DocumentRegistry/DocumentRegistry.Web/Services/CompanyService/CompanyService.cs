@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using DocumentRegistry.Web.Models.Company;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
@@ -18,7 +19,7 @@ namespace DocumentRegistry.Web.Services.CompanyService
         
         public IEnumerable<Company> Search(int beginFrom, int rows, int userId)
         {
-            var response = _apiClient.GetAsync("Search").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetList?beginFrom={beginFrom}&rows={rows}").Result.Content.ReadAsStringAsync().Result;
             return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
         }
 
@@ -28,14 +29,14 @@ namespace DocumentRegistry.Web.Services.CompanyService
             
             var jsonRequest = JsonSerializer.Serialize(request);
             
-            var response = _apiClient.PostAsync("Search", new StringContent(jsonRequest)).Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.PostAsync("Search", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result.Content.ReadAsStringAsync().Result;
             
             return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
         }
 
         public Company GetDetails(int companyId, int userId)
         {
-            var response = _apiClient.GetAsync("GetDetails").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?companyId={companyId}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<Company>(response);
         }
@@ -46,7 +47,7 @@ namespace DocumentRegistry.Web.Services.CompanyService
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
-            var result = _apiClient.PostAsync("Create", new StringContent(jsonRequest)).Result;
+            var result = _apiClient.PostAsync("Create", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during creating an object");
         }
@@ -57,7 +58,7 @@ namespace DocumentRegistry.Web.Services.CompanyService
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
-            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest)).Result;
+            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
@@ -68,7 +69,7 @@ namespace DocumentRegistry.Web.Services.CompanyService
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
-            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest)).Result;
+            var result = _apiClient.PostAsync("Delete", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
