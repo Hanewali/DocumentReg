@@ -31,6 +31,7 @@ namespace DocumentRegistry.Api.Controllers
             {
                 var queryResult = DatabaseHelper.GetAll<DomainModels.Company>();
                 result.AddRange(queryResult
+                    .Where(x => x.IsActive == true)
                     .Skip(beginFrom ?? 0)
                     .Take(rows ?? 10)
                     .Select(Company.BuildFromDomainModel));
@@ -67,12 +68,12 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetDetails([FromQuery] int Id)
+        public IActionResult GetDetails([FromQuery] int companyId)
         {
             var result = new DomainModels.Company();
             try
             {
-                result = DatabaseHelper.Get<DomainModels.Company>(Id);
+                result = DatabaseHelper.Get<DomainModels.Company>(companyId);
             }
             catch (Exception ex)
             {
@@ -88,7 +89,8 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                DatabaseHelper.Insert(model.Company.ToDomainModel(model.UserId));
+                var domainModel = model.Company.ToDomainModel(model.UserId);
+                DatabaseHelper.Insert(domainModel);
             }
             catch (Exception ex)
             {
@@ -128,12 +130,19 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                var parameters = new DynamicParameters();
-                
-                parameters.Add("Id", model.Company.Id);
-                parameters.Add("UserId", model.UserId);
+                // var parameters = new DynamicParameters();
+                //
+                // parameters.Add("Id", model.Company.Id);
+                // parameters.Add("UserId", model.UserId);
+                //
+                // DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
 
-                DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
+
+                var domainModel = DatabaseHelper.Get<DomainModels.Company>(model.Company.Id.Value);
+                
+                domainModel.IsActive = false;
+
+                DatabaseHelper.Update(domainModel);
             }
             catch (Exception ex)
             {
