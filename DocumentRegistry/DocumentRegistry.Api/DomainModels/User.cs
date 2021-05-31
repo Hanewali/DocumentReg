@@ -7,7 +7,7 @@ namespace DocumentRegistry.Api.DomainModels
     public class User : IBaseModel
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public DateTime CreateDate { get; set; }
         public int? CreateUserId { get; set; }
         public DateTime ModifyDate { get; set; }
