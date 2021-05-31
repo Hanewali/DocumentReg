@@ -37,7 +37,7 @@ namespace DocumentRegistry.Api.ApiModels.User
         {
             user ??= new DomainModels.User();
 
-            if (user.Id == null)
+            if (user.Id == 0)
             {
                 user.CreateUserId = userId;
                 user.CreateDate = DateTime.Now;

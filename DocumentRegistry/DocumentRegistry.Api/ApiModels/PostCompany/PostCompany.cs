@@ -34,7 +34,7 @@ namespace DocumentRegistry.Api.ApiModels.PostCompany
         {
             postCompany ??= new DomainModels.PostCompany();
 
-            if (postCompany.Id == null)
+            if (postCompany.Id == 0)
             {
                 postCompany.CreateUserId = userId;
                 postCompany.CreateDate = DateTime.Now;

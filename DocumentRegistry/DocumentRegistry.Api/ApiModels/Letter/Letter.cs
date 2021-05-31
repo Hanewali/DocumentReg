@@ -35,7 +35,7 @@ namespace DocumentRegistry.Api.ApiModels.Letter
         {
             letter ??= new DomainModels.Letter();
 
-            if (letter.Id == null)
+            if (letter.Id == 0)
             {
                 letter.CreateUserId = userId;
                 letter.CreateDate = DateTime.Now;

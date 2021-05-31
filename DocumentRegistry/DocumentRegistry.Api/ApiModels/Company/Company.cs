@@ -37,7 +37,7 @@ namespace DocumentRegistry.Api.ApiModels.Company
         {
             company ??= new DomainModels.Company();
 
-            if (company.Id == null)
+            if (company.Id == 0)
             {
                 company.CreateUserId = userId;
                 company.CreateDate = DateTime.Now;

@@ -25,7 +25,7 @@ namespace DocumentRegistry.Api.ApiModels.Employee
         {
             employee ??= new DomainModels.Employee();
 
-            if (employee.Id == null)
+            if (employee.Id == 0)
             {
                 employee.CreateUserId = userId;
                 employee.CreateDate = DateTime.Now;

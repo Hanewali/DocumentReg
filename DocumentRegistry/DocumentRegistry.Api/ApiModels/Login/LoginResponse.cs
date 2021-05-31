@@ -12,7 +12,7 @@ namespace DocumentRegistry.Api.ApiModels.Login
             return new()
             {
                 Verified = true,
-                UserId = user.Id.Value
+                UserId = user.Id
             };
         }
     }
