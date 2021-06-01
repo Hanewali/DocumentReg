@@ -34,9 +34,9 @@ namespace DocumentRegistry.Web.Services.EmployeeService
             return JsonSerializer.Deserialize<IEnumerable<Employee>>(response);
         }
 
-        public Employee GetDetails(int employeeId, int userId)
+        public Employee GetDetails(int id, int userId)
         {
-            var response = _apiClient.GetAsync("GetDetails").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?documentTypeId={id}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<Employee>(response);
         }
@@ -63,9 +63,9 @@ namespace DocumentRegistry.Web.Services.EmployeeService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
 
-        public void Delete(int employeeId, int userId)
+        public void Delete(int id, int userId)
         {
-            var request = PrepareRequestModel(employeeId, userId);
+            var request = PrepareRequestModel(id, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -74,12 +74,12 @@ namespace DocumentRegistry.Web.Services.EmployeeService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
         
-        private EmployeeRequest PrepareRequestModel(int employeeId, int userId)
+        private EmployeeRequest PrepareRequestModel(int id, int userId)
         {
             return new()
             {
                 UserId = userId,
-                Employee = new Employee {Id = employeeId}
+                Employee = new Employee {Id = id}
             };
         }
         

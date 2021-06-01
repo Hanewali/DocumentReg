@@ -34,9 +34,9 @@ namespace DocumentRegistry.Web.Services.PostCompanyService
             return JsonSerializer.Deserialize<IEnumerable<PostCompany>>(response);
         }
 
-        public PostCompany GetDetails(int postCompanyId, int userId)
+        public PostCompany GetDetails(int id, int userId)
         {
-            var response = _apiClient.GetAsync("GetDetails").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?documentTypeId={id}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<PostCompany>(response);
         }
@@ -63,9 +63,9 @@ namespace DocumentRegistry.Web.Services.PostCompanyService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
 
-        public void Delete(int postCompanyId, int userId)
+        public void Delete(int id, int userId)
         {
-            var request = PrepareRequestModel(postCompanyId, userId);
+            var request = PrepareRequestModel(id, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -74,12 +74,12 @@ namespace DocumentRegistry.Web.Services.PostCompanyService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
         
-        private PostCompanyRequest PrepareRequestModel(int postCompanyId, int userId)
+        private PostCompanyRequest PrepareRequestModel(int id, int userId)
         {
             return new()
             {
                 UserId = userId,
-                PostCompany = new PostCompany {Id = postCompanyId}
+                PostCompany = new PostCompany {Id = id}
             };
         }
         

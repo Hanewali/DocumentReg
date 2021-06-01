@@ -34,9 +34,9 @@ namespace DocumentRegistry.Web.Services.UserService
             return JsonSerializer.Deserialize<IEnumerable<User>>(response);
         }
 
-        public User GetDetails(int modifiedUserId, int userId)
+        public User GetDetails(int id, int userId)
         {
-            var response = _apiClient.GetAsync("GetDetails").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?documentTypeId={id}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<User>(response);
         }
@@ -63,9 +63,9 @@ namespace DocumentRegistry.Web.Services.UserService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
 
-        public void Delete(int modifiedUserId, int userId)
+        public void Delete(int id, int userId)
         {
-            var request = PrepareRequestModel(modifiedUserId, userId);
+            var request = PrepareRequestModel(id, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -74,12 +74,12 @@ namespace DocumentRegistry.Web.Services.UserService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
         
-        private UserRequest PrepareRequestModel(int modelUserId, int userId)
+        private UserRequest PrepareRequestModel(int id, int userId)
         {
             return new()
             {
                 UserId = userId,
-                User = new User {Id = modelUserId}
+                User = new User {Id = id}
             };
         }
         

@@ -35,9 +35,9 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
             return JsonSerializer.Deserialize<IEnumerable<DocumentType>>(response);
         }
 
-        public DocumentType GetDetails(int documentTypeId, int userId)
+        public DocumentType GetDetails(int id, int userId)
         {
-            var response = _apiClient.GetAsync("GetDetails").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?documentTypeId={id}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<DocumentType>(response);
         }
@@ -64,9 +64,9 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
 
-        public void Delete(int documentTypeId, int userId)
+        public void Delete(int id, int userId)
         {
-            var request = PrepareRequestModel(documentTypeId, userId);
+            var request = PrepareRequestModel(id, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -75,12 +75,12 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
         
-        private DocumentTypeRequest PrepareRequestModel(int documentTypeId, int userId)
+        private DocumentTypeRequest PrepareRequestModel(int id, int userId)
         {
             return new()
             {
                 UserId = userId,
-                DocumentType = new DocumentType {Id = documentTypeId}
+                DocumentType = new DocumentType {Id = id}
             };
         }
         

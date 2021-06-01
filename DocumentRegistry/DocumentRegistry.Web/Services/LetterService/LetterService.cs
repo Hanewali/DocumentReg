@@ -34,9 +34,9 @@ namespace DocumentRegistry.Web.Services.LetterService
             return JsonSerializer.Deserialize<IEnumerable<Letter>>(response);
         }
 
-        public Letter GetDetails(int letterId, int userId)
+        public Letter GetDetails(int id, int userId)
         {
-            var response = _apiClient.GetAsync("GetDetails").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?documentTypeId={id}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<Letter>(response);
         }
@@ -63,9 +63,9 @@ namespace DocumentRegistry.Web.Services.LetterService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
 
-        public void Delete(int letterId, int userId)
+        public void Delete(int id, int userId)
         {
-            var request = PrepareRequestModel(letterId, userId);
+            var request = PrepareRequestModel(id, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -74,12 +74,12 @@ namespace DocumentRegistry.Web.Services.LetterService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
         
-        private LetterRequest PrepareRequestModel(int letterId, int userId)
+        private LetterRequest PrepareRequestModel(int id, int userId)
         {
             return new()
             {
                 UserId = userId,
-                Letter = new Letter {Id = letterId}
+                Letter = new Letter {Id = id}
             };
         }
         
