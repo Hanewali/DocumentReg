@@ -1,34 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DocumentRegistry.Web.Models.Letter
 {
-    public class Letter
+    public class CreateEdit
     {
-        public int Id { get; set; }
-        [DisplayName("Numer")]
         public int Number { get; set; }
 
-        public int KeyPostCompanyId { get; set; }
-        [DisplayName("Firma do listów")] 
-        public string KeyPostCompanyName { get; set; }
+        public int CompanyId { get; set; }
+        
+        [DisplayName("Firma do listów")]
+        public IEnumerable<SelectListItem> PostCompanies { get; set; }
+        
         [DisplayName("Data")]
         public DateTime Date { get; set; }
+        
         [DisplayName("Data odbioru")]
         public DateTime ReceiveDate { get; set; }
+        
         [DisplayName("Zawartość")]
         public string Content { get; set; }
         public int KeyEmployeeId { get; set; }
+        
         [DisplayName("Pracownik")]
-        public string KeyEmployeeFullName { get; set; }
+        public IEnumerable<SelectListItem> Employees { get; set; }
 
         public int KeyCompanyId { get; set; }
         [DisplayName("Firma")] 
-        public string KeyCompanyName { get; set; }
+        public IEnumerable<SelectListItem> Companies { get; set; }
+
 
         public int KeyDocumentTypeId { get; set; }
         [DisplayName("Typ dokumentu")] 
-        public string KeyDocumentTypeName { get; set; }
+        public IEnumerable<SelectListItem> DocumentTypes { get; set; }
+
         [DisplayName("Inne")]
         public string Other { get; set; }
         [DisplayName("PR")]
@@ -56,6 +63,6 @@ namespace DocumentRegistry.Web.Models.Letter
         [DisplayName("Nazwisko")]
         public string EmployeeLastName { get; set; }
         [DisplayName("Rodzaj")]
-        public string Kind { get; set; } //inbox, outbox
+        public string Kind { get; set; }
     }
 }

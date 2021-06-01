@@ -22,7 +22,7 @@ namespace DocumentRegistry.Web.Models.Employee
                 {
                     Text = x.Name, Value = x.Id.ToString(), Selected = false
                 }),
-                SelectedCompanyId = employee.Company.Id
+                SelectedCompanyId = employee.KeyCompanyId
             };
 
             model.Companies.First(x => x.Value == model.SelectedCompanyId.ToString()).Selected = true;

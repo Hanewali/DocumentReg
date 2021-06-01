@@ -9,7 +9,9 @@ namespace DocumentRegistry.Web.Models.Employee
         public string FirstName { get; set; }
         [DisplayName("Nazwisko")]
         public string LastName { get; set; }
+
+        public int KeyCompanyId { get; set; }
         [DisplayName("Firma")]
-        public Company.Company Company { get; set; }
+        public string KeyCompanyName { get; set; }
     }
 }
