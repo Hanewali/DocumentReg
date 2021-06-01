@@ -10,7 +10,7 @@
 <tr>
     <td>@Html.DisplayNameFor(x => x.Employees.First().FirstName)</td>
     <td>@Html.DisplayNameFor(x => x.Employees.First().LastName)</td>
-    <td>@Html.DisplayNameFor(x => x.Employees.First().Company)</td>
+    <td>@Html.DisplayNameFor(x => x.Employees.First().KeyCompanyName)</td>
     <td></td>
 </tr>
 
@@ -19,7 +19,7 @@
     <tr>
         <td>@employee.FirstName</td>
         <td>@employee.LastName</td>
-        <td>@employee.Company.Name</td>
+        <td>@employee.KeyCompanyName</td>
         <td>@Html.ActionLink("Szczegóły", "Details", "Employee", new {id = employee.Id}, new {@class = "btn btn-outline-primary btn-sm"})</td>
     </tr>
 }
