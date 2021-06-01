@@ -16,6 +16,12 @@ namespace DocumentRegistry.Web.Services.CompanyService
         {
             _apiClient = ApiHelper.PrepareClient("Company");
         }
+
+        public IEnumerable<Company> GetList(int userId)
+        {
+            var response = _apiClient.GetAsync($"GetList").Result.Content.ReadAsStringAsync().Result;
+            return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
+        }
         
         public IEnumerable<Company> Search(int beginFrom, int rows, int userId)
         {
@@ -34,9 +40,9 @@ namespace DocumentRegistry.Web.Services.CompanyService
             return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
         }
 
-        public Company GetDetails(int companyId, int userId)
+        public Company GetDetails(int id, int userId)
         {
-            var response = _apiClient.GetAsync($"GetDetails?companyId={companyId}").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?companyId={id}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<Company>(response);
         }
@@ -63,9 +69,9 @@ namespace DocumentRegistry.Web.Services.CompanyService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during editing an object");
         }
 
-        public void Delete(int companyId, int userId)
+        public void Delete(int id, int userId)
         {
-            var request = PrepareRequestModel(companyId, userId);
+            var request = PrepareRequestModel(id, userId);
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
@@ -74,12 +80,12 @@ namespace DocumentRegistry.Web.Services.CompanyService
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
 
-        private CompanyRequest PrepareRequestModel(int companyId, int userId)
+        private CompanyRequest PrepareRequestModel(int id, int userId)
         {
             return new()
             {
                 UserId = userId,
-                Company = new Company {Id = companyId}
+                Company = new Company {Id = id}
             };
         }
         

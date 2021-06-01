@@ -6,6 +6,7 @@ namespace DocumentRegistry.Web.Services.CompanyService
 {
     public interface ICompanyService
     {
+        IEnumerable<Company> GetList(int userId);
         IEnumerable<Company> Search(int beginFrom, int rows, int userId);
         IEnumerable<Company> Search(Company company, int beginFrom, int rows, int userId);
         Company GetDetails(int companyId, int userId); 
