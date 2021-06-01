@@ -1,11 +1,10 @@
 ﻿@model DocumentRegistry.Web.Models.Company.Company
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edycja firmy: @Model.Name</h2>
+<h2>Edycja firmy</h2>
 @using (Html.BeginForm("Edit", "Company"))
 {
     @Html.HiddenFor(x => x.Id)
@@ -55,7 +54,7 @@
 
     
     <div class="row mt-3 pl-3">
-        @Html.ActionLink("Wróć", "Details", "Company", new {companyId = Model.Id}, new {@class = "btn btn-secondary"})
+        @Html.ActionLink("Wróć", "Details", "Company", new {id = Model.Id}, new {@class = "btn btn-secondary"})
         <div class="col-sm-6"></div>
         <div class="col-sm-2">
             <input type="submit" value="Zapisz" class="btn btn-primary">
