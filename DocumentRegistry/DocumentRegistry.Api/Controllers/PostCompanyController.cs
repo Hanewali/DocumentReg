@@ -31,6 +31,7 @@ namespace DocumentRegistry.Api.Controllers
             {
                 var queryResult = DatabaseHelper.GetAll<DomainModels.PostCompany>();
                 result.AddRange(queryResult
+                    .Where(x => x.IsActive == true)
                     .Skip(beginFrom ?? 0)
                     .Take(rows ?? 10)
                     .Select(PostCompany.BuildFromDomainModel));
@@ -67,12 +68,12 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetDetails([FromQuery] int Id)
+        public IActionResult GetDetails([FromQuery] int id)
         {
             var result = new DomainModels.PostCompany();
             try
             {
-                result = DatabaseHelper.Get<DomainModels.PostCompany>(Id);
+                result = DatabaseHelper.Get<DomainModels.PostCompany>(id);
             }
             catch (Exception ex)
             {

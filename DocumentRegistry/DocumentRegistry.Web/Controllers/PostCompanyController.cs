@@ -59,13 +59,13 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int companyId)
+        public IActionResult Details(int id)
         {
             var result = new PostCompany();
 
             try
             {
-                result = _postCompanyService.GetDetails(companyId, GetUserIdFromSession());
+                result = _postCompanyService.GetDetails(id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -81,6 +81,8 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = new PostCompany();
 
+            model.ContractDate = DateTime.Now;
+            
             return View(model);
         }
         
@@ -101,9 +103,9 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit([FromQuery] int id)
         {
-            var model = new PostCompany();
+            var model = _postCompanyService.GetDetails(id, GetUserIdFromSession());
 
             return View(model);
         }

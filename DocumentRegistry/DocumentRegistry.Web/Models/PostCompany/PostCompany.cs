@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace DocumentRegistry.Web.Models.PostCompany
@@ -17,7 +18,10 @@ namespace DocumentRegistry.Web.Models.PostCompany
         public string Street { get; set; }
         [DisplayName("Numer umowy")]
         public string ContractNumber { get; set; }
+        
         [DisplayName("Data umowy")]
+        [DataType(DataType.Date), Required]
+        [DisplayFormat(DataFormatString = "yyyy-MM-dd", ApplyFormatInEditMode = true)]
         public DateTime ContractDate { get; set; }
         [DisplayName("Urząd pocztowy")]
         public string PostOffice { get; set; }

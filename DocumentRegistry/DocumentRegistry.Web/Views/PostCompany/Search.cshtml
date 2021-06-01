@@ -4,9 +4,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Firmy pocztowe</h2>
-    <table class="table table-sm">
-<tr>
+<div class="row">
+    <h2 class="col-sm-3">Firmy pocztowe</h2>
+    <div class="col-sm-7"></div>
+    @Html.ActionLink("Dodaj", "Create", "PostCompany", null, new {@class = "btn btn-outline-secondary mb-2"})
+</div>
+
+<div class="row">
+    
+</div>
+<table class="table table-sm">
+<tr class="table-active">
     <td>@Html.DisplayNameFor(x => x.PostCompanies.First().Name)</td>
     <td>@Html.DisplayNameFor(x => x.PostCompanies.First().City)</td>
     <td>@Html.DisplayNameFor(x => x.PostCompanies.First().Code)</td>
@@ -25,7 +33,7 @@
         <td>@postCompany.Code</td>
         <td>@postCompany.Street</td>
         <td>@postCompany.ContractNumber</td>
-        <td>@postCompany.ContractDate</td>
+        <td>@postCompany.ContractDate.ToString("dd-MM-yyyy")</td>
         <td>@postCompany.PostOffice</td>
         <td>@Html.ActionLink("Szczegóły", "Details", "PostCompany", new {id = postCompany.Id}, new {@class = "btn btn-outline-primary btn-sm"})</td>
     </tr>

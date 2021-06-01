@@ -27,7 +27,7 @@
 </div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.ContractDate):</strong>
-    @Html.DisplayFor(x => x.ContractDate)
+    @{ var date = Model.ContractDate.ToString("dd-MM-yyyy"); } @Html.DisplayTextFor(x => date )
 </div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.PostOffice):</strong>
