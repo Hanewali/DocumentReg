@@ -1,18 +1,74 @@
 ﻿@model DocumentRegistry.Web.Models.PostCompany.PostCompany
 
 @{
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Dodaj firmę</title>
-</head>
-<body>
-<div>
-        
-</div>
-</body>
-</html>
+<h2>Dodaj firmę pocztową</h2>
+@using (Html.BeginForm("Create", "PostCompany"))
+{
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Name, new {@class = "required"})
+                @Html.TextBoxFor(x => x.Name, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Code, new {@class = "required"})
+                @Html.TextBoxFor(x => x.Code, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.City, new {@class = "required"})
+                @Html.TextBoxFor(x => x.City, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Street, new {@class = "required"})
+                @Html.TextBoxFor(x => x.Street, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.ContractNumber, new {@class = "required"})
+                @Html.TextBoxFor(x => x.ContractNumber, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.ContractDate, new {@class = "required"})
+                @Html.TextBoxFor(x => x.ContractDate, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.PostOffice, new {@class = "required"})
+                @Html.TextBoxFor(x => x.PostOffice, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-3 pl-3">
+        @Html.ActionLink("Wróć", "Details", "PostCompany", new {id = Model.Id}, new {@class = "btn btn-secondary"})
+        <div class="col-sm-6"></div>
+        <div class="col-sm-2">
+            <input type="submit" value="Zapisz" class="btn btn-primary">
+        </div>
+    </div>
+}

@@ -4,19 +4,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-
-<table class="table">
+<h2>Firmy pocztowe</h2>
+    <table class="table table-sm">
 <tr>
     <td>@Html.DisplayNameFor(x => x.PostCompanies.First().Name)</td>
     <td>@Html.DisplayNameFor(x => x.PostCompanies.First().City)</td>
+    <td>@Html.DisplayNameFor(x => x.PostCompanies.First().Code)</td>
     <td>@Html.DisplayNameFor(x => x.PostCompanies.First().Street)</td>
+    <td>@Html.DisplayNameFor(x => x.PostCompanies.First().ContractNumber)</td>
+    <td>@Html.DisplayNameFor(x => x.PostCompanies.First().ContractDate)</td>
+    <td>@Html.DisplayNameFor(x => x.PostCompanies.First().PostOffice)</td>
+    <td></td>
 </tr>
 
 @foreach (var postCompany in Model.PostCompanies)
@@ -24,11 +22,12 @@
     <tr>
         <td>@postCompany.Name</td>
         <td>@postCompany.City</td>
+        <td>@postCompany.Code</td>
         <td>@postCompany.Street</td>
+        <td>@postCompany.ContractNumber</td>
+        <td>@postCompany.ContractDate</td>
+        <td>@postCompany.PostOffice</td>
+        <td>@Html.ActionLink("Szczegóły", "Details", "PostCompany", new {id = postCompany.Id}, new {@class = "btn btn-outline-primary btn-sm"})</td>
     </tr>
 }
 </table>
-
-
-</body>
-</html>

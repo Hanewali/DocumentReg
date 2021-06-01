@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Firma pocztowa</h2>
+<h2>Usuń firmę pocztową</h2>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.Name):</strong>
     @Html.DisplayFor(x => x.Name)
@@ -34,9 +34,12 @@
     @Html.DisplayFor(x => x.PostOffice)
 </div>
 
-<div class="row mt-4 ml-2">
-    @Html.ActionLink("Wróć", "Search", "PostCompany", null, new {@class = "btn btn-secondary col-sm-1"})
-    <div class="col-sm-7"></div>
-    @Html.ActionLink("Edytuj", "Edit", "PostCompany", new {id = Model.Id}, new {@class = "btn btn-warning col-sm-1"})
-    @Html.ActionLink("Usuń", "ConfirmDelete", "PostCompany", new {id = Model.Id}, new {@class = "btn btn-danger col-sm-1  ml-1"})
-</div>
+@using (Html.BeginForm("Delete", "PostCompany"))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="row ml-3 mt-3">
+        @Html.ActionLink("Wróć", "Details", "PostCompany", new {id = Model.Id}, new {@class = "btn btn-secondary"})
+        <div class="col-sm-4"></div>
+        <input type="submit" value="Usuń" class="btn btn-danger"/>
+    </div>
+}
