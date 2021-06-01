@@ -3,16 +3,8 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-
-<table class="table">
+<h2>Użytkownicy</h2>
+<table class="table table-sm">
 <tr>
     <td>@Html.DisplayNameFor(x => x.Users.First().FirstName)</td>
     <td>@Html.DisplayNameFor(x => x.Users.First().LastName)</td>
@@ -33,6 +25,3 @@
 }
 </table>
 
-
-</body>
-</html>

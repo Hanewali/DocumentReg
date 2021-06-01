@@ -1,8 +1,60 @@
 ﻿@model DocumentRegistry.Web.Models.User.User
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>title</h2>
+<h2>Edycja użytkownika</h2>
+@using (Html.BeginForm("Edit", "User"))
+{
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.FirstName, new {@class = "required"})
+                @Html.TextBoxFor(x => x.FirstName, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.LastName, new {@class = "required"})
+                @Html.TextBoxFor(x => x.LastName, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Login, new {@class = "required"})
+                @Html.TextBoxFor(x => x.Login, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Email, new {@class = "required"})
+                @Html.TextBoxFor(x => x.Email, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.IsAdmin, new {@class = "required"})
+                @Html.CheckBoxFor(x => x.IsAdmin)
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-3 pl-3">
+        @Html.ActionLink("Wróć", "Details", "User", new {id = Model.Id}, new {@class = "btn btn-secondary"})
+        <div class="col-sm-6"></div>
+        <div class="col-sm-2">
+            <input type="submit" value="Zapisz" class="btn btn-primary">
+        </div>
+    </div>
+}

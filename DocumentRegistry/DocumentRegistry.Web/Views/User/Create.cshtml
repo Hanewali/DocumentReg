@@ -1,18 +1,53 @@
 ﻿@model DocumentRegistry.Web.Models.User.User
 
 @{
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Dodaj firmę</title>
-</head>
-<body>
-<div>
-        
+<div class="pb-2">
+    <h2>Dodaj użytkownika</h2>
 </div>
-</body>
-</html>
+
+@using (Html.BeginForm("Create", "User"))
+{
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.FirstName, new {@class = "required"})
+                @Html.TextBoxFor(x => x.FirstName, null, new {@class = "form-control"})
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.LastName, new {@class = "required"})
+                @Html.TextBoxFor(x => x.LastName, null, new {@class = "form-control"})
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Login, new {@class = "required"})
+                @Html.TextBoxFor(x => x.Login, null, new {@class = "form-control"})
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Email, new {@class = "required"})
+                @Html.TextBoxFor(x => x.Email, null, new {@class = "form-control"})
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.IsAdmin, new {@class = "required"})
+                @Html.CheckBoxFor(x => x.IsAdmin)
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-2">
+            <input type="submit" value="Dodaj" class="btn btn-primary">
+        </div>
+    </div>
+}

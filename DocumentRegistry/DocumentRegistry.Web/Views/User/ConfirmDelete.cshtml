@@ -4,7 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Użytkownik</h2>
+<h2>Usuń użytkownika</h2>
+
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.FirstName):</strong>
     @Html.DisplayFor(x => x.FirstName)
@@ -23,12 +24,15 @@
 </div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.IsAdmin):</strong>
-    @(Model.IsAdmin ? "Tak" : "Nie")
+    @Html.DisplayFor(x => x.IsAdmin ? "Administrator" : "Użytkownik")
 </div>
 
-<div class="row mt-4 ml-2">
-    @Html.ActionLink("Wróć", "Search", "User", null, new {@class = "btn btn-secondary col-sm-1"})
-    <div class="col-sm-7"></div>
-    @Html.ActionLink("Edytuj", "Edit", "User", new {id = Model.Id}, new {@class = "btn btn-warning col-sm-1"})
-    @Html.ActionLink("Usuń", "ConfirmDelete", "User", new {id = Model.Id}, new {@class = "btn btn-danger col-sm-1  ml-1"})
-</div>
+@using (Html.BeginForm("Delete", "User"))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="row ml-3 mt-3">
+        @Html.ActionLink("Wróć", "Details", "User", new {id = Model.Id}, new {@class = "btn btn-secondary"})
+        <div class="col-sm-4"></div>
+        <input type="submit" value="Usuń" class="btn btn-danger"/>
+    </div>
+}
