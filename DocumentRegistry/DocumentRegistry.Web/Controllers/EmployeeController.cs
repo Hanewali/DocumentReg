@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
 using DocumentRegistry.Web.Models.Employee;
+using DocumentRegistry.Web.Services.CompanyService;
 using DocumentRegistry.Web.Services.EmployeeService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,10 +15,12 @@ namespace DocumentRegistry.Web.Controllers
     {
         private readonly ILogger<EmployeeController> _logger;
         private static IEmployeeService _employeeService;
+        private static ICompanyService _companyService;
 
-        public EmployeeController(IEmployeeService employeeService, ILogger<EmployeeController> logger)
+        public EmployeeController(IEmployeeService employeeService, ICompanyService companyService, ILogger<EmployeeController> logger)
         {
             _employeeService = employeeService;
+            _companyService = companyService;
             _logger = logger;
         }
 
@@ -79,7 +82,7 @@ namespace DocumentRegistry.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new Employee();
+            var model = new CreateEdit();
 
             return View(model);
         }
@@ -101,9 +104,11 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
-            var model = new Employee();
+            var employee = _employeeService.GetDetails(id, GetUserIdFromSession());
+
+            var model = CreateEdit.FromDomainModel(employee, _companyService.GetList(GetUserIdFromSession())); 
 
             return View(model);
         }
@@ -125,13 +130,12 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpGet]
-        public IActionResult Delete()
+        public IActionResult ConfirmDelete(int id)
         {
-            var model = new Employee();
+            var model = _employeeService.GetDetails(id, GetUserIdFromSession());
 
             return View(model);
         }
-
         [HttpPost]
         public IActionResult Delete(int employeeId)
         {

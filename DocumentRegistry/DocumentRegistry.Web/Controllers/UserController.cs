@@ -125,9 +125,9 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpGet]
-        public IActionResult Delete()
+        public IActionResult ConfirmDelete(int id)
         {
-            var model = new User();
+            var model = _userService.GetDetails(id, GetUserIdFromSession());
 
             return View(model);
         }

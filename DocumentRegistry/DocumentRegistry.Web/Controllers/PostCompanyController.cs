@@ -125,13 +125,13 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpGet]
-        public IActionResult Delete()
+        public IActionResult ConfirmDelete(int id)
         {
-            var model = new PostCompany();
+            var model = _postCompanyService.GetDetails(id, GetUserIdFromSession());
 
             return View(model);
-        }
-
+        } 
+        
         [HttpPost]
         public IActionResult Delete(int companyId)
         {
