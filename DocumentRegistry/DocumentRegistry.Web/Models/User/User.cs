@@ -11,6 +11,8 @@ namespace DocumentRegistry.Web.Models.User
         public string LastName { get; set; }
         [DisplayName("Login")]
         public string Login { get; set; }
+        [DisplayName("Nowe hasło")] 
+        public string Password { get; set; }
         [DisplayName("Email")]
         public string Email { get; set; }
         [DisplayName("Administrator")]

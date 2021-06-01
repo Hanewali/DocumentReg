@@ -3,14 +3,23 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>Użytkownicy</h2>
+<div class="row">
+    <h2 class="col-sm-2">Użytkownicy</h2>
+    <div class="col-sm-8"></div>
+    @Html.ActionLink("Dodaj", "Create", "User", null, new {@class = "btn btn-outline-secondary mb-2"})
+</div>
+
+<div class="row">
+    
+</div>
 <table class="table table-sm">
-<tr>
+<tr class="table-active">
     <td>@Html.DisplayNameFor(x => x.Users.First().FirstName)</td>
     <td>@Html.DisplayNameFor(x => x.Users.First().LastName)</td>
     <td>@Html.DisplayNameFor(x => x.Users.First().Login)</td>
     <td>@Html.DisplayNameFor(x => x.Users.First().Email)</td>
     <td>@Html.DisplayNameFor(x => x.Users.First().IsAdmin)</td>
+    <td></td>
 </tr>
 
 @foreach (var user in Model.Users)
@@ -21,6 +30,7 @@
         <td>@user.Login</td>
         <td>@user.Email</td>
         <td>@(user.IsAdmin ? "Tak" : "Nie")</td>
+        <td>@Html.ActionLink("Szczegóły", "Details", "User", new {id = user.Id}, new {@class = "btn btn-outline-primary btn-sm"})</td>
     </tr>
 }
 </table>

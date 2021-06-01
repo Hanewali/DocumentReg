@@ -24,7 +24,7 @@
 </div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.IsAdmin):</strong>
-    @Html.DisplayFor(x => x.IsAdmin ? "Administrator" : "Użytkownik")
+    @(Model.IsAdmin ? "Tak" : "Nie")
 </div>
 
 @using (Html.BeginForm("Delete", "User"))

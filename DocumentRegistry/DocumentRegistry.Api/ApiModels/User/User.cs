@@ -50,9 +50,13 @@ namespace DocumentRegistry.Api.ApiModels.User
             user.LastName = LastName;
             user.Login = Login;
             user.Email = Email;
-            user.PasswordHash = PasswordHash;
-            user.PasswordSalt = PasswordSalt;
             user.IsAdmin = IsAdmin;
+
+            if (!string.IsNullOrWhiteSpace(Password))
+            {
+                user.PasswordHash = PasswordHash;
+                user.PasswordSalt = PasswordSalt;    
+            }
             
             return user;
         }

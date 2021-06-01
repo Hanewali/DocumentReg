@@ -32,6 +32,7 @@ namespace DocumentRegistry.Api.Controllers
             {
                 var queryResult = DatabaseHelper.GetAll<DomainModels.User>();
                 result.AddRange(queryResult
+                    .Where(x => x.IsActive == true)
                     .Skip(beginFrom ?? 0)
                     .Take(rows ?? 10)
                     .Select(ApiModels.User.User.BuildFromDomainModel));
@@ -92,9 +93,9 @@ namespace DocumentRegistry.Api.Controllers
                 var insertModel = model.User.ToDomainModel(model.UserId);
 
                 var password = HashPassword(model.User.Password);
-                
+            
                 insertModel.PasswordHash = password.Hash;
-                insertModel.PasswordSalt = password.Salt;
+                insertModel.PasswordSalt = password.Salt;    
                 
                 DatabaseHelper.Insert(insertModel);
             }
@@ -126,6 +127,11 @@ namespace DocumentRegistry.Api.Controllers
                     updateModel.PasswordHash = password.Hash;
                     updateModel.PasswordSalt = password.Salt;
                 }
+                else
+                {
+                    updateModel.PasswordHash = existingUser.PasswordHash;
+                    updateModel.PasswordSalt = existingUser.PasswordSalt;
+                }
                 
                 var result = DatabaseHelper.Update(updateModel);
 
@@ -146,12 +152,20 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                var parameters = new DynamicParameters();
-                
-                parameters.Add("Id", model.User.Id);
-                parameters.Add("UserId", model.UserId);
+                // var parameters = new DynamicParameters();
+                //
+                // parameters.Add("Id", model.User.Id);
+                // parameters.Add("UserId", model.UserId);
+                //
+                // DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
 
-                DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
+                var user = DatabaseHelper.Get<DomainModels.User>(model.User.Id.Value);
+
+                user.IsActive = false;
+                user.ModifyUserId = model.UserId;
+                user.ModifyDate = DateTime.Now;
+
+                DatabaseHelper.Update(user);
             }
             catch (Exception ex)
             {

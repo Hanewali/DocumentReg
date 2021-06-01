@@ -59,13 +59,13 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int companyId)
+        public IActionResult Details(int id)
         {
             var result = new User();
 
             try
             {
-                result = _userService.GetDetails(companyId, GetUserIdFromSession());
+                result = _userService.GetDetails(id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -101,19 +101,19 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
-            var model = new User();
+            var model = _userService.GetDetails(id, GetUserIdFromSession());
 
             return View(model);
         }
         
         [HttpPost]
-        public IActionResult Edit(User company)
+        public IActionResult Edit(User user)
         {
             try
             {
-                _userService.Edit(company, GetUserIdFromSession());
+                _userService.Edit(user, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -121,7 +121,7 @@ namespace DocumentRegistry.Web.Controllers
                 return Problem();
             }
 
-            return RedirectToAction("Details", "User", company.Id);
+            return RedirectToAction("Details", "User", new {id = user.Id});
         }
         
         [HttpGet]
@@ -133,11 +133,11 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(int companyId)
+        public IActionResult Delete(int id)
         {
             try
             {
-                _userService.Delete(companyId, GetUserIdFromSession());
+                _userService.Delete(id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {

@@ -3,7 +3,7 @@ using Dapper.Contrib.Extensions;
 
 namespace DocumentRegistry.Api.DomainModels
 {
-    [Table("User")]
+    [Table("[User]")]
     public class User : IBaseModel
     {
         [Key]

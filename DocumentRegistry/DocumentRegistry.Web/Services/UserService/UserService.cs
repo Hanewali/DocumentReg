@@ -36,7 +36,7 @@ namespace DocumentRegistry.Web.Services.UserService
 
         public User GetDetails(int id, int userId)
         {
-            var response = _apiClient.GetAsync($"GetDetails?documentTypeId={id}").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?id={id}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<User>(response);
         }
@@ -69,7 +69,7 @@ namespace DocumentRegistry.Web.Services.UserService
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
-            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            var result = _apiClient.PostAsync("Delete", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }
