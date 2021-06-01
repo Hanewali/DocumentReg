@@ -4,18 +4,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
+<h2>Pracownicy</h2>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-
-<table class="table">
+    <table class="table table-sm">
 <tr>
     <td>@Html.DisplayNameFor(x => x.Employees.First().FirstName)</td>
     <td>@Html.DisplayNameFor(x => x.Employees.First().LastName)</td>
+    <td>@Html.DisplayNameFor(x => x.Employees.First().Company)</td>
+    <td></td>
 </tr>
 
 @foreach (var employee in Model.Employees)
@@ -23,10 +19,8 @@
     <tr>
         <td>@employee.FirstName</td>
         <td>@employee.LastName</td>
+        <td>@employee.Company.Name</td>
+        <td>@Html.ActionLink("Szczegóły", "Details", "Employee", new {id = employee.Id}, new {@class = "btn btn-outline-primary btn-sm"})</td>
     </tr>
 }
 </table>
-
-
-</body>
-</html>
