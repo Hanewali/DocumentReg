@@ -1,0 +1,23 @@
+﻿@model DocumentRegistry.Web.Models.DocumentType.DocumentType
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Usuń typ dokumentu</h2>
+
+
+<div class="row ml-2">
+    <strong class="mr-1">@Html.DisplayNameFor(x => x.Name):</strong>
+    @Html.DisplayFor(x => x.Name)
+</div>
+
+@using (Html.BeginForm("Delete", "DocumentType"))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="row ml-3 mt-3">
+        @Html.ActionLink("Wróć", "Details", "DocumentType", new {id = Model.Id}, new {@class = "btn btn-secondary"})
+        <div class="col-sm-4"></div>
+        <input type="submit" value="Usuń" class="btn btn-danger"/>
+    </div>
+}

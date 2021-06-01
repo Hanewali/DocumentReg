@@ -1,8 +1,19 @@
 ﻿@model DocumentRegistry.Web.Models.DocumentType.DocumentType
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>title</h2>
+<h2>Typ dokumentu</h2>
+
+<div class="row ml-2">
+    <strong class="mr-1">@Html.DisplayNameFor(x => x.Name):</strong>
+    @Html.DisplayFor(x => x.Name)
+</div>
+
+<div class="row mt-4 ml-2">
+    @Html.ActionLink("Wróć", "Search", "DocumentType", null, new {@class = "btn btn-secondary col-sm-1"})
+    <div class="col-sm-7"></div>
+    @Html.ActionLink("Edytuj", "Edit", "DocumentType", new {id = Model.Id}, new {@class = "btn btn-warning col-sm-1"})
+    @Html.ActionLink("Usuń", "ConfirmDelete", "DocumentType", new {id = Model.Id}, new {@class = "btn btn-danger col-sm-1  ml-1"})
+</div>

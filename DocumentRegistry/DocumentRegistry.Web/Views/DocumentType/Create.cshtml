@@ -1,18 +1,28 @@
 ﻿@model DocumentRegistry.Web.Models.DocumentType.DocumentType
 
 @{
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <title>Dodaj firmę</title>
-</head>
-<body>
-<div>
-        
+<div class="pb-2">
+    <h2>Dodaj typ dokumentu</h2>
 </div>
-</body>
-</html>
+@using (Html.BeginForm("Create", "DocumentType"))
+{
+    <div class="form-group row pl-3">
+        <div class="col-sm-3">
+            <div class="row pb-1">
+                @Html.LabelFor(x => x.Name, new {@class = "required"})
+                @Html.TextBoxFor(x => x.Name, null, new {@class = "form-control"})
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-2">
+            <input type="submit" value="Dodaj" class="btn btn-primary">
+        </div>
+    </div>
+}
