@@ -129,12 +129,20 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                var parameters = new DynamicParameters();
-                
-                parameters.Add("Id", model.PostCompany.Id);
-                parameters.Add("UserId", model.UserId);
+                // var parameters = new DynamicParameters();
+                //
+                // parameters.Add("Id", model.PostCompany.Id);
+                // parameters.Add("UserId", model.UserId);
+                //
+                // DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
 
-                DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
+                var postCompany = DatabaseHelper.Get<DomainModels.PostCompany>(model.PostCompany.Id.Value);
+
+                postCompany.IsActive = false;
+                postCompany.ModifyDate = DateTime.Now;
+                postCompany.ModifyUserId = model.UserId;
+
+                DatabaseHelper.Update(postCompany);
             }
             catch (Exception ex)
             {

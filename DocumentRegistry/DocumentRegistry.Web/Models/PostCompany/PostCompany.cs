@@ -21,7 +21,7 @@ namespace DocumentRegistry.Web.Models.PostCompany
         
         [DisplayName("Data umowy")]
         [DataType(DataType.Date), Required]
-        [DisplayFormat(DataFormatString = "yyyy-MM-dd", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime ContractDate { get; set; }
         [DisplayName("Urząd pocztowy")]
         public string PostOffice { get; set; }

@@ -123,7 +123,7 @@ namespace DocumentRegistry.Web.Controllers
                 return Problem();
             }
 
-            return RedirectToAction("Details", "PostCompany", company.Id);
+            return RedirectToAction("Details", "PostCompany", new {id = company.Id});
         }
         
         [HttpGet]
@@ -135,11 +135,11 @@ namespace DocumentRegistry.Web.Controllers
         } 
         
         [HttpPost]
-        public IActionResult Delete(int companyId)
+        public IActionResult Delete(int id)
         {
             try
             {
-                _postCompanyService.Delete(companyId, GetUserIdFromSession());
+                _postCompanyService.Delete(id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {

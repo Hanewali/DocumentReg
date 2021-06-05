@@ -44,6 +44,7 @@ namespace DocumentRegistry.Api.ApiModels.PostCompany
             postCompany.ModifyUserId = userId;
             postCompany.ModifyDate = DateTime.Now;
             postCompany.Name = Name;
+            postCompany.Code = Code;
             postCompany.City = City;
             postCompany.Street = Street;
             postCompany.ContractNumber = ContractNumber;
@@ -59,6 +60,7 @@ namespace DocumentRegistry.Api.ApiModels.PostCompany
             
             parameters.Add("Id", Id);
             parameters.Add("Name", Name);
+            parameters.Add("Code", Code);
             parameters.Add("City", City);
             parameters.Add("Street", Street);
             parameters.Add("ContractNumber", ContractNumber);
