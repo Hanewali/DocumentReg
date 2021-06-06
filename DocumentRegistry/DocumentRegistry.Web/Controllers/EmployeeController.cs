@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
 using DocumentRegistry.Web.Models.Employee;
 using DocumentRegistry.Web.Services.CompanyService;
 using DocumentRegistry.Web.Services.EmployeeService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 
 namespace DocumentRegistry.Web.Controllers
@@ -29,6 +31,9 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = new Search();
 
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+
             try
             {
                 model.Employees = _employeeService.Search(0, 10, GetUserIdFromSession());
@@ -46,29 +51,33 @@ namespace DocumentRegistry.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Search(EmployeeRequest model)
         {
-            var searchResult = new List<Employee>();
+            var viewModel = new Search();
+            
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
             
             try
             {
-                searchResult.AddRange(_employeeService.Search(model.Employee, model.BeginFrom, model.Rows, GetUserIdFromSession()));
+                viewModel.Employees = _employeeService.Search(model.Employee, model.BeginFrom, model.Rows, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during employee search");
-                return Problem();
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas wyszukiwania pracowników");
+                return View(viewModel);
             }
 
-            return Ok(JsonSerializer.Serialize(searchResult));
+            return View(viewModel);
         }
 
         [HttpGet]
-        public IActionResult Details(int employeeId)
+        public IActionResult Details(int id)
         {
             var result = new Employee();
 
             try
             {
-                result = _employeeService.GetDetails(employeeId, GetUserIdFromSession());
+                result = _employeeService.GetDetails(id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -84,15 +93,19 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = new CreateEdit();
 
+            var companies = _companyService.GetList(GetUserIdFromSession());
+            model.Companies = companies.Select(company => new SelectListItem(company.Name, company.Id.ToString()));
+            
             return View(model);
         }
         
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(CreateEdit employee)
         {
             try
             {
-                _employeeService.Create(employee, GetUserIdFromSession());
+                _employeeService.Create(employee.ToDomainModel(), GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -114,11 +127,12 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpPost]
-        public IActionResult Edit(Employee employee)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(CreateEdit employee)
         {
             try
             {
-                _employeeService.Edit(employee, GetUserIdFromSession());
+                _employeeService.Edit(employee.ToDomainModel(), GetUserIdFromSession());
             }
             catch (Exception ex)
             {
@@ -126,7 +140,7 @@ namespace DocumentRegistry.Web.Controllers
                 return Problem();
             }
 
-            return RedirectToAction("Details", "Employee", employee.Id);
+            return RedirectToAction("Details", "Employee", new {id = employee.Id});
         }
         
         [HttpGet]
@@ -137,11 +151,12 @@ namespace DocumentRegistry.Web.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult Delete(int employeeId)
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
         {
             try
             {
-                _employeeService.Delete(employeeId, GetUserIdFromSession());
+                _employeeService.Delete(id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {

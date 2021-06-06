@@ -1,5 +1,6 @@
 ﻿using System;
 using Dapper;
+using DocumentRegistry.Api.Helpers;
 
 namespace DocumentRegistry.Api.ApiModels.Employee
 {
@@ -8,7 +9,8 @@ namespace DocumentRegistry.Api.ApiModels.Employee
         public int? Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int CompanyId { get; set; }
+        public int KeyCompanyId { get; set; }
+        public string KeyCompanyName { get; set; }
         
         public static Employee BuildFromDomainModel(DomainModels.Employee employee)
         {
@@ -17,7 +19,8 @@ namespace DocumentRegistry.Api.ApiModels.Employee
                 Id = employee.Id,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                CompanyId = employee.CompanyId
+                KeyCompanyId = employee.CompanyId,
+                KeyCompanyName = DatabaseHelper.Get<DomainModels.Company>(employee.CompanyId).Name
             };
         }
 
@@ -36,6 +39,7 @@ namespace DocumentRegistry.Api.ApiModels.Employee
             employee.ModifyDate = DateTime.Now;
             employee.FirstName = FirstName;
             employee.LastName = LastName;
+            employee.CompanyId = KeyCompanyId;
             
             return employee;
         }
@@ -47,6 +51,7 @@ namespace DocumentRegistry.Api.ApiModels.Employee
             parameters.Add("Id", Id);
             parameters.Add("FirstName", FirstName);
             parameters.Add("LastName", LastName);
+            parameters.Add("CompanyId", KeyCompanyId);
 
             return parameters;
         }

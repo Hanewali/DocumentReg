@@ -10,6 +10,7 @@ namespace DocumentRegistry.Web.Services.EmployeeService
 {
     public class EmployeeService : IEmployeeService
     {
+        
         private readonly HttpClient _apiClient;
 
         public EmployeeService()
@@ -17,9 +18,9 @@ namespace DocumentRegistry.Web.Services.EmployeeService
             _apiClient = ApiHelper.PrepareClient("Employee");
         }
         
-       public IEnumerable<Employee> Search(int beginFrom, int rows, int userId)
+        public IEnumerable<Employee> Search(int beginFrom, int rows, int userId)
         {
-            var response = _apiClient.GetAsync("GetList?beginFrom={beginFrom}&rows={rows}").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetList?beginFrom={beginFrom}&rows={rows}").Result.Content.ReadAsStringAsync().Result;
             return JsonSerializer.Deserialize<IEnumerable<Employee>>(response);
         }
 
@@ -36,7 +37,7 @@ namespace DocumentRegistry.Web.Services.EmployeeService
 
         public Employee GetDetails(int id, int userId)
         {
-            var response = _apiClient.GetAsync($"GetDetails?documentTypeId={id}").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?Id={id}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<Employee>(response);
         }
@@ -69,7 +70,7 @@ namespace DocumentRegistry.Web.Services.EmployeeService
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
-            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            var result = _apiClient.PostAsync("Delete", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }

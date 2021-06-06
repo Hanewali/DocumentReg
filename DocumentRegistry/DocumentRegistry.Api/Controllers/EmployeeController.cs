@@ -31,6 +31,7 @@ namespace DocumentRegistry.Api.Controllers
             {
                 var queryResult = DatabaseHelper.GetAll<DomainModels.Employee>();
                 result.AddRange(queryResult
+                    .Where(x => x.IsActive == true)
                     .Skip(beginFrom ?? 0)
                     .Take(rows ?? 10)
                     .Select(Employee.BuildFromDomainModel));
@@ -69,10 +70,12 @@ namespace DocumentRegistry.Api.Controllers
         [HttpGet]
         public IActionResult GetDetails([FromQuery] int Id)
         {
-            var result = new DomainModels.Employee();
+            var result = new Employee();
             try
             {
-                result = DatabaseHelper.Get<DomainModels.Employee>(Id);
+                var queryResult = DatabaseHelper.Get<DomainModels.Employee>(Id);
+                result = Employee.BuildFromDomainModel(queryResult);
+
             }
             catch (Exception ex)
             {
@@ -128,12 +131,20 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                var parameters = new DynamicParameters();
-                
-                parameters.Add("Id", model.Employee.Id);
-                parameters.Add("UserId", model.UserId);
+                // var parameters = new DynamicParameters();
+                //
+                // parameters.Add("Id", model.Employee.Id);
+                // parameters.Add("UserId", model.UserId);
+                //
+                // DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
 
-                DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
+                var domainModel = DatabaseHelper.Get<DomainModels.Employee>(model.Employee.Id.Value);
+
+                domainModel.IsActive = false;
+                domainModel.ModifyDate = DateTime.Now;
+                domainModel.ModifyUserId = model.UserId;
+
+                DatabaseHelper.Update(domainModel);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -7,11 +8,25 @@ namespace DocumentRegistry.Web.Models.Employee
     public class CreateEdit
     {
         public int Id { get; set; }
+        [DisplayName("Imię")]
         public string FirstName { get; set; }
+        [DisplayName("Nazwisko")]
         public string LastName { get; set; }
-        public List<SelectListItem> Companies { get; set; }
+        public IEnumerable<SelectListItem> Companies { get; set; }
+        [DisplayName("Firma")]
         public int SelectedCompanyId { get; set; }
 
+        public Employee ToDomainModel()
+        {
+            return new()
+            {
+                Id = Id,
+                FirstName = FirstName,
+                LastName = LastName,
+                KeyCompanyId = SelectedCompanyId
+            };
+        }
+        
         public static CreateEdit FromDomainModel(Employee employee, IEnumerable<Company.Company> companies)
         {
             var model = new CreateEdit

@@ -4,23 +4,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Pracownicy</h2>
 
-    <table class="table table-sm">
-<tr>
-    <td>@Html.DisplayNameFor(x => x.Employees.First().FirstName)</td>
-    <td>@Html.DisplayNameFor(x => x.Employees.First().LastName)</td>
-    <td>@Html.DisplayNameFor(x => x.Employees.First().KeyCompanyName)</td>
-    <td></td>
-</tr>
+<div class="row">
+    <h2 class="col-sm-2">Pracownicy</h2>
+    <div class="col-sm-8"></div>
+    @Html.ActionLink("Dodaj", "Create", "Employee", null, new {@class = "btn btn-outline-secondary mb-2"})
+</div>
 
-@foreach (var employee in Model.Employees)
-{
-    <tr>
-        <td>@employee.FirstName</td>
-        <td>@employee.LastName</td>
-        <td>@employee.KeyCompanyName</td>
-        <td>@Html.ActionLink("Szczegóły", "Details", "Employee", new {id = employee.Id}, new {@class = "btn btn-outline-primary btn-sm"})</td>
+<div class="row">
+    
+</div>
+<table class="table table-sm">
+    <tr class="table-active">
+        <td>@Html.DisplayNameFor(x => x.Employees.First().FirstName)</td>
+        <td>@Html.DisplayNameFor(x => x.Employees.First().LastName)</td>
+        <td>@Html.DisplayNameFor(x => x.Employees.First().KeyCompanyName)</td>
+        <td></td>
     </tr>
-}
+
+    @foreach (var employee in Model.Employees)
+    {
+        <tr>
+            <td>@employee.FirstName</td>
+            <td>@employee.LastName</td>
+            <td>@employee.KeyCompanyName</td>
+            <td>@Html.ActionLink("Szczegóły", "Details", "Employee", new {id = employee.Id}, new {@class = "btn btn-outline-primary btn-sm"})</td>
+        </tr>
+    }
 </table>
