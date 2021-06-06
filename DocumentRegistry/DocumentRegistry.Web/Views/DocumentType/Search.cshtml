@@ -4,10 +4,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Typy dokumentów</h2>
+<div class="row">
+    <h2 class="col-sm-4">Typy dokumentów</h2>
+    <div class="col-sm-6"></div>
+    @Html.ActionLink("Dodaj", "Create", "DocumentType", null, new {@class = "btn btn-outline-secondary mb-2"})
+</div>
+
+<div class="row">
+    
+</div>
 
 <table class="table table-sm">
-<tr>
+<tr class="table-active">
     <td>@Html.DisplayNameFor(x => x.DocumentTypes.First().Name)</td>
     <td></td>
 </tr>
@@ -15,8 +23,8 @@
 @foreach (var documentType in Model.DocumentTypes)
 {
     <tr>
-        <td>@documentType.Name</td>
-        @Html.ActionLink("Szczegóły", "Details", "DocumentType", new {id = documentType.Id}, new {@class = "btn btn-outline-primary btn-sm"})
+        <td style="width: 90%">@documentType.Name</td>
+        <td>@Html.ActionLink("Szczegóły", "Details", "DocumentType", new {id = documentType.Id}, new {@class = "btn btn-outline-primary btn-sm"})</td>
     </tr>
 }
 </table>

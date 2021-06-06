@@ -1,4 +1,5 @@
-﻿using Dapper.Contrib.Extensions;
+﻿using System;
+using Dapper.Contrib.Extensions;
 
 namespace DocumentRegistry.Api.DomainModels
 {
@@ -7,6 +8,11 @@ namespace DocumentRegistry.Api.DomainModels
     {
         [Key]
         public int Id { get; set; }
+        public DateTime CreateDate { get; set; }
+        public int? CreateUserId { get; set; }
+        public DateTime ModifyDate { get; set; }
+        public int? ModifyUserId { get; set; }
+        public bool? IsActive { get; set; }
         public string Name { get; set; }
     }
 }

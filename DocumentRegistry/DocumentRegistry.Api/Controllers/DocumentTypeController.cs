@@ -31,6 +31,7 @@ namespace DocumentRegistry.Api.Controllers
             {
                 var queryResult = DatabaseHelper.GetAll<DomainModels.DocumentType>();
                 result.AddRange(queryResult
+                    .Where(x => x.IsActive == true)
                     .Skip(beginFrom ?? 0)
                     .Take(rows ?? 10)
                     .Select(DocumentType.BuildFromDomainModel));
@@ -128,12 +129,20 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                var parameters = new DynamicParameters();
-                
-                parameters.Add("Id", model.DocumentType.Id);
-                parameters.Add("UserId", model.UserId);
+                // var parameters = new DynamicParameters();
+                //
+                // parameters.Add("Id", model.DocumentType.Id);
+                // parameters.Add("UserId", model.UserId);
+                //
+                // DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
 
-                DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
+                var domainModel = DatabaseHelper.Get<DomainModels.DocumentType>(model.DocumentType.Id.Value);
+
+                domainModel.IsActive = false;
+                domainModel.ModifyDate = DateTime.Now;
+                domainModel.ModifyUserId = model.UserId;
+
+                DatabaseHelper.Update(domainModel);
             }
             catch (Exception ex)
             {

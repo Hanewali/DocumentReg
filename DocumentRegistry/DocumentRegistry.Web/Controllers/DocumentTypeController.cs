@@ -26,6 +26,9 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = new Search();
 
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+
             try
             {
                 model.DocumentTypes = _documentTypeService.Search(0, 10, GetUserIdFromSession());
@@ -43,33 +46,38 @@ namespace DocumentRegistry.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Search(DocumentTypeRequest model)
         {
-            var searchResult = new List<DocumentType>();
+            var viewModel = new Search();
+            
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
             
             try
             {
-                searchResult.AddRange(_documentTypeService.Search(model.DocumentType, model.BeginFrom, model.Rows, GetUserIdFromSession()));
+                viewModel.DocumentTypes = _documentTypeService.Search(model.DocumentType, model.BeginFrom, model.Rows, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                _logger.LogError(ex, "There was an error during document type search");
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas wyszukiwania typów dokumentów");
+                return View(viewModel);
             }
 
-            return Ok(JsonSerializer.Serialize(searchResult));
+            return View(viewModel);
         }
 
         [HttpGet]
-        public IActionResult Details(int companyId)
+        public IActionResult Details(int id)
         {
             var result = new DocumentType();
 
             try
             {
-                result = _documentTypeService.GetDetails(companyId, GetUserIdFromSession());
+                result = _documentTypeService.GetDetails(id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during document type search");
+                //todo: dodać obsługę błędów i p rzekierowanie na search
                 return Problem();
             }
 
@@ -85,15 +93,16 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpPost]
-        public IActionResult Create(DocumentType company)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(DocumentType documentType)
         {
             try
             {
-                _documentTypeService.Create(company, GetUserIdFromSession());
+                _documentTypeService.Create(documentType, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during document type search");
                 return Problem();
             }
 
@@ -101,27 +110,39 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
             var model = new DocumentType();
+            
+            try
+            {
+                model = _documentTypeService.GetDetails(id, GetUserIdFromSession());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during document type edit");
+                return RedirectToAction("Details", "DocumentType", new {id});
+            }
 
             return View(model);
         }
         
         [HttpPost]
-        public IActionResult Edit(DocumentType company)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(DocumentType documentType)
         {
             try
             {
-                _documentTypeService.Edit(company, GetUserIdFromSession());
+                _documentTypeService.Edit(documentType, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during document type search");
+                //todo dodać obsługę błędó i przekierownaie na search
                 return Problem();
             }
 
-            return RedirectToAction("Details", "DocumentType", company.Id);
+            return RedirectToAction("Details", "DocumentType", new {id = documentType.Id});
         }
         
         [HttpGet]
@@ -132,15 +153,16 @@ namespace DocumentRegistry.Web.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult Delete(int companyId)
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
         {
             try
             {
-                _documentTypeService.Delete(companyId, GetUserIdFromSession());
+                _documentTypeService.Delete(id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
+                _logger.LogError(ex, "There was an error during document type search");
                 return Problem();
             }
 

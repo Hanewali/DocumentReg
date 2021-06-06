@@ -11,7 +11,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
     public class DocumentTypeService : IDocumentTypeService
     {
         
-        private HttpClient _apiClient;
+        private readonly HttpClient _apiClient;
 
         public DocumentTypeService()
         {
@@ -20,7 +20,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
         
         public IEnumerable<DocumentType> Search(int beginFrom, int rows, int userId)
         {
-            var response = _apiClient.GetAsync("GetList?beginFrom={beginFrom}&rows={rows}").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetList?beginFrom={beginFrom}&rows={rows}").Result.Content.ReadAsStringAsync().Result;
             return JsonSerializer.Deserialize<IEnumerable<DocumentType>>(response);
         }
 
@@ -37,7 +37,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
 
         public DocumentType GetDetails(int id, int userId)
         {
-            var response = _apiClient.GetAsync($"GetDetails?documentTypeId={id}").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetDetails?id={id}").Result.Content.ReadAsStringAsync().Result;
 
             return JsonSerializer.Deserialize<DocumentType>(response);
         }
@@ -70,7 +70,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
 
             var jsonRequest = JsonSerializer.Serialize(request);
 
-            var result = _apiClient.PostAsync("Edit", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
+            var result = _apiClient.PostAsync("Delete", new StringContent(jsonRequest, Encoding.UTF8, "application/json")).Result;
 
             if (!result.IsSuccessStatusCode) throw new Exception("Error during deleting an object");
         }

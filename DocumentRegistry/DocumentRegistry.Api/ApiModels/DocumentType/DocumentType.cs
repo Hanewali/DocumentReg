@@ -21,6 +21,16 @@ namespace DocumentRegistry.Api.ApiModels.DocumentType
         {
             documentType ??= new DomainModels.DocumentType();
 
+            if (documentType.Id == 0)
+            {
+                documentType.CreateUserId = userId;
+                documentType.CreateDate = DateTime.Now;
+                documentType.IsActive = true;
+            }
+
+            documentType.ModifyUserId = userId;
+            documentType.ModifyDate = DateTime.Now;
+            
             documentType.Name = Name;
             
             return documentType;
