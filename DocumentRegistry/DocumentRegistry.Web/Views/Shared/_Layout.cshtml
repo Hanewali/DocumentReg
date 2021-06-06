@@ -27,13 +27,13 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Search">Pracownicy</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="PostCompany" asp-action="Search">Firmy pocztowe</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="Search">Firmy</a>
                     </li>
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link text-dark" asp-area="" asp-controller="PostCompany" asp-action="Search">Firmy pocztowe</a> *@
+                    @* </li> *@
                     @if(Context.Session.GetString("Admin") == "True")
                     {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="Search">Firmy</a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Search">Użytkownicy</a>
                         </li>
