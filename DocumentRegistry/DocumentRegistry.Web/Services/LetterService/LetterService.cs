@@ -19,7 +19,7 @@ namespace DocumentRegistry.Web.Services.LetterService
 
         public IEnumerable<Letter> Search(int beginFrom, int rows, int userId)
         {
-            var response = _apiClient.GetAsync("GetList?beginFrom={beginFrom}&rows={rows}").Result.Content.ReadAsStringAsync().Result;
+            var response = _apiClient.GetAsync($"GetList?beginFrom={beginFrom}&rows={rows}").Result.Content.ReadAsStringAsync().Result;
             return JsonSerializer.Deserialize<IEnumerable<Letter>>(response);
         }
 

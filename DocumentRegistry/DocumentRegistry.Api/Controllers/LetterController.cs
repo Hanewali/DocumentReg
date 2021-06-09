@@ -31,6 +31,7 @@ namespace DocumentRegistry.Api.Controllers
             {
                 var queryResult = DatabaseHelper.GetAll<DomainModels.Letter>();
                 result.AddRange(queryResult
+                    .Where(x => x.IsActive == true)
                     .Skip(beginFrom ?? 0)
                     .Take(rows ?? 10)
                     .Select(Letter.BuildFromDomainModel));

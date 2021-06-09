@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
+using DocumentRegistry.Web.Exceptions;
 using DocumentRegistry.Web.Models.PostCompany;
 using DocumentRegistry.Web.Services.PostCompanyService;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +28,9 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = new Search();
 
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+            
             try
             {
                 model.PostCompanies = _postCompanyService.Search(0, 10, GetUserIdFromSession());
@@ -33,7 +38,8 @@ namespace DocumentRegistry.Web.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas wyszukiwania firmy");
+                return View(model);
             }
 
             return View(model);
@@ -43,19 +49,23 @@ namespace DocumentRegistry.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Search(PostCompanyRequest model)
         {
-            var searchResult = new List<PostCompany>();
+            var viewModel = new Search();
+            
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
             
             try
             {
-                searchResult.AddRange(_postCompanyService.Search(model.PostCompany, model.BeginFrom, model.Rows, GetUserIdFromSession()));
+                viewModel.PostCompanies = _postCompanyService.Search(model.PostCompany, model.BeginFrom, model.Rows, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas wyszukiwania firm");
+                return View(viewModel);
             }
 
-            return Ok(JsonSerializer.Serialize(searchResult));
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -63,14 +73,28 @@ namespace DocumentRegistry.Web.Controllers
         {
             var result = new PostCompany();
 
+            if (id == 0)
+            {
+                throw new ObjectNotFoundException("Nie ma takiej firmy!");
+            }
+
             try
             {
                 result = _postCompanyService.GetDetails(id, GetUserIdFromSession());
+
+                if (result == null)
+                    throw new ObjectNotFoundException("Nie ma takiej firmy!");
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                TempData.Add("Error", ex.Message);
+                return RedirectToAction("Search", "PostCompany");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych firmy");
+                return RedirectToAction("Search","PostCompany");
             }
 
             return View(result);
@@ -87,6 +111,7 @@ namespace DocumentRegistry.Web.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(PostCompany company)
         {
             try
@@ -96,7 +121,8 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas tworzenia firmy");
+                return View(company);
             }
 
             return RedirectToAction("Search", "PostCompany");
@@ -107,10 +133,14 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = _postCompanyService.GetDetails(id, GetUserIdFromSession());
 
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+
             return View(model);
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(PostCompany company)
         {
             try
@@ -135,6 +165,7 @@ namespace DocumentRegistry.Web.Controllers
         } 
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             try

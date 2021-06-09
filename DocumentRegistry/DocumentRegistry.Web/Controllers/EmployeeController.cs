@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
+using DocumentRegistry.Web.Exceptions;
 using DocumentRegistry.Web.Models.Employee;
 using DocumentRegistry.Web.Services.CompanyService;
 using DocumentRegistry.Web.Services.EmployeeService;
@@ -40,8 +41,9 @@ namespace DocumentRegistry.Web.Controllers
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                _logger.LogError(ex, "There was an error during employee search");
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas wyszukiwania pracowników");
+                return View(model);
             }
 
             return View(model);
@@ -75,14 +77,28 @@ namespace DocumentRegistry.Web.Controllers
         {
             var result = new Employee();
 
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+            
+            if (id == 0)
+                throw new ObjectNotFoundException("Nie ma takiego pracownika!");
+
             try
             {
                 result = _employeeService.GetDetails(id, GetUserIdFromSession());
+
+                if (result == null) throw new ObjectNotFoundException("Nie ma takiego pracownika!");
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                TempData.Add("Error", ex.Message);
+                return RedirectToAction("Search","Employee");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during employee search");
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych pracownika");
+                return RedirectToAction("Search","Employee");
             }
 
             return View(result);
@@ -93,6 +109,9 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = new CreateEdit();
 
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+            
             var companies = _companyService.GetList(GetUserIdFromSession());
             model.Companies = companies.Select(company => new SelectListItem(company.Name, company.Id.ToString()));
             
@@ -110,7 +129,8 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during employee search");
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas tworzenia dokumentu");
+                return View(employee);
             }
 
             return RedirectToAction("Search", "Employee");
@@ -121,6 +141,9 @@ namespace DocumentRegistry.Web.Controllers
         {
             var employee = _employeeService.GetDetails(id, GetUserIdFromSession());
 
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+            
             var model = CreateEdit.FromDomainModel(employee, _companyService.GetList(GetUserIdFromSession())); 
 
             return View(model);
@@ -137,7 +160,8 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during employee search");
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas edycji pracownika");
+                return View(employee);
             }
 
             return RedirectToAction("Details", "Employee", new {id = employee.Id});
@@ -147,7 +171,10 @@ namespace DocumentRegistry.Web.Controllers
         public IActionResult ConfirmDelete(int id)
         {
             var model = _employeeService.GetDetails(id, GetUserIdFromSession());
-
+            
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+            
             return View(model);
         }
         [HttpPost]
@@ -161,7 +188,8 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during employee search");
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas edycji pracownika");
+                return RedirectToAction("ConfirmDelete", "Employee", new {id});
             }
 
             return RedirectToAction("Search", "Employee");

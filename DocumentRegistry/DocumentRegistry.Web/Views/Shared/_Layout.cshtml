@@ -48,6 +48,10 @@
 </header>
 <div class="container">
     <main role="main" class="pb-3">
+        @if (Html.ViewData.ModelState.Count > 0)
+        {
+            @Html.ValidationMessage("Error")
+        }
         @RenderBody()
     </main>
 </div>

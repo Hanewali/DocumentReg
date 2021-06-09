@@ -9,10 +9,10 @@ namespace DocumentRegistry.Web.Models.Letter
     {
         public int Number { get; set; }
 
-        public int CompanyId { get; set; }
-        
         [DisplayName("Firma do listów")]
-        public IEnumerable<SelectListItem> PostCompanies { get; set; }
+        public int PostCompanyId { get; set; }
+        
+        // public IEnumerable<SelectListItem> PostCompanies { get; set; }
         
         [DisplayName("Data")]
         public DateTime Date { get; set; }
@@ -22,26 +22,25 @@ namespace DocumentRegistry.Web.Models.Letter
         
         [DisplayName("Zawartość")]
         public string Content { get; set; }
-        public int KeyEmployeeId { get; set; }
-        
+
         [DisplayName("Pracownik")]
-        public IEnumerable<SelectListItem> Employees { get; set; }
+        public int EmployeeId { get; set; }
+        
+        // public IEnumerable<SelectListItem> Employees { get; set; }
 
-        public int KeyCompanyId { get; set; }
         [DisplayName("Firma")] 
-        public IEnumerable<SelectListItem> Companies { get; set; }
+        public int KeyCompanyId { get; set; }
+        // public IEnumerable<SelectListItem> Companies { get; set; }
 
-
-        public int KeyDocumentTypeId { get; set; }
         [DisplayName("Typ dokumentu")] 
-        public IEnumerable<SelectListItem> DocumentTypes { get; set; }
+        public int DocumentTypeId { get; set; }
+        // public IEnumerable<SelectListItem> DocumentTypes { get; set; }
 
-        [DisplayName("Inne")]
+        [DisplayName("Dane dodatkowe")]
         public string Other { get; set; }
-        [DisplayName("PR")]
-        public string PR { get; set; }
-        [DisplayName("PO")]
-        public string PO { get; set; }
+        [DisplayName("Rodzaj listu")]
+        public bool PR { get; set; }
+        public bool PO { get; set; }
         [DisplayName("Odbiorca - Nazwa firmy")]
         public string CompanyName { get; set; }
         [DisplayName("Odbiorca - Ulica")]
@@ -64,5 +63,34 @@ namespace DocumentRegistry.Web.Models.Letter
         public string EmployeeLastName { get; set; }
         [DisplayName("Rodzaj")]
         public string Kind { get; set; }
+
+
+        public static CreateEdit BuildFromModel(Letter letter)
+        {
+            return new()
+            {
+                Number = letter.Number,
+                PostCompanyId = letter.KeyPostCompanyId,
+                Date = letter.Date,
+                ReceiveDate = letter.ReceiveDate,
+                Content = letter.Content,
+                EmployeeId = letter.KeyEmployeeId,
+                DocumentTypeId = letter.KeyDocumentTypeId,
+                Other = letter.Other,
+                PR = letter.PR,
+                PO = letter.PO,
+                CompanyName = letter.CompanyName,
+                CompanyStreet = letter.CompanyStreet,
+                CompanyCity = letter.CompanyCity,
+                CompanyPostalCode = letter.CompanyPostalCode,
+                CompanyPostName = letter.CompanyPostName,
+                CompanyPostStreet = letter.CompanyPostStreet,
+                CompanyPostCity = letter.CompanyPostCity,
+                CompanyPostPostalCode = letter.CompanyPostPostalCode,
+                EmployeeFirstName = letter.EmployeeFirstName,
+                EmployeeLastName = letter.EmployeeLastName,
+                Kind = letter.Kind
+            };
+        }
     }
 }

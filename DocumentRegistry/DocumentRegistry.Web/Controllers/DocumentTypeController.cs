@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
+using DocumentRegistry.Web.Exceptions;
 using DocumentRegistry.Web.Models.DocumentType;
 using DocumentRegistry.Web.Services.DocumentTypeService;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,8 @@ namespace DocumentRegistry.Web.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas wyszukiwania typów dokumentów");
+                return View(model);
             }
 
             return View(model);
@@ -70,15 +72,24 @@ namespace DocumentRegistry.Web.Controllers
         {
             var result = new DocumentType();
 
+            if (id == 0)
+                throw new ObjectNotFoundException("Nie ma takiego dokumentu!");
+            
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+
             try
             {
                 result = _documentTypeService.GetDetails(id, GetUserIdFromSession());
+                
+                if (result == null)
+                    throw new ObjectNotFoundException("Nie ma takiej firmy!");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during document type search");
-                //todo: dodać obsługę błędów i p rzekierowanie na search
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych dokumentu");
+                return RedirectToAction("Search","DocumentType");
             }
 
             return View(result);
@@ -88,6 +99,10 @@ namespace DocumentRegistry.Web.Controllers
         public IActionResult Create()
         {
             var model = new DocumentType();
+            
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+
 
             return View(model);
         }
@@ -100,10 +115,16 @@ namespace DocumentRegistry.Web.Controllers
             {
                 _documentTypeService.Create(documentType, GetUserIdFromSession());
             }
+            catch (ObjectNotFoundException ex)
+            {
+                TempData.Add("Error", ex.Message);
+                return RedirectToAction("Search", "PostCompany");
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during document type search");
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas tworzenia typu dokumentu");
+                return View(documentType);
             }
 
             return RedirectToAction("Search", "DocumentType");
@@ -114,6 +135,9 @@ namespace DocumentRegistry.Web.Controllers
         {
             var model = new DocumentType();
             
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+            
             try
             {
                 model = _documentTypeService.GetDetails(id, GetUserIdFromSession());
@@ -121,6 +145,7 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during document type edit");
+                TempData.Add("Error", "Wystąpił błąd podczas edycji typu dokumentu");
                 return RedirectToAction("Details", "DocumentType", new {id});
             }
 
@@ -138,8 +163,8 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during document type search");
-                //todo dodać obsługę błędó i przekierownaie na search
-                return Problem();
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+                return View(documentType);
             }
 
             return RedirectToAction("Details", "DocumentType", new {id = documentType.Id});
@@ -148,7 +173,31 @@ namespace DocumentRegistry.Web.Controllers
         [HttpGet]
         public IActionResult ConfirmDelete(int id)
         {
-            var model = _documentTypeService.GetDetails(id, GetUserIdFromSession());
+            var model = new DocumentType();
+
+            if (id == 0)
+                throw new ObjectNotFoundException("Nie znaleziono typu dokumentu");
+            
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+
+            try
+            {
+                model = _documentTypeService.GetDetails(id, GetUserIdFromSession());
+                if (model == null)
+                    throw new ObjectNotFoundException("Nie znaleziono typu dokumentu");
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                TempData.Add("Error", ex.Message);
+                return RedirectToAction("Details", "DocumentType", new {id});
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during document type search.");
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych typu dokumentu");
+                return RedirectToAction("Details", "DocumentType", new {id});
+            }
 
             return View(model);
         }
@@ -163,7 +212,8 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during document type search");
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych typu dokumentu");
+                return RedirectToAction("ConfirmDelete", "DocumentType", new {id});
             }
 
             return RedirectToAction("Search", "DocumentType");

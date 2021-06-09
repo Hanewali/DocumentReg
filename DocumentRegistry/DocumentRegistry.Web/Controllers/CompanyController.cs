@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
+using DocumentRegistry.Web.Exceptions;
 using DocumentRegistry.Web.Models.Company;
 using DocumentRegistry.Web.Services.CompanyService;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace DocumentRegistry.Web.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas wyszukiwania firm");
             }
             
             return View(model);
@@ -57,8 +58,8 @@ namespace DocumentRegistry.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during post company search");
-                ModelState.AddModelError("Error", "Wystąpił błąd podczas wyszukiwania firm pocztowych");
+                _logger.LogError(ex, "There was an error during company search");
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas wyszukiwania firm");
                 return View(viewModel);
             }
 
@@ -70,14 +71,28 @@ namespace DocumentRegistry.Web.Controllers
         {
             var result = new Company();
 
+            if (id == 0)
+                throw new ObjectNotFoundException("Nie ma takiego dokumentu!");
+            
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+
             try
             {
                 result = _companyService.GetDetails(id, GetUserIdFromSession());
+
+                if (result == null)
+                    throw new ObjectNotFoundException("Nie ma takiej firmy!");
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                ModelState.AddModelError("Error", ex.Message);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych dokumentu");
+                return RedirectToAction("Search","Company");
             }
 
             return View(result);
@@ -101,8 +116,9 @@ namespace DocumentRegistry.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                _logger.LogError(ex, "There was an error during company create");
+                TempData.Add("Error", "Wystąpił błąd podczas tworzenia firmy");
+                return View(company);
             }
 
             return RedirectToAction("Search", "Company");
@@ -111,7 +127,24 @@ namespace DocumentRegistry.Web.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var model = _companyService.GetDetails(id, GetUserIdFromSession());
+            var model = new Company();
+
+            try
+            {
+                model = _companyService.GetDetails(id, GetUserIdFromSession());
+                if (model == null) throw new ObjectNotFoundException("Nie znaleziono firmy!");
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                TempData.Add("Error", ex.Message);
+                return RedirectToAction("Search", "Company");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "There was na error during company search");
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas pobierania danych firmy");
+                return RedirectToAction("Search", "Company");
+            }
 
             return View(model);
         }
@@ -126,33 +159,51 @@ namespace DocumentRegistry.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                _logger.LogError(ex, "There was an error during company edit");
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas edycji danych firmy");
+                return View(company);
             }
 
-            return RedirectToAction("Details", "Company", new {id = company.Id});
+            return RedirectToAction("Search", "Company");
         }
         
         [HttpGet]
         public IActionResult ConfirmDelete(int id)
         {
-            var model = _companyService.GetDetails(id, GetUserIdFromSession());
+            var model = new Company();
+            try
+            {
+                model = _companyService.GetDetails(id, GetUserIdFromSession());
+                if (model == null) throw new ObjectNotFoundException("Nie znaleziono danych firmy");
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                TempData.Add("Error", ex.Message);
+                return RedirectToAction("Search", "Company");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during company confirmDelete");
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych firmy");
+                return RedirectToAction("Details", "Company", new {id});
+            }
 
             return View(model);
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(int id)
         {
             try
             {
-                _companyService.Delete(Id, GetUserIdFromSession());
+                _companyService.Delete(id, GetUserIdFromSession());
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was an error during company search");
-                return Problem();
+                _logger.LogError(ex, "There was an error during company delete");
+                TempData.Add("Error", "Wystąpił błąd podczas usuwania firmy");
+                return RedirectToAction("ConfirmDelete", "Company", new {id});
             }
 
             return RedirectToAction("Search", "Company");

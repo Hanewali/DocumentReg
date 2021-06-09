@@ -29,12 +29,14 @@ namespace DocumentRegistry.Web.Models.Letter
         public int KeyDocumentTypeId { get; set; }
         [DisplayName("Typ dokumentu")] 
         public string KeyDocumentTypeName { get; set; }
-        [DisplayName("Inne")]
+        [DisplayName("Dane dodatkowe")]
         public string Other { get; set; }
-        [DisplayName("PR")]
-        public string PR { get; set; }
-        [DisplayName("PO")]
-        public string PO { get; set; }
+        [DisplayName("Rodzaj listu")]
+        public bool PR { get; set; }
+
+        public string PRText => PR ? "Tak" : "Nie";        
+        public bool PO { get; set; }
+        public string POText => PO ? "Tak" : "Nie";
         [DisplayName("Odbiorca - Nazwa firmy")]
         public string CompanyName { get; set; }
         [DisplayName("Odbiorca - Ulica")]
