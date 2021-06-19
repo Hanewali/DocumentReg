@@ -45,6 +45,27 @@ namespace DocumentRegistry.Api.Controllers
             return Ok(JsonSerializer.Serialize(result));
         }
 
+        [HttpGet]
+        public IActionResult Search(string companyName)
+        {
+            var result = new Dictionary<string, string>();
+
+            try
+            {
+                result = DatabaseHelper.GetAll<DomainModels.Company>()
+                    .Where(x => x.Name.ToLower().Contains(companyName))
+                    .ToDictionary(company => company.Id.ToString(), company => company.Name);
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+
+            return Ok(JsonSerializer.Serialize(result));
+        }
+        
         [HttpPost]
         public IActionResult Search(CompanyRequest model)
         {

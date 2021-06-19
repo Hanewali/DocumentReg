@@ -68,6 +68,27 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpGet]
+        public IActionResult Search(string employeeName)
+        {
+            var result = new Dictionary<string, string>();
+
+            try
+            {
+                result = DatabaseHelper.GetAll<DomainModels.Employee>()
+                    .Where(x => x.FullName.ToLower().Contains(employeeName))
+                    .ToDictionary(employee => employee.Id.ToString(), employee => employee.FullName);
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+
+            return Ok(JsonSerializer.Serialize(result));
+        }
+        
+        [HttpGet]
         public IActionResult GetDetails([FromQuery] int Id)
         {
             var result = new Employee();

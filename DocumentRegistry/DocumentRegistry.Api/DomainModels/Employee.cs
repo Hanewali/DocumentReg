@@ -15,6 +15,8 @@ namespace DocumentRegistry.Api.DomainModels
         public bool? IsActive { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        [Computed]
+        public string FullName => string.Join(" ", FirstName, LastName);
         public int CompanyId { get; set; }
     }
 }

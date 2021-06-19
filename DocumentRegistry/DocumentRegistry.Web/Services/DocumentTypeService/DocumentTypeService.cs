@@ -24,6 +24,12 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
             return JsonSerializer.Deserialize<IEnumerable<DocumentType>>(response);
         }
 
+        public IEnumerable<NameSearchResponse> Search(string documentTypeName, int userId)
+        {
+            var response = _apiClient.GetAsync($"Search?documentTypeName={documentTypeName}").Result.Content.ReadAsStringAsync().Result;
+            return NameSearchResponse.BuildFromDictionaryJson(response);
+        }
+
         public IEnumerable<DocumentType> Search(DocumentType documentType, int beginFrom, int rows, int userId)
         {
             var request = PrepareRequestModel(documentType, beginFrom, rows, userId);

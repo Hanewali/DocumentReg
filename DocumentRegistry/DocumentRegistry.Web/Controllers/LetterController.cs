@@ -106,32 +106,25 @@ namespace DocumentRegistry.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            // var model = new CreateEdit();
-            //          
-            //
-            // if (TempData["Error"] != null)
-            //     ModelState.AddModelError("Error", TempData["Error"].ToString());
-            //
-            //
-            // return View(model);
-            TempData.Add("Error", "Strona będzie dostępna w przyszłości!");
-            return RedirectToAction("Search", "Letter");
+            var model = CreateEdit.BuildForCreate();
+            
+            return View(model);
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateEdit model)
         {
-            // try
-            // {
-            //     _letterService.Create(model, GetUserIdFromSession());
-            // }
-            // catch (Exception ex)
-            // {
-            //     _logger.LogError(ex, "There was an error during letter search");
-            //     TempData.Add("Error", "Wystąpił błąd podczas tworzenia dokumentu");
-            //     return View(model);
-            // }
+            try
+            {
+                _letterService.Create(model.ToDomainModel(), GetUserIdFromSession());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during letter search");
+                TempData.Add("Error", "Wystąpił błąd podczas tworzenia dokumentu");
+                return View(model);
+            }
             TempData.Add("Error", "Strona będzie dostępna w przyszłości!");
             return RedirectToAction("Search", "Letter");
         }

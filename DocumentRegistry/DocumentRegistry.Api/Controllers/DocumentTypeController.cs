@@ -68,6 +68,27 @@ namespace DocumentRegistry.Api.Controllers
         }
 
         [HttpGet]
+        public IActionResult Search(string documentTypeName)
+        {
+            var result = new Dictionary<string, string>();
+
+            try
+            {
+                result = DatabaseHelper.GetAll<DomainModels.DocumentType>()
+                    .Where(x => x.Name.ToLower().Contains(documentTypeName))
+                    .ToDictionary(documentType => documentType.Id.ToString(), company => company.Name);
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+
+            return Ok(JsonSerializer.Serialize(result));
+        }
+        
+        [HttpGet]
         public IActionResult GetDetails([FromQuery] int Id)
         {
             var result = new DomainModels.DocumentType();

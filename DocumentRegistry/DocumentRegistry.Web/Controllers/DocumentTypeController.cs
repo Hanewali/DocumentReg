@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
 using DocumentRegistry.Web.Exceptions;
@@ -96,6 +97,24 @@ namespace DocumentRegistry.Web.Controllers
         }
 
         [HttpGet]
+        public IActionResult SearchNames([FromQuery(Name = "q")]string companyName)
+        {
+            var companies = new List<NameSearchResponse>();
+
+            try
+            {
+                companies = _documentTypeService.Search(companyName, GetUserIdFromSession()).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+
+            return Ok(companies);
+        }
+        
+        [HttpGet]
         public IActionResult Create()
         {
             var model = new DocumentType();
@@ -123,7 +142,7 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during document type search");
-                TempData.Add("Error", "Wystąpił błąd podczas tworzenia typu dokumentu");
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas tworzenia typu dokumentu");
                 return View(documentType);
             }
 

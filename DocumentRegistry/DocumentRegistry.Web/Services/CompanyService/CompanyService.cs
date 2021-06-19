@@ -29,6 +29,12 @@ namespace DocumentRegistry.Web.Services.CompanyService
             return JsonSerializer.Deserialize<IEnumerable<Company>>(response);
         }
 
+        public IEnumerable<NameSearchResponse> Search(string companyName, int userId)
+        {
+            var response = _apiClient.GetAsync($"Search?companyName={companyName}").Result.Content.ReadAsStringAsync().Result;
+            return NameSearchResponse.BuildFromDictionaryJson(response);
+        }
+        
         public IEnumerable<Company> Search(Company company, int beginFrom, int rows, int userId)
         {
             var request = PrepareRequestModel(company, beginFrom, rows, userId);

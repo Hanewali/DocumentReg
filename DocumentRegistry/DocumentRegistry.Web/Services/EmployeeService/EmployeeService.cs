@@ -24,6 +24,12 @@ namespace DocumentRegistry.Web.Services.EmployeeService
             return JsonSerializer.Deserialize<IEnumerable<Employee>>(response);
         }
 
+        public IEnumerable<NameSearchResponse> Search(string employeeName, int userId)
+        {
+            var response = _apiClient.GetAsync($"Search?employeeName={employeeName}").Result.Content.ReadAsStringAsync().Result;
+            return NameSearchResponse.BuildFromDictionaryJson(response);
+        }
+        
         public IEnumerable<Employee> Search(Employee employee, int beginFrom, int rows, int userId)
         {
             var request = PrepareRequestModel(employee, beginFrom, rows, userId);

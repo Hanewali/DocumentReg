@@ -53,7 +53,7 @@
                 @Html.LabelFor(x => x.ContractDate) 
             </div>
             <div class="row">                
-                @Html.EditorFor(x => x.ContractDate, new {@class = "form-control"})
+                @Html.EditorFor(x => x.ContractDate, new { htmlAttributes = new { @class = "form-control"}})
             </div>
         </div>
     </div>

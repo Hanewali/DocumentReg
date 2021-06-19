@@ -9,9 +9,9 @@ namespace DocumentRegistry.Web.Models.Letter
         [DisplayName("Numer")]
         public int Number { get; set; }
 
-        public int KeyPostCompanyId { get; set; }
-        [DisplayName("Firma do listów")] 
-        public string KeyPostCompanyName { get; set; }
+        // public int KeyPostCompanyId { get; set; }
+        // [DisplayName("Firma do listów")] 
+        // public string KeyPostCompanyName { get; set; }
         [DisplayName("Data")]
         public DateTime Date { get; set; }
         [DisplayName("Data odbioru")]

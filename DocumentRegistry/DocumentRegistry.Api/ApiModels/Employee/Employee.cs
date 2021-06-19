@@ -9,8 +9,8 @@ namespace DocumentRegistry.Api.ApiModels.Employee
         public int? Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int KeyCompanyId { get; set; }
-        public string KeyCompanyName { get; set; }
+        public int CompanyId { get; set; }
+        public string CompanyName { get; set; }
         
         public static Employee BuildFromDomainModel(DomainModels.Employee employee)
         {
@@ -19,8 +19,8 @@ namespace DocumentRegistry.Api.ApiModels.Employee
                 Id = employee.Id,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                KeyCompanyId = employee.CompanyId,
-                KeyCompanyName = DatabaseHelper.Get<DomainModels.Company>(employee.CompanyId).Name
+                CompanyId = employee.CompanyId,
+                CompanyName = DatabaseHelper.Get<DomainModels.Company>(employee.CompanyId).Name
             };
         }
 
@@ -39,7 +39,7 @@ namespace DocumentRegistry.Api.ApiModels.Employee
             employee.ModifyDate = DateTime.Now;
             employee.FirstName = FirstName;
             employee.LastName = LastName;
-            employee.CompanyId = KeyCompanyId;
+            employee.CompanyId = CompanyId;
             
             return employee;
         }
@@ -51,7 +51,7 @@ namespace DocumentRegistry.Api.ApiModels.Employee
             parameters.Add("Id", Id);
             parameters.Add("FirstName", FirstName);
             parameters.Add("LastName", LastName);
-            parameters.Add("CompanyId", KeyCompanyId);
+            parameters.Add("CompanyId", CompanyId);
 
             return parameters;
         }

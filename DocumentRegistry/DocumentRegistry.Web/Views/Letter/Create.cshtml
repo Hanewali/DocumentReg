@@ -1,18 +1,241 @@
-﻿@model DocumentRegistry.Web.Models.Letter.Letter
+﻿@using DocumentRegistry.Web.Models.Company
+@model DocumentRegistry.Web.Models.Letter.CreateEdit
 
 @{
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
+<h2>Dodaj dokument</h2>
 
-<html>
-<head>
-    <title>Dodaj firmę</title>
-</head>
-<body>
-<div>
-        
-</div>
-</body>
-</html>
+@using (Html.BeginForm("Create", "Letter"))
+           {
+               <div class="form-group row pl-3">
+                   <div class="col-sm-3">
+                       <div class="row pb-1"> 
+                           @Html.LabelFor(x => x.Number, new {@class = "required"})
+                           @Html.TextBoxFor(x => x.Number, null, new {@class = "form-control"})
+                       </div>
+                   </div>
+               </div>
+               
+               <div class="row pl-3 pb-1 form-group">
+                   <div class="col-sm-3 p-0 m-0">
+                       @Html.LabelFor(x => x.Date)
+                       @Html.EditorFor(x => x.Date, new { htmlAttributes = new { @class = "form-control"}})
+                   </div>
+                   <div class="col-sm-3">
+                       @Html.LabelFor(x => x.ReceiveDate)
+                       @Html.EditorFor(x => x.ReceiveDate, new { htmlAttributes = new { @class = "form-control"}})
+                   </div>
+               </div>
+               
+               <div class="row pl-3 pb-1 form-group">
+                   <div class="col-sm-6 p-0 m-0">
+                       @Html.LabelFor(x => x.Content)
+                       @Html.TextBoxFor(x => x.Content, null, new {@class = "form-control"})
+                   </div>
+               </div>
+               
+               <div class="row pl-3 pb-1 form-group">
+                   <div class="col-sm-6 p-0 m-0">
+                       @Html.LabelFor(x => x.Other)
+                       @Html.TextBoxFor(x => x.Other, null, new {@class = "form-control"})
+                   </div>
+               </div>
+           
+               <div class="row pl-3">
+                   @Html.Label("Rodzaj listu" )
+               </div>
+               
+               <div class="row pl-3 pb-1">
+                   <div class="col-sm-2 form-check">  
+                       @Html.CheckBoxFor(x => x.PO, new {@class = "form-check-input"})
+                       @Html.LabelFor(x => x.PO, new {@class = "form-check-label"})
+                   </div>
+                   <div class="col-sm-2 form-check">
+                       @Html.CheckBoxFor(x => x.PR, new {@class = "form-check-input"})
+                       @Html.LabelFor(x => x.PR, new {@class = "form-check-label"})
+                   </div>
+               </div>
+               
+               <div class="form-group row pl-3">
+                   <div class="col-sm-3">
+                       <div class="row pb-1">
+                           @Html.Label("Wybierz firmę:")
+                           <input type="text" id="companySearchInput" class="form-control">
+                       </div>
+                   </div>
+               </div>
+               @Html.HiddenFor(x => x.CompanyId)
+               <div class="row pl-3 pb-1 form-group">
+                   <div class="col-sm-3 p-0 m-0">
+                       @Html.LabelFor(x => x.CompanyName)
+                       @Html.TextBoxFor(x => x.CompanyName, null, new {@class = "form-control"})
+                   </div>
+                   <div class="col-sm-3">
+                       @Html.LabelFor(x => x.CompanyPostName)
+                       @Html.TextBoxFor(x => x.CompanyPostName, null, new {@class = "form-control"})
+                   </div>
+               </div>
+               <div class="row pl-3 pb-1 form-group">
+                   <div class="col-sm-3 p-0 m-0">
+                       @Html.LabelFor(x => x.CompanyCity)
+                       @Html.TextBoxFor(x => x.CompanyCity, null, new {@class = "form-control"})
+                   </div>
+                   <div class="col-sm-3">
+                       @Html.LabelFor(x => x.CompanyPostCity)
+                       @Html.TextBoxFor(x => x.CompanyPostCity, null, new {@class = "form-control"})
+                   </div>
+               </div>
+               <div class="row pl-3 pb-1 form-group">
+                   <div class="col-sm-3 p-0 m-0">
+                       @Html.LabelFor(x => x.CompanyStreet)
+                       @Html.TextBoxFor(x => x.CompanyStreet, null, new {@class = "form-control"})
+                   </div>
+                   <div class="col-sm-3">
+                       @Html.LabelFor(x => x.CompanyPostStreet)
+                       @Html.TextBoxFor(x => x.CompanyPostStreet, null, new {@class = "form-control"})
+                   </div>
+               </div>
+               <div class="row pl-3 pb-1 form-group">
+                   <div class="col-sm-3 p-0 m-0">
+                       @Html.LabelFor(x => x.CompanyPostalCode)
+                       @Html.TextBoxFor(x => x.CompanyPostalCode, null, new {@class = "form-control"})
+                   </div>
+                   <div class="col-sm-3">
+                       @Html.LabelFor(x => x.CompanyPostPostalCode)
+                       @Html.TextBoxFor(x => x.CompanyPostPostalCode, null, new {@class = "form-control"})
+                   </div>
+               </div>
+               
+               <div class="form-group row pl-3">
+                   <div class="col-sm-3">
+                       <div class="row pb-1">
+                           @Html.Label("Wybierz pracownika:")
+                           <input type="text" id="employeeSearchInput" class="form-control">
+                       </div>
+                   </div>
+               </div>
+               
+               <div class="row pl-3 pb-1 form-group">
+                   @Html.HiddenFor(x => x.EmployeeId)
+                   <div class="col-sm-3 p-0 m-0">
+                       @Html.LabelFor(x => x.EmployeeFirstName)
+                       @Html.TextBoxFor(x => x.EmployeeFirstName, null, new {@class = "form-control"})
+                   </div>
+                   <div class="col-sm-3">
+                       @Html.LabelFor(x => x.EmployeeLastName)
+                       @Html.TextBoxFor(x => x.EmployeeLastName, null, new {@class = "form-control"})
+                   </div>
+               </div>
+               
+               <div class="form-group row pl-3">
+                   <div class="col-sm-3">
+                       <div class="row pb-1">
+                           @Html.Label("Wybierz typ dokumentu:")
+                           <input type="text" id="documentTypeSearchInput" class="form-control">
+                       </div>
+                   </div>
+               </div>
+           }
+           
+           @section Scripts
+           {
+               <script>
+               $(document).ready(function () {
+                   $("#companySearchInput").tokenInput("/Company/SearchNames", {
+                       tokenLimit: 1, 
+                       resultsLimit: 10,
+                       onDelete: function (item) {
+                           clearCompanyForm();   
+                       },
+                       onAdd: function (item){
+                           if (item.id != ""|| item.id != null)
+                               $.get("/Company/GetDetails?id=" + item.id, function(data, status){
+                               fillCompany(data);
+                           });
+                       }
+                   });
+           
+                   $("#employeeSearchInput").tokenInput("/Employee/SearchNames", {
+                       tokenLimit: 1, 
+                       resultsLimit: 10,
+                       onDelete: function (item) {
+                           clearEmployeeForm();   
+                       },
+                       onAdd: function (item){
+                           if (item.id != ""|| item.id != null)
+                               $.get("/Employee/GetDetails?id=" + item.id, function(data, status){
+                               fillEmployee(data);
+                           });
+                       }
+                   });
+                   
+                   $("#documentTypeSearchInput").tokenInput("/DocumentType/SearchNames", {
+                       tokenLimit: 1, 
+                       resultsLimit: 10,
+                       onDelete: function (item) {
+                           clearDocumentTypeId();   
+                       },
+                       onAdd: function (item){
+                           if (item.id != ""|| item.id != null)
+                               $.get("/DocumentType/GetDetails?id=" + item.id, function(data, status){
+                               updateDocumentTypeId(data.id);
+                           });
+                       }
+                   });
+                   
+                   // $('#token-input-companySearchInput').addClass("form-control");
+                   
+                   function fillCompany(company){
+                       if (company == null) return;
+                       
+                       $(@Html.IdFor(x => x.CompanyId)).val(company.id)
+                       $(@Html.IdFor(x => x.CompanyName)).val(company.name)
+                       $(@Html.IdFor(x => x.CompanyCity)).val(company.city)
+                       $(@Html.IdFor(x => x.CompanyStreet)).val(company.street)
+                       $(@Html.IdFor(x => x.CompanyPostalCode)).val(company.postalCode)
+                       $(@Html.IdFor(x => x.CompanyPostName)).val(company.postName)
+                       $(@Html.IdFor(x => x.CompanyPostCity)).val(company.postCity)
+                       $(@Html.IdFor(x => x.CompanyPostStreet)).val(company.postStreet)
+                       $(@Html.IdFor(x => x.CompanyPostPostalCode)).val(company.postPostalCode)
+                   }
+                   
+                   function clearCompanyForm(){
+                       $(@Html.IdFor(x => x.CompanyName)).val("")
+                       $(@Html.IdFor(x => x.CompanyCity)).val("")
+                       $(@Html.IdFor(x => x.CompanyStreet)).val("")
+                       $(@Html.IdFor(x => x.CompanyPostalCode)).val("")
+                       $(@Html.IdFor(x => x.CompanyPostName)).val("")
+                       $(@Html.IdFor(x => x.CompanyPostCity)).val("")
+                       $(@Html.IdFor(x => x.CompanyPostStreet)).val("")
+                       $(@Html.IdFor(x => x.CompanyPostPostalCode)).val("")
+                   }
+                   
+                   function fillEmployee(employee){
+                       if (employee == null) return;
+                       
+                       console.log(employee);
+                       
+                       $(@Html.IdFor(x => x.EmployeeId)).val(employee.id)
+                       $(@Html.IdFor(x => x.EmployeeFirstName)).val(employee.firstName)
+                       $(@Html.IdFor(x => x.EmployeeLastName)).val(employee.lastName)
+                   }
+                   
+                   function clearEmployeeForm(){
+                       $(@Html.IdFor(x => x.EmployeeId)).val("")
+                       $(@Html.IdFor(x => x.EmployeeFirstName)).val("")
+                       $(@Html.IdFor(x => x.EmployeeLastName)).val("")
+                   }
+                   
+                   function updateDocumentTypeId(id){
+                       $(@Html.IdFor(x => x.DocumentTypeId)).val(id)
+                   }
+                   
+                   function clearDocumentTypeId(){
+                       $(@Html.IdFor(x => x.DocumentTypeId)).val("")
+                   } 
+               });
+               
+       </script>
+}

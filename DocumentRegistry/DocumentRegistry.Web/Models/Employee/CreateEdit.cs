@@ -12,9 +12,10 @@ namespace DocumentRegistry.Web.Models.Employee
         public string FirstName { get; set; }
         [DisplayName("Nazwisko")]
         public string LastName { get; set; }
-        public IEnumerable<SelectListItem> Companies { get; set; }
         [DisplayName("Firma")]
-        public int SelectedCompanyId { get; set; }
+        public int CompanyId { get; set; }
+
+        public string CompanyName { get; set; }
 
         public Employee ToDomainModel()
         {
@@ -23,7 +24,7 @@ namespace DocumentRegistry.Web.Models.Employee
                 Id = Id,
                 FirstName = FirstName,
                 LastName = LastName,
-                KeyCompanyId = SelectedCompanyId
+                CompanyId = CompanyId
             };
         }
         
@@ -31,16 +32,12 @@ namespace DocumentRegistry.Web.Models.Employee
         {
             var model = new CreateEdit
             {
+                Id = employee.Id,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                Companies = companies.ToList().ConvertAll(x => new SelectListItem
-                {
-                    Text = x.Name, Value = x.Id.ToString(), Selected = false
-                }),
-                SelectedCompanyId = employee.KeyCompanyId
+                CompanyId = employee.CompanyId,
+                CompanyName = employee.CompanyName
             };
-
-            model.Companies.First(x => x.Value == model.SelectedCompanyId.ToString()).Selected = true;
 
             return model;
         }

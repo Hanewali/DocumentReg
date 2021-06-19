@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DocumentRegistry.Web.ApiModels;
 using DocumentRegistry.Web.Models.DocumentType;
 
 namespace DocumentRegistry.Web.Services.DocumentTypeService
@@ -6,6 +7,7 @@ namespace DocumentRegistry.Web.Services.DocumentTypeService
     public interface IDocumentTypeService
     {
         IEnumerable<DocumentType> Search(int beginFrom, int rows, int userId);
+        IEnumerable<NameSearchResponse> Search(string documentTypeName, int userId);
         IEnumerable<DocumentType> Search(DocumentType documentType, int beginFrom, int rows, int userId);
         DocumentType GetDetails(int documentTypeId, int userId); 
         void Create(DocumentType documentType, int userId);

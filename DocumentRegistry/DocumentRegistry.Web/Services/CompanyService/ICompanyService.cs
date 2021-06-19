@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DocumentRegistry.Web.ApiModels;
 using DocumentRegistry.Web.Models;
 using DocumentRegistry.Web.Models.Company;
 
@@ -8,6 +9,7 @@ namespace DocumentRegistry.Web.Services.CompanyService
     {
         IEnumerable<Company> GetList(int userId);
         IEnumerable<Company> Search(int beginFrom, int rows, int userId);
+        IEnumerable<NameSearchResponse> Search(string companyName, int userId);
         IEnumerable<Company> Search(Company company, int beginFrom, int rows, int userId);
         Company GetDetails(int companyId, int userId); 
         void Create(Company company, int userId);

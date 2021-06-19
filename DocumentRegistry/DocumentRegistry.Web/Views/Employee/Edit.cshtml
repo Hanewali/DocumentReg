@@ -29,14 +29,14 @@
         <div class="col-sm-3">
             <div class="pb-1">
                 <div class="row">
-                    @Html.LabelFor(x => x.SelectedCompanyId, new {@class = "required"})
-                </div>
-                <div class="row">
-                    @Html.DropDownListFor(x => x.SelectedCompanyId, Model.Companies, null, new {@class = "form-control"})
+                    @Html.LabelFor(x => x.CompanyId, new {@class = "required"})
+                    <input type="text" id="companySearchInput" class="form-control">
                 </div>
             </div>
         </div>
     </div>
+    
+    @Html.HiddenFor(x => x.CompanyId)
     
    <div class="row mt-3 pl-3">
         @Html.ActionLink("Wróć", "Details", "Employee", new {id = Model.Id}, new {@class = "btn btn-secondary"})
@@ -45,4 +45,38 @@
             <input type="submit" value="Zapisz" class="btn btn-primary">
         </div>
     </div>
+}
+
+@section Scripts
+{
+    <script>
+    
+    $(document).ready(function () {
+        
+        function updateCompanyId(company){
+            if (company == null) return;
+            
+            $(@Html.IdFor(x => x.CompanyId)).val(company.id)
+        }
+        
+        function clearCompanyId(){
+            $(@Html.IdFor(x => x.CompanyId)).val(0)
+        }     
+        
+        $("#companySearchInput").tokenInput("/Company/SearchNames", {
+            tokenLimit: 1, 
+            resultsLimit: 10,
+            onDelete: function (item) {
+                clearCompanyId();   
+            },
+            onAdd: function (item){
+                if (item.id != ""|| item.id != null)
+                    $.get("/Company/GetDetails?id=" + item.id, function(data, status){
+                    updateCompanyId(data);
+                });
+            },
+            prePopulate: [{id: "@Model.CompanyId", name: "@Model.CompanyName"}] 
+        })
+    });
+    </script>
 }

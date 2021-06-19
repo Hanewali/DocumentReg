@@ -49,6 +49,24 @@ namespace DocumentRegistry.Web.Controllers
             return View(model);
         }
         
+        [HttpGet]
+        public IActionResult SearchNames([FromQuery(Name = "q")]string employeeName)
+        {
+            var employees = new List<NameSearchResponse>();
+
+            try
+            {
+                employees = _employeeService.Search(employeeName, GetUserIdFromSession()).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+
+            return Ok(employees);
+        }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Search(EmployeeRequest model)
@@ -72,6 +90,25 @@ namespace DocumentRegistry.Web.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public IActionResult GetDetails([FromQuery] int id)
+        {
+            var result = new Employee();
+            try
+            {
+                result = _employeeService.GetDetails(id, GetUserIdFromSession());
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during employee getDetails");
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych pracownika");
+            }
+
+            return Ok(result);
+        }
+        
+        
+        
         [HttpGet]
         public IActionResult Details(int id)
         {
@@ -112,9 +149,6 @@ namespace DocumentRegistry.Web.Controllers
             if (TempData["Error"] != null)
                 ModelState.AddModelError("Error", TempData["Error"].ToString());
             
-            var companies = _companyService.GetList(GetUserIdFromSession());
-            model.Companies = companies.Select(company => new SelectListItem(company.Name, company.Id.ToString()));
-            
             return View(model);
         }
         
@@ -129,7 +163,7 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during employee search");
-                TempData.Add("Error", "Wystąpił błąd podczas tworzenia dokumentu");
+                ModelState.AddModelError("Error", "Wystąpił błąd podczas tworzenia pracownika");
                 return View(employee);
             }
 

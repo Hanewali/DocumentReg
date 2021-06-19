@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
 using DocumentRegistry.Web.Exceptions;
@@ -42,6 +43,24 @@ namespace DocumentRegistry.Web.Controllers
             
             return View(model);
         }
+
+        [HttpGet]
+        public IActionResult SearchNames([FromQuery(Name = "q")]string companyName)
+        {
+            var companies = new List<NameSearchResponse>();
+
+            try
+            {
+                companies = _companyService.Search(companyName, GetUserIdFromSession()).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+
+            return Ok(companies);
+        }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -66,6 +85,23 @@ namespace DocumentRegistry.Web.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public IActionResult GetDetails([FromQuery] int id)
+        {
+            var result = new Company();
+            try
+            {
+                result = _companyService.GetDetails(id, GetUserIdFromSession());
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during company search");
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych dokumentu");
+            }
+
+            return Ok(result);
+        }
+        
         [HttpGet]
         public IActionResult Details([FromQuery] int id)
         {
@@ -164,7 +200,7 @@ namespace DocumentRegistry.Web.Controllers
                 return View(company);
             }
 
-            return RedirectToAction("Search", "Company");
+            return RedirectToAction("Details", "Company", new {id = company.Id});
         }
         
         [HttpGet]

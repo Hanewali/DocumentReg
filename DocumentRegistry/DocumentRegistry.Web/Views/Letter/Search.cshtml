@@ -4,12 +4,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Dokumenty</h2>
+<div class="row">
+    <h2 class="col-sm-2">Dokumenty</h2>
+    <div class="col-sm-8"></div>
+    @Html.ActionLink("Dodaj", "Create", "Letter", null, new {@class = "btn btn-outline-secondary mb-2"})
+</div>
+
+<div class="row">
+    
+</div>
 <div>
     <table class="table table-sm">
-      <tr>
+      <tr class="table-active">
           <td>@Html.DisplayNameFor(x => x.Letters.First().Number)</td>
-          <td>@Html.DisplayNameFor(x => x.Letters.First().KeyPostCompanyName)</td>
           <td>@Html.DisplayNameFor(x => x.Letters.First().Date)</td>
           <td>@Html.DisplayNameFor(x => x.Letters.First().ReceiveDate)</td>
           <td>@Html.DisplayNameFor(x => x.Letters.First().Content)</td>
@@ -27,7 +34,6 @@
       {
           <tr>
               <td>@letter.Number</td>
-              <td>@letter.KeyPostCompanyName</td>
               <td>@letter.Date</td>
               <td>@letter.ReceiveDate</td>
               <td>@letter.KeyEmployeeFullName</td>
