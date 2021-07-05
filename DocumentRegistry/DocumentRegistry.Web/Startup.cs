@@ -64,7 +64,7 @@ namespace DocumentRegistry.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            Log.Information(Directory.GetCurrentDirectory());
+            Log.Information(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"hane/apps/DocumentsRegistry/Web");
             
             app.UseRouting();
 
