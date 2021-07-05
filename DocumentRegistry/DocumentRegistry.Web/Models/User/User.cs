@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace DocumentRegistry.Web.Models.User
 {
@@ -12,8 +13,10 @@ namespace DocumentRegistry.Web.Models.User
         [DisplayName("Login")]
         public string Login { get; set; }
         [DisplayName("Nowe hasło")] 
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         [DisplayName("Email")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [DisplayName("Administrator")]
         public bool IsAdmin { get; set; }

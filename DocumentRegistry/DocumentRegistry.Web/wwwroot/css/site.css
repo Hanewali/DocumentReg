@@ -76,3 +76,28 @@ body {
   /*margin-bottom: 3rem;*/
   maargin-top: 3rem;
 }
+
+/** Custom Styles **/
+/*Token input*/
+
+.itoken{
+  border: 1px solid #ced4da !important;
+  border-radius: .25rem !important;
+  color: #495057;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: .375rem .75rem;
+  height: calc(1.5em + .75rem + 2px);
+  width: 100% !important;
+  display: block;
+}
+
+.no-token-border{
+  border: none !important;
+}
+
+.form {
+  border: 1px solid #ced4da;
+  border-radius: .50rem;  
+}

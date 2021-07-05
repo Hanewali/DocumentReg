@@ -237,5 +237,23 @@ namespace DocumentRegistry.Web.Controllers
 
             return RedirectToAction("Search", "DocumentType");
         }
+        
+        [HttpGet]
+        public IActionResult GetDetails([FromQuery] int id)
+        {
+            var result = new DocumentType();
+            try
+            {
+                result = _documentTypeService.GetDetails(id, GetUserIdFromSession());
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during document type getDetails");
+                TempData.Add("Error", "Wystąpił błąd podczas pobierania danych typu dokumentu");
+            }
+
+            return Ok(result);
+        }
+
     }
 }

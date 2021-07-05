@@ -37,6 +37,7 @@ namespace DocumentRegistry.Web.Services.HomeService
             if (!session.IsAvailable) throw new Exception("Session is not available!");
             
             session.SetInt32("UserId", response.UserId);
+            session.SetString("Admin", response.Verified ? "True" : "False");
         }
     }
 }

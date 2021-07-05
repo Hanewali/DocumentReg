@@ -69,12 +69,27 @@
                 clearCompanyId();   
             },
             onAdd: function (item){
+                formatResult();
                 if (item.id != ""|| item.id != null)
                     $.get("/Company/GetDetails?id=" + item.id, function(data, status){
                     updateCompanyId(data);
                 });
+            },
+            onResult: function (items){
+                var result = items.slice(0,5);
+                return result;
             }
         })
+        
+       $.each($('.token-input-list'), function(x,y) {$(y).addClass("no-token-border")});
+               
+       $.each($('.token-input-input-token :input'), function(x,y) {$(y).addClass('itoken')});
+    
+    
+       function  formatResult(){
+            $.each($('.token-input-token'), function(x,y) {$(y).addClass('itoken')});
+       }
+        
     });
     </script>
 }

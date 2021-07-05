@@ -8,8 +8,8 @@ namespace DocumentRegistry.Web.Models.Letter
 {
     public class CreateEdit
     {
+        [DisplayName("Numer ")]
         public int Id { get; set; }
-        public int Number { get; set; }
 
         // [DisplayName("Firma do listów")]
         // public int PostCompanyId { get; set; }
@@ -38,6 +38,8 @@ namespace DocumentRegistry.Web.Models.Letter
         [DisplayName("Typ dokumentu")] 
         public int DocumentTypeId { get; set; }
 
+        public string DocumentTypeName { get; set; }
+
         [DisplayName("Dane dodatkowe")]
         public string Other { get; set; }
         [DisplayName("PR")]
@@ -64,8 +66,11 @@ namespace DocumentRegistry.Web.Models.Letter
         public string EmployeeFirstName { get; set; }
         [DisplayName("Nazwisko")]
         public string EmployeeLastName { get; set; }
-        [DisplayName("Rodzaj")]
-        public string Kind { get; set; }
+
+        public string EmployeeFullName { get; set; }
+        [DisplayName("Rodzaj")] 
+        public int DocumentDirectionId { get; set; }
+        public IEnumerable<DocumentDirection.DocumentDirection> DocumentDirections { get; set; }
 
 
         public static CreateEdit BuildForCreate()
@@ -80,13 +85,13 @@ namespace DocumentRegistry.Web.Models.Letter
         {
             return new()
             {
-                Number = letter.Number,
                 // PostCompanyId = letter.KeyPostCompanyId,
                 Date = letter.Date,
                 ReceiveDate = letter.ReceiveDate,
                 Content = letter.Content,
-                EmployeeId = letter.KeyEmployeeId,
-                DocumentTypeId = letter.KeyDocumentTypeId,
+                EmployeeId = letter.EmployeeId,
+                CompanyId = letter.CompanyId,
+                DocumentTypeId = letter.DocumentTypeId,
                 Other = letter.Other,
                 PR = letter.PR,
                 PO = letter.PO,
@@ -100,7 +105,9 @@ namespace DocumentRegistry.Web.Models.Letter
                 CompanyPostPostalCode = letter.CompanyPostPostalCode,
                 EmployeeFirstName = letter.EmployeeFirstName,
                 EmployeeLastName = letter.EmployeeLastName,
-                Kind = letter.Kind
+                DocumentDirectionId = letter.DocumentDirectionId,
+                EmployeeFullName = letter.EmployeeFullName,
+                DocumentTypeName = letter.DocumentTypeName,
             };
         }
 
@@ -109,14 +116,14 @@ namespace DocumentRegistry.Web.Models.Letter
             return new()
             {
                 Id = Id,
-                Number = Number,
                 Date = Date,
                 ReceiveDate = ReceiveDate,
                 Content = Content,
-                KeyEmployeeId = EmployeeId,
+                EmployeeId = EmployeeId,
                 EmployeeFirstName = EmployeeFirstName,
                 EmployeeLastName = EmployeeLastName,
-                KeyCompanyId = CompanyId,
+                DocumentTypeId = DocumentTypeId,
+                CompanyId = CompanyId,
                 Other = Other,
                 PR = PR,
                 PO = PO,
@@ -128,7 +135,7 @@ namespace DocumentRegistry.Web.Models.Letter
                 CompanyPostStreet = CompanyPostStreet,
                 CompanyPostCity = CompanyPostalCode,
                 CompanyPostPostalCode = CompanyPostPostalCode,
-                Kind = Kind
+                DocumentDirectionId = DocumentDirectionId
             };
         }
     }

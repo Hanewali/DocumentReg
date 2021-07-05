@@ -7,45 +7,59 @@
 <h2>Dokument</h2>
 
 <div class="row ml-2">
-    <strong class="mr-1">@Html.DisplayNameFor(x => x.Number):</strong>
-    @Html.DisplayFor(x => x.Number)
+    <strong class="mr-1">@Html.DisplayNameFor(x => x.Id):</strong>
+    @Html.DisplayFor(x => x.Id)
 </div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.Date):</strong>
-    @Html.DisplayFor(x => x.Date)
+    @Html.DisplayFor(x => x.DateString)
 </div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.ReceiveDate):</strong>
-    @Html.DisplayFor(x => x.ReceiveDate)
+    @Html.DisplayFor(x => x.ReceiveDateString)
 </div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.Content):</strong>
     @Html.DisplayFor(x => x.Content)
 </div>
 <div class="row ml-2">
-    <strong class="mr-1">@Html.DisplayNameFor(x => x.KeyEmployeeFullName):</strong>
-    @Html.DisplayFor(x => x.KeyEmployeeFullName)
+    <strong class="mr-1">@Html.DisplayNameFor(x => x.EmployeeFullName):</strong>
+    @Html.DisplayFor(x => x.EmployeeFullName)
 </div>
 <div class="row ml-2">
-    <strong class="mr-1">@Html.DisplayNameFor(x => x.KeyCompanyName):</strong>
-    @Html.DisplayFor(x => x.KeyCompanyName)
+    <strong class="mr-1">@Html.DisplayNameFor(x => x.CompanyName):</strong>
+    @Html.DisplayFor(x => x.CompanyName)
 </div>
 <div class="row ml-2">
-    <strong class="mr-1">@Html.DisplayNameFor(x => x.KeyDocumentTypeName):</strong>
-    @Html.DisplayFor(x => x.KeyDocumentTypeName)
+    <strong class="mr-1">@Html.DisplayNameFor(x => x.DocumentTypeName):</strong>
+    @Html.DisplayFor(x => x.DocumentTypeName)
 </div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.Other):</strong>
     @Html.DisplayFor(x => x.Other)
 </div>
-<div class="row ml-2">
+  <div class="row pl-4 pb-1">
+       <div class="col-sm-2 form-check">  
+           @Html.CheckBoxFor(x => x.PO, new {@class = "form-check-input", disabled = "disabled" })
+           @Html.LabelFor(x => x.PO, new {@class = "form-check-label"})
+       </div>
+       <div class="col-sm-2 form-check">
+           @Html.CheckBoxFor(x => x.PR, new {@class = "form-check-input", disabled = "disabled"})
+           @Html.LabelFor(x => x.PR)
+       </div>
+    </div>
+    <div class="row ml-2">
+        <strong class="mr-1">@Html.DisplayNameFor(x => x.DocumentDirectionName):</strong>
+        @Html.DisplayFor(x => x.DocumentDirectionName)
+    </div>
+@*<div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.PR):</strong>
     @Html.DisplayFor(x => x.PR)
 </div>
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.PO):</strong>
     @Html.DisplayFor(x => x.PO)
-</div>
+</div>*@
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.CompanyName):</strong>
     @Html.DisplayFor(x => x.CompanyName)
@@ -91,11 +105,6 @@
 <div class="row ml-2">
     <strong class="mr-1">@Html.DisplayNameFor(x => x.EmployeeLastName):</strong>
     @Html.DisplayFor(x => x.EmployeeLastName)
-</div>
-
-<div class="row ml-2">
-    <strong class="mr-1">@Html.DisplayNameFor(x => x.Kind):</strong>
-    @Html.DisplayFor(x => x.Kind)
 </div>
 
 <div class="row mt-4 ml-2">

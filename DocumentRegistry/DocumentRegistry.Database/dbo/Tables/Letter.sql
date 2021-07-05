@@ -6,7 +6,7 @@
     [ModifyUserId]          INT             DEFAULT ((1)) NOT NULL,
     [IsActive]              BIT             DEFAULT ((1)) NOT NULL,
     [Number]                INT             NOT NULL,
-    [PostCompanyId]         INT             NOT NULL,
+    [PostCompanyId]         INT             NULL,
     [Date]                  DATE            NOT NULL,
     [ReceiveDate]           DATE            NOT NULL,
     [Content]               NVARCHAR (150)  NULL,
@@ -26,14 +26,12 @@
     [CompanyPostPostalCode] NVARCHAR (10)   NULL,
     [EmployeeFirstName]     NVARCHAR (150)  NULL,
     [EmployeeLastName]      NVARCHAR (150)  NULL,
-    [Inbox]                 BIT             NULL,
-    [Outbox]                BIT             NULL,
+    [DocumentDirectionId]   INT             NULL,
     CONSTRAINT [PK_Letter] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Letter_Company] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Company] ([Id]),
     CONSTRAINT [FK_Letter_CreateUser] FOREIGN KEY ([CreateUserId]) REFERENCES [dbo].[User] ([Id]),
     CONSTRAINT [FK_Letter_DocumentType] FOREIGN KEY ([DocumentTypeId]) REFERENCES [dbo].[DocumentType] ([Id]),
     CONSTRAINT [FK_Letter_Employee] FOREIGN KEY ([EmployeeId]) REFERENCES [dbo].[Employee] ([Id]),
     CONSTRAINT [FK_Letter_ModifyUser] FOREIGN KEY ([ModifyUserId]) REFERENCES [dbo].[User] ([Id]),
-    CONSTRAINT [FK_Letter_PostCompanyId] FOREIGN KEY ([PostCompanyId]) REFERENCES [dbo].[PostCompany] ([Id])
+    CONSTRAINT [FK_Letter_DocumentDirectionId] FOREIGN KEY ([DocumentDirectionId]) REFERENCES [dbo].[DocumentDirection] ([Id])
 );
-

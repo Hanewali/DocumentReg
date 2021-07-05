@@ -16,33 +16,26 @@
 <div>
     <table class="table table-sm">
       <tr class="table-active">
-          <td>@Html.DisplayNameFor(x => x.Letters.First().Number)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().Id)</td>
           <td>@Html.DisplayNameFor(x => x.Letters.First().Date)</td>
           <td>@Html.DisplayNameFor(x => x.Letters.First().ReceiveDate)</td>
           <td>@Html.DisplayNameFor(x => x.Letters.First().Content)</td>
-          <td>@Html.DisplayNameFor(x => x.Letters.First().KeyEmployeeFullName)</td>
-          <td>@Html.DisplayNameFor(x => x.Letters.First().KeyCompanyName)</td>
-          <td>@Html.DisplayNameFor(x => x.Letters.First().KeyDocumentTypeName)</td>
-          <td>@Html.DisplayNameFor(x => x.Letters.First().Other)</td>
-          <td>@Html.DisplayNameFor(x => x.Letters.First().PR)</td>
-          <td>@Html.DisplayNameFor(x => x.Letters.First().PO)</td>
-          <td>@Html.DisplayNameFor(x => x.Letters.First().Kind)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().CompanyName)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().DocumentTypeName)</td>
+          <td>@Html.DisplayNameFor(x => x.Letters.First().DocumentDirectionName)</td>
           <td></td>
       </tr>
       
       @foreach (var letter in Model.Letters)
       {
           <tr>
-              <td>@letter.Number</td>
-              <td>@letter.Date</td>
-              <td>@letter.ReceiveDate</td>
-              <td>@letter.KeyEmployeeFullName</td>
-              <td>@letter.KeyCompanyName</td>
-              <td>@letter.KeyDocumentTypeName</td>
-              <td>@letter.Other</td>
-              <td>@letter.PR</td>
-              <td>@letter.PO</td>
-              <td>@letter.Kind</td>
+              <td>@letter.Id</td>
+              <td>@letter.Date.ToShortDateString()</td>
+              <td>@letter.ReceiveDate.ToShortDateString()</td>
+              <td>@letter.Content</td>
+              <td>@letter.CompanyName</td>
+              <td>@letter.DocumentTypeName</td>
+              <td>@letter.DocumentDirectionName</td>
               <td>@Html.ActionLink("Szczegóły", "Details", "Letter", new {id = letter.Id}, new {@class = "btn btn-outline-primary btn-sm"})</td>
           </tr>
       }

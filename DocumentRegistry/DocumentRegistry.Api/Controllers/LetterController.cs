@@ -25,16 +25,15 @@ namespace DocumentRegistry.Api.Controllers
         [HttpGet]
         public IActionResult GetList([FromQuery] int? beginFrom, [FromQuery] int? rows)
         {
-            var result = new List<Letter>();
+            var result = new List<DomainModels.Letter>();
 
             try
             {
-                var queryResult = DatabaseHelper.GetAll<DomainModels.Letter>();
+                var queryResult = GetLetters();
+                
                 result.AddRange(queryResult
-                    .Where(x => x.IsActive == true)
                     .Skip(beginFrom ?? 0)
-                    .Take(rows ?? 10)
-                    .Select(Letter.BuildFromDomainModel));
+                    .Take(rows ?? 10));
             }
             catch (Exception ex)
             {
@@ -48,15 +47,15 @@ namespace DocumentRegistry.Api.Controllers
         [HttpPost]
         public IActionResult Search(LetterRequest model)
         {
-            var result = new List<Letter>();
+            var result = new List<DomainModels.Letter>();
 
             try
             {
-                var queryResult = DatabaseHelper.ExecProcedure<DomainModels.Letter>("CompanySearch", model.Letter.ToDynamicParameters());
-                result.AddRange(queryResult
+                var letters = GetLetters(model);
+                
+                result.AddRange(letters
                     .Skip(model.BeginFrom ?? 0)
-                    .Take(model.Rows ?? 10)
-                    .Select(Letter.BuildFromDomainModel));
+                    .Take(model.Rows ?? 10));
             }
             catch (Exception ex)
             {
@@ -73,7 +72,7 @@ namespace DocumentRegistry.Api.Controllers
             var result = new DomainModels.Letter();
             try
             {
-                result = DatabaseHelper.Get<DomainModels.Letter>(Id);
+                result = GetLetter(Id);
             }
             catch (Exception ex)
             {
@@ -129,12 +128,13 @@ namespace DocumentRegistry.Api.Controllers
         {
             try
             {
-                var parameters = new DynamicParameters();
-                
-                parameters.Add("Id", model.Letter.Id);
-                parameters.Add("UserId", model.UserId);
+                var domainModel = DatabaseHelper.Get<DomainModels.Letter>(model.Letter.Id.Value);
 
-                DatabaseHelper.ExecuteNoResult("DeleteCompany", parameters);
+                domainModel.IsActive = false;
+                domainModel.ModifyDate = DateTime.Now;
+                domainModel.ModifyUserId = model.UserId;
+
+                DatabaseHelper.Update(domainModel);
             }
             catch (Exception ex)
             {
@@ -143,6 +143,32 @@ namespace DocumentRegistry.Api.Controllers
             }
 
             return Ok();
+        }
+
+        private IEnumerable<DomainModels.Letter> GetLetters(LetterRequest model = null)
+        {
+            var letters = DatabaseHelper.GetAll<DomainModels.Letter>().Where(x => x.IsActive == true);
+
+            foreach (var letter in letters)
+            {
+                letter.CompanyName = DatabaseHelper.Get<DomainModels.Company>(letter.CompanyId).Name;
+                letter.EmployeeFullName = DatabaseHelper.Get<DomainModels.Employee>(letter.EmployeeId).FullName;
+                letter.DocumentTypeName = DatabaseHelper.Get<DomainModels.DocumentType>(letter.DocumentTypeId).Name;
+                letter.DocumentDirectionName = DatabaseHelper.Get<DomainModels.DocumentDirection>(letter.DocumentDirectionId).Name;
+            }
+
+            return letters;
+        }
+
+        private DomainModels.Letter GetLetter(int id)
+        {
+            var letter = DatabaseHelper.Get<DomainModels.Letter>(id);
+            letter.CompanyName = DatabaseHelper.Get<DomainModels.Company>(letter.CompanyId).Name;
+            letter.EmployeeFullName = DatabaseHelper.Get<DomainModels.Employee>(letter.EmployeeId).FullName;
+            letter.DocumentTypeName = DatabaseHelper.Get<DomainModels.DocumentType>(letter.DocumentTypeId).Name;
+            letter.DocumentDirectionName = DatabaseHelper.Get<DomainModels.DocumentDirection>(letter.DocumentDirectionId).Name;
+
+            return letter;
         }
     }
 }

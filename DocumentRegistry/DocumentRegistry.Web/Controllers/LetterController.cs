@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
 using DocumentRegistry.Web.ApiModels;
 using DocumentRegistry.Web.Exceptions;
 using DocumentRegistry.Web.Models.Letter;
 using DocumentRegistry.Web.Services.CompanyService;
+using DocumentRegistry.Web.Services.DocumentDirectionService;
 using DocumentRegistry.Web.Services.DocumentTypeService;
 using DocumentRegistry.Web.Services.EmployeeService;
 using DocumentRegistry.Web.Services.LetterService;
@@ -21,14 +20,16 @@ namespace DocumentRegistry.Web.Controllers
         private static ICompanyService _companyService;
         private static IEmployeeService _employeeService;
         private static IDocumentTypeService _documentTypeService;
+        private static IDocumentDirectionService _documentDirectionService;
 
-        public LetterController(ILetterService letterService, ILogger<LetterController> logger, ICompanyService companyService, IEmployeeService employeeService, IDocumentTypeService documentTypeService)
+        public LetterController(ILetterService letterService, ILogger<LetterController> logger, ICompanyService companyService, IEmployeeService employeeService, IDocumentTypeService documentTypeService, IDocumentDirectionService documentDirectionService)
         {
             _letterService = letterService;
             _logger = logger;
             _companyService = companyService;
             _employeeService = employeeService;
             _documentTypeService = documentTypeService;
+            _documentDirectionService = documentDirectionService;
         }
 
         [HttpGet]
@@ -107,6 +108,8 @@ namespace DocumentRegistry.Web.Controllers
         public IActionResult Create()
         {
             var model = CreateEdit.BuildForCreate();
+
+            model.DocumentDirections = _documentDirectionService.GetList(GetUserIdFromSession());
             
             return View(model);
         }
@@ -125,44 +128,39 @@ namespace DocumentRegistry.Web.Controllers
                 TempData.Add("Error", "Wystąpił błąd podczas tworzenia dokumentu");
                 return View(model);
             }
-            TempData.Add("Error", "Strona będzie dostępna w przyszłości!");
             return RedirectToAction("Search", "Letter");
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            // var letter = _letterService.GetDetails(id, GetUserIdFromSession());
-            //
-            // if (TempData["Error"] != null)
-            //     ModelState.AddModelError("Error", TempData["Error"].ToString());
-            //
-            // var model = CreateEdit.BuildFromModel(letter);
-            // return View(model);
-
-            TempData.Add("Error", "Strona będzie dostępna w przyszłości!");
-            return RedirectToAction("Search", "Letter");
-
+            var letter = _letterService.GetDetails(id, GetUserIdFromSession());
+            
+            if (TempData["Error"] != null)
+                ModelState.AddModelError("Error", TempData["Error"].ToString());
+            
+            var model = CreateEdit.BuildFromModel(letter);
+            model.DocumentDirections = _documentDirectionService.GetList(GetUserIdFromSession());
+            
+            return View(model);
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Letter letter)
         {
-            // try
-            // {
-            //     _letterService.Edit(letter, GetUserIdFromSession());
-            // }
-            // catch (Exception ex)
-            // {
-            //     _logger.LogError(ex, "There was an error during letter search");
-            //     TempData.Add("Error", "Wystąpił błąd podczas edycji dokumentu");
-            //      return RedirectToAction("ConfirmDelete", "User", new {id});
-            // }
-            //
-            // return RedirectToAction("Details", "Letter", letter.Id);
-            TempData.Add("Error", "Strona będzie dostępna w przyszłości!");
-            return RedirectToAction("Search", "Letter");
+            try
+            {
+                _letterService.Edit(letter, GetUserIdFromSession());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "There was an error during letter search");
+                TempData.Add("Error", "Wystąpił błąd podczas edycji dokumentu");
+                return RedirectToAction("Details", "Letter", new {letter.Id});
+            }
+            
+            return RedirectToAction("Details", "Letter", new {letter.Id});
         }
         
         [HttpGet]
@@ -187,9 +185,8 @@ namespace DocumentRegistry.Web.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was an error during letter delete");
-                
                 TempData.Add("Error", "Wystąpił błąd podczas usuwania dokumentu");
-                return RedirectToAction("ConfirmDelete", "User", new {id});
+                return RedirectToAction("ConfirmDelete", "Letter", new {id});
             }
 
             return RedirectToAction("Search", "Letter");

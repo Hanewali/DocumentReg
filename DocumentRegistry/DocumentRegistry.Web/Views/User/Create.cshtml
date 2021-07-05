@@ -38,7 +38,7 @@
         <div class="col-sm-3">
             <div class="row pb-1">
                 @Html.LabelFor(x => x.Password, new {@class = "required"})
-                @Html.TextBoxFor(x => x.Password, null, new {@class = "form-control"})
+                @Html.EditorFor(x => x.Password, null, new { htmlAttributes = new { @class = "form-control"}})
             </div>
         </div>
     </div>
@@ -46,7 +46,7 @@
         <div class="col-sm-3">
             <div class="row pb-1">
                 @Html.LabelFor(x => x.Email, new {@class = "required"})
-                @Html.TextBoxFor(x => x.Email, null, new {@class = "form-control"})
+                @Html.EditorFor(x => x.Email, null, new { htmlAttributes = new { @class = "form-control"}})
             </div>
         </div>
     </div>

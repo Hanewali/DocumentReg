@@ -1,37 +1,38 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using DocumentRegistry.Web.Controllers;
 
 namespace DocumentRegistry.Web.Models.Letter
 {
     public class Letter
     {
-        public int Id { get; set; }
         [DisplayName("Numer")]
-        public int Number { get; set; }
+        public int Id { get; set; }
 
-        // public int KeyPostCompanyId { get; set; }
-        // [DisplayName("Firma do listów")] 
-        // public string KeyPostCompanyName { get; set; }
         [DisplayName("Data")]
         public DateTime Date { get; set; }
+
+        public string DateString => Date.ToShortDateString();
         [DisplayName("Data odbioru")]
         public DateTime ReceiveDate { get; set; }
+
+        public string ReceiveDateString => ReceiveDate.ToShortDateString();
         [DisplayName("Zawartość")]
         public string Content { get; set; }
-        public int KeyEmployeeId { get; set; }
+        public int EmployeeId { get; set; }
         [DisplayName("Pracownik")]
-        public string KeyEmployeeFullName { get; set; }
+        public string EmployeeFullName { get; set; }
 
-        public int KeyCompanyId { get; set; }
+        public int CompanyId { get; set; }
         [DisplayName("Firma")] 
-        public string KeyCompanyName { get; set; }
-
-        public int KeyDocumentTypeId { get; set; }
-        [DisplayName("Typ dokumentu")] 
-        public string KeyDocumentTypeName { get; set; }
+        public int DocumentTypeId { get; set; }
+        [DisplayName("Typ")] 
+        public string DocumentTypeName { get; set; }
         [DisplayName("Dane dodatkowe")]
         public string Other { get; set; }
-        [DisplayName("Rodzaj listu")]
         public bool PR { get; set; }
 
         public string PRText => PR ? "Tak" : "Nie";        
@@ -44,6 +45,7 @@ namespace DocumentRegistry.Web.Models.Letter
         [DisplayName("Odbiorca - Miasto")]
         public string CompanyCity { get; set; }
         [DisplayName("Odbiorca - Kod pocztowy")]
+        [DataType(DataType.PostalCode)]
         public string CompanyPostalCode { get; set; }
         [DisplayName("Adres korespondecyjny - Nazwa")]
         public string CompanyPostName { get; set; }
@@ -52,12 +54,14 @@ namespace DocumentRegistry.Web.Models.Letter
         [DisplayName("Adres korespondecyjny - Miasto")]
         public string CompanyPostCity { get; set; }
         [DisplayName("Adres korespondecyjny - Kod pocztowy")]
+        [DataType(DataType.PostalCode)]
         public string CompanyPostPostalCode { get; set; }
         [DisplayName("Imię")]
         public string EmployeeFirstName { get; set; }
         [DisplayName("Nazwisko")]
         public string EmployeeLastName { get; set; }
-        [DisplayName("Rodzaj")]
-        public string Kind { get; set; } //inbox, outbox
+        public int DocumentDirectionId { get; set; }
+        [DisplayName("Rodzaj")] 
+        public string DocumentDirectionName { get; set; }
     }
 }

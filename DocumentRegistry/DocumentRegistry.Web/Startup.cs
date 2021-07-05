@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using DocumentRegistry.Web.Infrastructure;
 using DocumentRegistry.Web.Services.CompanyService;
+using DocumentRegistry.Web.Services.DocumentDirectionService;
 using DocumentRegistry.Web.Services.DocumentTypeService;
 using DocumentRegistry.Web.Services.EmployeeService;
 using DocumentRegistry.Web.Services.HomeService;
@@ -44,6 +45,7 @@ namespace DocumentRegistry.Web
             services.AddScoped<IPostCompanyService, PostCompanyService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDocumentTypeService, DocumentTypeService>();
+            services.AddScoped<IDocumentDirectionService, DocumentDirectionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

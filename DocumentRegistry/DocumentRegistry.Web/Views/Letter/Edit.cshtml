@@ -13,8 +13,8 @@
             <div class="form-group row pl-3">
                <div class="col-sm-3">
                    <div class="row pb-1"> 
-                       @Html.LabelFor(x => x.Number, new {@class = "required"})
-                       @Html.TextBoxFor(x => x.Number, null, new {@class = "form-control"})
+                       @Html.LabelFor(x => x.Id)
+                       @Html.TextBoxFor(x => x.Id, new {@class = "form-control", disabled = "disabled"})
                    </div>
                </div>
            </div>
@@ -120,6 +120,7 @@
            
            <div class="row pl-3 pb-1 form-group">
                @Html.HiddenFor(x => x.EmployeeId)
+               @Html.HiddenFor(x => x.EmployeeFullName)
                <div class="col-sm-3 p-0 m-0">
                    @Html.LabelFor(x => x.EmployeeFirstName)
                    @Html.TextBoxFor(x => x.EmployeeFirstName, null, new {@class = "form-control"})
@@ -130,64 +131,114 @@
                </div>
            </div>
            
-           <div class="form-group row pl-3">
-               <div class="col-sm-3">
-                   <div class="row pb-1">
-                       @Html.Label("Wybierz typ dokumentu:")
-                       <input type="text" id="documentTypeSearchInput" class="form-control">
-                   </div>
-               </div>
-           </div>
+            <div class="form-group row pl-3">
+                @Html.HiddenFor(x => x.DocumentTypeId)
+                @Html.HiddenFor(x => x.DocumentTypeName)
+                <div class="col-sm-3">
+                    <div class="row pb-1">
+                        @Html.Label("Wybierz typ dokumentu:")
+                        <input type="text" id="documentTypeSearchInput" class="form-control">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row pl-3 col-sm-3 pb-1 form-group">
+                @Html.LabelFor(x => x.DocumentDirectionId)
+                @Html.DropDownListFor(x => x.DocumentDirectionId, new SelectList(@Model.DocumentDirections, "Id", "Name", Model.DocumentDirectionId != 0 ? Model.DocumentDirectionId : 1), null, new {@class = "form-control"})
+            </div>
+           
+            <div class="row">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-2">
+                    <input type="submit" value="Zapisz" class="btn btn-primary">
+                </div>
+            </div>
        }
        
        @section Scripts
        {
            <script>
            $(document).ready(function () {
+               
+               let companyId = $(@Html.IdFor(x => x.CompanyId)).val();
+               let companyName = $(@Html.IdFor(x => x.CompanyName)).val();
+               let documentTypeId = $(@Html.IdFor(x => x.DocumentTypeId)).val();
+               let documentTypeName = $(@Html.IdFor(x => x.DocumentTypeName)).val();
+               let employeeId = $(@Html.IdFor(x => x.EmployeeId)).val();
+               let employeeFullName = $(@Html.IdFor(x => x.EmployeeFullName)).val();
+              
                $("#companySearchInput").tokenInput("/Company/SearchNames", {
                    tokenLimit: 1, 
                    resultsLimit: 10,
+                   prePopulate: [{id:companyId, name:companyName}],
                    onDelete: function (item) {
                        clearCompanyForm();   
                    },
                    onAdd: function (item){
+                        formatResult();
                        if (item.id != ""|| item.id != null)
                            $.get("/Company/GetDetails?id=" + item.id, function(data, status){
                            fillCompany(data);
                        });
+                   },
+                   onResult: function (items){
+                       var result = items.slice(0,5);
+                       return result;
                    }
                });
        
                $("#employeeSearchInput").tokenInput("/Employee/SearchNames", {
                    tokenLimit: 1, 
                    resultsLimit: 10,
+                   prePopulate: [{id:employeeId, name:employeeFullName}],
                    onDelete: function (item) {
                        clearEmployeeForm();   
                    },
                    onAdd: function (item){
+                        formatResult();  
                        if (item.id != ""|| item.id != null)
                            $.get("/Employee/GetDetails?id=" + item.id, function(data, status){
                            fillEmployee(data);
                        });
+                   },
+                   onResult: function (items){
+                       var result = items.slice(0,5);
+                       return result;
                    }
                });
+               
                
                $("#documentTypeSearchInput").tokenInput("/DocumentType/SearchNames", {
                    tokenLimit: 1, 
                    resultsLimit: 10,
+                   prePopulate: [{id:documentTypeId, name:documentTypeName}],
                    onDelete: function (item) {
                        clearDocumentTypeId();   
                    },
                    onAdd: function (item){
+                        formatResult();
                        if (item.id != ""|| item.id != null)
                            $.get("/DocumentType/GetDetails?id=" + item.id, function(data, status){
                            updateDocumentTypeId(data.id);
                        });
+                   },
+                   onResult: function (items){
+                       var result = items.slice(0,5);
+                       return result;
                    }
                });
                
-               // $('#token-input-companySearchInput').addClass("form-control");
                
+              $.each($('.token-input-list'), function(x,y) {$(y).addClass("no-token-border")});
+              
+              $.each($('.token-input-input-token :input'), function(x,y) {$(y).addClass('itoken')});
+                
+             $.each($('.token-input-token'), function(x,y) {$(y).addClass('itoken')});
+
+              function  formatResult(){
+                   $.each($('.token-input-token'), function(x,y) {$(y).addClass('itoken')});
+              }
+           
                function fillCompany(company){
                    if (company == null) return;
                    
@@ -235,8 +286,10 @@
                
                function clearDocumentTypeId(){
                    $(@Html.IdFor(x => x.DocumentTypeId)).val("")
-               } 
+               }
+               
+               
            });
            
    </script>
-}
+       }

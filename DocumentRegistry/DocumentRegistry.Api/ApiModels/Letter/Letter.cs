@@ -1,5 +1,6 @@
 ﻿using System;
 using Dapper;
+using DocumentRegistry.Api.DomainModels;
 
 namespace DocumentRegistry.Api.ApiModels.Letter
 {
@@ -14,6 +15,19 @@ namespace DocumentRegistry.Api.ApiModels.Letter
         public int EmployeeId { get; set; }
         public int CompanyId { get; set; }
         public int DocumentTypeId { get; set; }
+        public int DocumentDirectionId { get; set; }
+        public string Other { get; set; }
+        public bool PR { get; set; }
+        public bool PO { get; set; }
+        public string CompanyStreet { get; set; }
+        public string CompanyCity { get; set; }
+        public string CompanyPostalCode { get; set; }
+        public string CompanyPostName { get; set; }
+        public string CompanyPostStreet { get; set; }
+        public string CompanyPostCity { get; set; }
+        public string CompanyPostPostalCode { get; set; }
+        public string EmployeeFirstName { get; set; }
+        public string EmployeeLastName { get; set; }
         
         public static Letter BuildFromDomainModel(DomainModels.Letter letter)
         {
@@ -27,7 +41,20 @@ namespace DocumentRegistry.Api.ApiModels.Letter
                 Content = letter.Content,
                 EmployeeId = letter.EmployeeId,
                 CompanyId = letter.CompanyId,
-                DocumentTypeId = letter.DocumentTypeId
+                DocumentTypeId = letter.DocumentTypeId,
+                DocumentDirectionId = letter.DocumentDirectionId,
+                Other = letter.Other,
+                PR = letter.PR,
+                PO = letter.PO,
+                CompanyStreet = letter.CompanyStreet,
+                CompanyCity = letter.CompanyCity,
+                CompanyPostalCode = letter.CompanyPostalCode,
+                CompanyPostName = letter.CompanyPostName,
+                CompanyPostCity = letter.CompanyPostCity,
+                CompanyPostStreet = letter.CompanyPostStreet,
+                CompanyPostPostalCode = letter.CompanyPostPostalCode,
+                EmployeeFirstName = letter.EmployeeFirstName,
+                EmployeeLastName = letter.EmployeeLastName
             };
         }
 
@@ -52,6 +79,19 @@ namespace DocumentRegistry.Api.ApiModels.Letter
             letter.EmployeeId = EmployeeId;
             letter.CompanyId = CompanyId;
             letter.DocumentTypeId = DocumentTypeId;
+            letter.DocumentDirectionId = DocumentDirectionId;
+            letter.Other = Other;
+            letter.PR = PR;
+            letter.PO = PO;
+            letter.CompanyStreet = CompanyStreet;
+            letter.CompanyCity = CompanyCity;
+            letter.CompanyPostalCode = CompanyPostalCode;
+            letter.CompanyPostName = CompanyPostName;
+            letter.CompanyPostCity = CompanyPostCity;
+            letter.CompanyPostStreet = CompanyPostStreet;
+            letter.CompanyPostPostalCode = CompanyPostPostalCode;
+            letter.EmployeeFirstName = EmployeeFirstName;
+            letter.EmployeeLastName = EmployeeLastName;
             
             return letter;
         }
