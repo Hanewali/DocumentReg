@@ -24,7 +24,6 @@
     </nav>
 </header>
 <div  style="display:flex;justify-content:center;align-items:center;">
-    @Directory.GetParent("~")
     @using (Html.BeginForm("LoginPost", "Login", FormMethod.Post, new {@class = "form p-5"}))
     {
         @Html.AntiForgeryToken()
