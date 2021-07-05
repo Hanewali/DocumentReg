@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using DocumentRegistry.Web.Infrastructure;
 using DocumentRegistry.Web.Services.CompanyService;
 using DocumentRegistry.Web.Services.DocumentDirectionService;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace DocumentRegistry.Web
 {
@@ -62,6 +64,8 @@ namespace DocumentRegistry.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            Log.Information(Directory.GetCurrentDirectory());
+            
             app.UseRouting();
 
             app.UseSession();
