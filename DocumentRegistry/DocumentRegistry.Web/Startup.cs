@@ -65,8 +65,6 @@ namespace DocumentRegistry.Web
             app.UseRouting();
 
             app.UseSession();
-
-            app.UsePathBase(Configuration.GetConfigurationField("RootDirectory"));
             
             app.UseAuthorization();
 
