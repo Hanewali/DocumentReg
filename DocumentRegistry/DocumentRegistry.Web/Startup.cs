@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using DocumentRegistry.Web.Infrastructure;
 using DocumentRegistry.Web.Services.CompanyService;
 using DocumentRegistry.Web.Services.DocumentDirectionService;
@@ -11,9 +10,7 @@ using DocumentRegistry.Web.Services.PostCompanyService;
 using DocumentRegistry.Web.Services.UserService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace DocumentRegistry.Web
@@ -68,6 +65,8 @@ namespace DocumentRegistry.Web
             app.UseRouting();
 
             app.UseSession();
+
+            app.UsePathBase(Configuration.GetConfigurationField("RootDirectory"));
             
             app.UseAuthorization();
 
