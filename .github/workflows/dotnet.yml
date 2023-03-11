@@ -35,7 +35,7 @@ jobs:
     - name: Action - rsync API
       uses: up9cloud/action-rsync@v1.3
       env:
-        SOURCE: /home/runner/work/DocumentRegistry/DocumentRegistry/deploy/Api/
+        SOURCE: /home/runner/work/DocumentReg/DocumentReg/deploy/Api/
         HOST: ${{ secrets.REMOTE_HOST }}
         USER: ${{ secrets.REMOTE_USER }}
         KEY: ${{ secrets.REMOTE_SSH_KEY }}
@@ -44,7 +44,7 @@ jobs:
     - name: Action - rsync WEB
       uses: up9cloud/action-rsync@v1.3
       env:
-        SOURCE: /home/runner/work/DocumentRegistry/DocumentRegistry/deploy/Web/
+        SOURCE: /home/runner/work/DocumentReg/DocumentReg/deploy/Web/
         HOST: ${{ secrets.REMOTE_HOST }}
         USER: ${{ secrets.REMOTE_USER }}
         KEY: ${{ secrets.REMOTE_SSH_KEY }}
@@ -53,7 +53,7 @@ jobs:
     - name: Run SSH command
       uses: garygrossgarten/github-action-ssh@v0.3.0
       with:
-        command: chmod +x /home/hane/apps/DocumentRegistry/Api/DocumentRegistry.Api && chmod +x /home/hane/apps/DocumentRegistry/Web/DocumentRegistry.Web && sudo service DocumentRegistry.Api start && sudo service DocumentRegistry.Web start
+        command: chmod +x /home/hane/apps/DocReg.Api/DocumentRegistry.Api && chmod +x /home/hane/apps/DocReg.Web/DocumentRegistry.Web && sudo service DocumentRegistryApi start && sudo service DocumentRegistryWeb start
         host: ${{ secrets.REMOTE_HOST }}
         port: ${{ secrets.REMOTE_PORT }}
         username: ${{ secrets.REMOTE_USER }}
