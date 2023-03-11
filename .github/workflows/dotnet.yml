@@ -35,7 +35,7 @@ jobs:
     - name: Action - rsync API
       uses: up9cloud/action-rsync@v1.3
       env:
-        SOURCE: /home/runner/work/DocumentReg/DocumentRegistry/deploy/Api/
+        SOURCE: /home/runner/work/DocumentReg/DocumentReg/deploy/Api/
         HOST: ${{ secrets.REMOTE_HOST }}
         USER: ${{ secrets.REMOTE_USER }}
         KEY: ${{ secrets.REMOTE_SSH_KEY }}
@@ -44,7 +44,7 @@ jobs:
     - name: Action - rsync WEB
       uses: up9cloud/action-rsync@v1.3
       env:
-        SOURCE: /home/runner/work/DocumentReg/DocumentRegistry/deploy/Web/
+        SOURCE: /home/runner/work/DocumentReg/DocumentReg/deploy/Web/
         HOST: ${{ secrets.REMOTE_HOST }}
         USER: ${{ secrets.REMOTE_USER }}
         KEY: ${{ secrets.REMOTE_SSH_KEY }}
