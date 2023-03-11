@@ -39,7 +39,7 @@ namespace DocumentRegistry.Web
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseContentRoot(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"/apps/DocumentRegistry/Web")
+                .UseContentRoot(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"/apps/DocReg.Web/")
                 .UseSerilog((context, services, configuration) => configuration
                     .ReadFrom.Configuration(context.Configuration)
                     .ReadFrom.Services(services)
