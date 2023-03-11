@@ -1,0 +1,24 @@
+name: .NET
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+ 
+    - name: Action - rsync API
+      uses: up9cloud/action-rsync@v1.3
+      env:
+        SOURCE: /home/runner/work/DocumentRegistry/DocumentRegistry/deploy/Api/
+        HOST: ${{ secrets.REMOTE_HOST }}
+        USER: ${{ secrets.REMOTE_USER }}
+        KEY: ${{ secrets.REMOTE_SSH_KEY }}
+        TARGET: ${{ secrets.REMOTE_TARGET_API }}
+        PORT: ${{ secrets.REMOTE_PORT }}
